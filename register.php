@@ -1,0 +1,301 @@
+<?php
+
+require_once "config/db.php";
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $password_confirm = $_POST['password_confirm'] ?? '';
+    $fullname = $_POST['fullname'] ?? '';
+    $mssv = $_POST['mssv'] ?? '';
+    $unit = $_POST['unit'] ?? '';
+    $class = $_POST['class'] ?? '';
+    $year = $_POST['year'] ?? '';
+    $birth = $_POST['birth'] ?? '';
+    $tel = $_POST['tel'] ?? '';
+
+    if(empty($fullname)){
+        $error['fullname'] = "Họ tên không được để trống!";
+    }
+
+    if(empty($mssv)){
+        $error['mssv'] = "Mã số sinh viên không được để trống!";
+    }
+
+    if(empty($email)){
+        $error['email'] = "Email không được để trống!";
+    }
+
+    if (empty($password)) {
+        $errors['password'] = "Mật khẩu không được để trống!";
+    } elseif (strlen($password) < 6) {
+        $errors['password'] = "Mật khẩu phải từ 6 ký tự trở lên!";
+    } elseif (!preg_match('/[A-Z]/', $password)) {
+        $errors['password'] = "Mật khẩu phải có ít nhất 1 chữ in hoa!";
+    } elseif (!preg_match('/[a-z]/', $password)) {
+        $errors['password'] = "Mật khẩu phải có ít nhất 1 chữ thường!";
+    } elseif (!preg_match('/[0-9]/', $password)) {
+        $errors['password'] = "Mật khẩu phải có ít nhất 1 số!";
+    }
+
+    if(empty($password_confirm) || ($password !== $password_confirm)){
+        $errors['password_confirm'] = "Mật khẩu xác nhận không khớp!";
+    }
+
+    if(empty($unit)){
+        $error['unit'] = "Tên đơn vị không được để trống!";
+    }
+
+    if(empty($class)){
+        $error['class'] = "Ngành không được để trống!";
+    }
+    
+    if(empty($year)){
+        $error['year'] = "Khóa không được để trống!";
+    }
+
+    
+
+}
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    
+    <div class="register-container">
+        <div class="register-form">
+            <form action="#" method="post">
+                <div class="register-logo">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h1>Đăng ký tài khoản</h1>
+                <small>Tạo tài khoản để bắt đầu hành trình của bạn</small>
+
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <h3>Họ và tên</h3>
+                    </div>
+                    <div class="register-input-block">
+                        <input type="text" name="fullname" id="" placeholder="Nhập họ và tên của bạn">
+                    </div>
+                    <?php if(!empty($error['fullname'])): ?>
+                        <small style="color:red;">
+                            <?= $error['fullname'] ?>
+                        </small>
+                    <?php endif;?>
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-regular fa-address-card"></i>
+                        </span>
+                        <h3>Mã số sinh viên</h3>
+                    </div>
+                    <div class="register-input-block">
+                        <input type="text" name="mssv" id="" placeholder="Nhập mã số sinh viên">
+                    </div>
+                    <?php if(!empty($error['mssv'])): ?>
+                        <small style="color:red;">
+                            <?= $error['mssv'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-regular fa-building"></i>
+                        </span>
+                        <h3>Đơn vị</h3>
+                    </div>
+                    <div class="register-input-block ">
+                        <input type="text" name="unit" class="search-input" autocomplete="off">
+                        <input type="hidden" class="type" value="unit">
+                        <div class="suggestions"></div>
+                    </div>
+                    <small>Gõ tên đơn vị để tìm kiếm và chọn</small><br>
+                    <?php if(!empty($error['unit'])): ?>
+                        <small style="color:red">
+                            <?= $error['unit'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-regular fa-object-group"></i>
+                        </span>
+                        <h3>Ngành</h3>
+                    </div>
+                    <div class="register-input-block register-class-search">
+                        <input type="text" name="class" id="">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <small>Gõ tên ngành để tìm kiếm và chọn</small> <br>
+                    <?php if(!empty($error['class'])): ?>
+                        <small style="color:red">
+                            <?= $error['class'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-regular fa-calendar"></i>
+                        </span>
+                        <h3>Khóa</h3>
+                    </div>
+                    <div class="register-input-block">
+                        <input type="text" name="year" id="">
+                    </div>
+                    <?php if(!empty($error['year'])): ?>
+                        <small style="color:red">
+                            <?= $error['year'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-solid fa-mars-and-venus"></i>
+                        </span>
+                        <h3>Giới tính</h3>
+                    </div>
+                    <div class="register-input-block">
+                        <div class="register-gender">
+                            <input type="checkbox" name="gender" id="" value="male"> Nam
+                        </div>
+                        <div class="register-gender">
+                            <input type="checkbox" name="gender" id="" value="female"> Nữ
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-regular fa-calendar"></i>
+                        </span>
+                        <h3>Ngày sinh</h3>
+                    </div>
+                    <div class="register-input-block register-birth">
+                        <input type="date" name="birth" id="" >
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+                    <?php if(!empty($error['birth'])): ?>
+                        <small style="color:red">
+                            <?= $error['birth'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-solid fa-mobile-screen"></i>
+                        </span>
+                        <h3>Số điện thoại</h3>
+                    </div>
+                    <div class="register-input-block">
+                        <input type="tel" name="tel" id="" placeholder="Nhập vào số điện thọai của bạn">
+                    </div>
+                    <?php if(!empty($error['tel'])): ?>
+                        <small style="color:red">
+                            <?= $error['tel'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-regular fa-envelope"></i>
+                        </span>
+                        <h3>Email</h3>
+                    </div>
+                    <div class="register-input-block">
+                        <input type="email" name="email" id="" placeholder="Nhập vào email của bạn">
+                    </div>
+                    <?php if(!empty($error['email'])): ?>
+                        <small style="color:red">
+                            <?= $error['email'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <h3>Mật khẩu</h3>
+                    </div>
+                    <div class="register-input-block">
+                        <input type="password" name="password" id="" placeholder="Nhập vào mật khẩu của bạn">
+                        <i class="fa-solid fa-eye"></i>
+                        <i class="fa-solid fa-eye-slash"></i>
+                    </div>
+                    <?php if(!empty($error['password'])): ?>
+                        <small style="color:red">
+                            <?= $error['password'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="register-block">
+                    <div class="register-title-block">
+                        <span>
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <h3>Xác nhận mật khẩu</h3>
+                    </div>
+                    <div class="register-input-block">
+                        <input type="password" name="password_confirm" id="" placeholder="Nhập lại mật khẩu của bạn một lần nữa">
+                        <i class="fa-solid fa-eye"></i>
+                        <i class="fa-solid fa-eye-slash"></i>
+                    </div>
+                    <?php if(!empty($error['password_confirm'])): ?>
+                        <small style="color:red">
+                            <?= $error['password_confirm'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="register-btn">
+                    <input type="submit" value="Đăng ký">
+                </div>
+            </form>
+        </div>
+        <div class="register-another">
+            <small>hoặc</small>
+            <h3>
+                Bạn đã có tài khoản?
+                <a href="">
+                    <b>
+                        Đăng nhập ngay
+                    </b>
+                </a>
+            </h3>
+        </div>
+    </div>
+
+    <script src="../assets/suggest.js"></script>
+</body>
+</html>
