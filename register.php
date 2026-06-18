@@ -1,4 +1,7 @@
 <?php
+if(session_start === PHP_SESSION_NONE){
+    session_start();
+}
 
 require_once "config/db.php";
 
@@ -11,6 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $unit = $_POST['unit'] ?? '';
     $class = $_POST['class'] ?? '';
     $year = $_POST['year'] ?? '';
+    $gender = $_POST['gender'] ?? '';
     $birth = $_POST['birth'] ?? '';
     $tel = $_POST['tel'] ?? '';
 
@@ -27,19 +31,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 
     if (empty($password)) {
-        $errors['password'] = "Mật khẩu không được để trống!";
+        $error['password'] = "Mật khẩu không được để trống!";
     } elseif (strlen($password) < 6) {
-        $errors['password'] = "Mật khẩu phải từ 6 ký tự trở lên!";
+        $error['password'] = "Mật khẩu phải từ 6 ký tự trở lên!";
     } elseif (!preg_match('/[A-Z]/', $password)) {
-        $errors['password'] = "Mật khẩu phải có ít nhất 1 chữ in hoa!";
+        $error['password'] = "Mật khẩu phải có ít nhất 1 chữ in hoa!";
     } elseif (!preg_match('/[a-z]/', $password)) {
-        $errors['password'] = "Mật khẩu phải có ít nhất 1 chữ thường!";
+        $error['password'] = "Mật khẩu phải có ít nhất 1 chữ thường!";
     } elseif (!preg_match('/[0-9]/', $password)) {
-        $errors['password'] = "Mật khẩu phải có ít nhất 1 số!";
+        $error['password'] = "Mật khẩu phải có ít nhất 1 số!";
     }
 
     if(empty($password_confirm) || ($password !== $password_confirm)){
-        $errors['password_confirm'] = "Mật khẩu xác nhận không khớp!";
+        $error['password_confirm'] = "Mật khẩu xác nhận không khớp!";
     }
 
     if(empty($unit)){
@@ -52,6 +56,29 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
     if(empty($year)){
         $error['year'] = "Khóa không được để trống!";
+    }
+
+    try{
+        $conn->beginTransaction();
+
+        $sql1 = "INSERT INTO taikhoandangnhap (Email, MatKhau) VALUES (?, ?)";
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->execute([$email, $password]);
+
+        $userId = $conn->lastInsertId();
+
+        $sql2 = "INSERT INTO sinhvien (MSSV, MaTaiKhoan, MaNghanh, HoTen, GioiTinh, NgaySinh, SoDienThoai) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->execute([$mssv, $userId, $class, $fullname, $gender, $birth, $tel]);
+
+        $conn->commit();
+        $_SESSION['success_message'] = "Đăng ký thành công! Vui lòng đăng nhập.";
+        header("Location: Login.php");
+        exit;
+        
+    }catch(PDOException $e){
+        $conn->rollBack();
+        echo "Lỗi đăng ký: " . $e->getMessage();
     }
 
     
@@ -89,7 +116,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Họ và tên</h3>
                     </div>
                     <div class="register-input-block">
-                        <input type="text" name="fullname" id="" placeholder="Nhập họ và tên của bạn">
+                        <input type="text" name="fullname" id="" value="<?= htmlspecialchars($fullname ?? '') ?>" placeholder="Nhập họ và tên của bạn">
                     </div>
                     <?php if(!empty($error['fullname'])): ?>
                         <small style="color:red;">
@@ -106,7 +133,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Mã số sinh viên</h3>
                     </div>
                     <div class="register-input-block">
-                        <input type="text" name="mssv" id="" placeholder="Nhập mã số sinh viên">
+                        <input type="text" name="mssv" value="<?= htmlspecialchars($mssv ?? '') ?>" id="" placeholder="Nhập mã số sinh viên">
                     </div>
                     <?php if(!empty($error['mssv'])): ?>
                         <small style="color:red;">
@@ -123,7 +150,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Đơn vị</h3>
                     </div>
                     <div class="register-input-block ">
-                        <input type="text" name="unit" class="search-input" data-type="unit" id="unit">
+                        <input type="text" name="unit" class="search-input" data-type="unit" value="<?= htmlspecialchars($unit ?? '') ?>" id="unit">
                         <div class="suggest-box"></div>
                     </div>
                     <small>Gõ tên đơn vị để tìm kiếm và chọn</small><br>
@@ -142,7 +169,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Ngành</h3>
                     </div>
                     <div class="register-input-block register-class-search">
-                        <input type="text" name="class" class="search-input" data-type="class" id="">
+                        <input type="text" name="class" class="search-input" data-type="class" value="<?= htmlspecialchars($class ?? '') ?>" id="">
                         <div class="suggest-box"></div>
                     </div>
                     <small>Gõ tên ngành để tìm kiếm và chọn</small> <br>
@@ -161,7 +188,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Khóa</h3>
                     </div>
                     <div class="register-input-block">
-                        <input type="text" name="year" id="">
+                        <input type="text" name="year" value="<?= htmlspecialchars($year ?? '') ?>" id="">
                     </div>
                     <?php if(!empty($error['year'])): ?>
                         <small style="color:red">
@@ -179,10 +206,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     </div>
                     <div class="register-input-block">
                         <div class="register-gender">
-                            <input type="checkbox" name="gender" id="" value="male"> Nam
+                            <input type="radio" name="gender" id="" value="male" checked> Nam
                         </div>
                         <div class="register-gender">
-                            <input type="checkbox" name="gender" id="" value="female"> Nữ
+                            <input type="radio" name="gender" id="" value="female"> Nữ
                         </div>
                     </div>
                     
@@ -196,7 +223,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Ngày sinh</h3>
                     </div>
                     <div class="register-input-block register-birth">
-                        <input type="date" name="birth" id="" >
+                        <input type="date" name="birth" value="<?= htmlspecialchars($birth ?? '') ?>" id="" >
                         <i class="fa-regular fa-calendar"></i>
                     </div>
                     <?php if(!empty($error['birth'])): ?>
@@ -214,7 +241,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Số điện thoại</h3>
                     </div>
                     <div class="register-input-block">
-                        <input type="tel" name="tel" id="" placeholder="Nhập vào số điện thọai của bạn">
+                        <input type="tel" name="tel" id="" value="<?= htmlspecialchars($tel ?? '') ?>" placeholder="Nhập vào số điện thọai của bạn">
                     </div>
                     <?php if(!empty($error['tel'])): ?>
                         <small style="color:red">
@@ -231,7 +258,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Email</h3>
                     </div>
                     <div class="register-input-block">
-                        <input type="email" name="email" id="" placeholder="Nhập vào email của bạn">
+                        <input type="email" name="email" id="" value="<?= htmlspecialchars($email ?? '') ?>" placeholder="Nhập vào email của bạn">
                     </div>
                     <?php if(!empty($error['email'])): ?>
                         <small style="color:red">
@@ -248,9 +275,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Mật khẩu</h3>
                     </div>
                     <div class="register-input-block">
-                        <input type="password" name="password" id="" placeholder="Nhập vào mật khẩu của bạn">
-                        <i class="fa-solid fa-eye"></i>
-                        <i class="fa-solid fa-eye-slash"></i>
+                        <input type="password" name="password" value="<?= htmlspecialchars($password ?? '') ?>" id="" placeholder="Nhập vào mật khẩu của bạn">
                     </div>
                     <?php if(!empty($error['password'])): ?>
                         <small style="color:red">
@@ -267,9 +292,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Xác nhận mật khẩu</h3>
                     </div>
                     <div class="register-input-block">
-                        <input type="password" name="password_confirm" id="" placeholder="Nhập lại mật khẩu của bạn một lần nữa">
-                        <i class="fa-solid fa-eye"></i>
-                        <i class="fa-solid fa-eye-slash"></i>
+                        <input type="password" name="password_confirm" id="" value="<?= htmlspecialchars($password_confirm ?? '') ?>" placeholder="Nhập lại mật khẩu của bạn một lần nữa">
                     </div>
                     <?php if(!empty($error['password_confirm'])): ?>
                         <small style="color:red">
