@@ -192,7 +192,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Khóa</h3>
                     </div>
                     <div class="register-input-block">
-                        <input type="text" name="year" value="<?= htmlspecialchars($year ?? '') ?>" id="">
+                        <input type="text" name="year" value="<?= htmlspecialchars($year ?? '') ?>" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     </div>
                     <?php if(!empty($error['year'])): ?>
                         <small style="color:red">
@@ -245,7 +245,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Số điện thoại</h3>
                     </div>
                     <div class="register-input-block">
-                        <input type="tel" name="tel" id="" value="<?= htmlspecialchars($tel ?? '') ?>" placeholder="Nhập vào số điện thọai của bạn">
+                        <input type="tel" name="tel" id="" value="<?= htmlspecialchars($tel ?? '') ?>" placeholder="Nhập vào số điện thọai của bạn" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength='12'>
                     </div>
                     <?php if(!empty($error['tel'])): ?>
                         <small style="color:red">
