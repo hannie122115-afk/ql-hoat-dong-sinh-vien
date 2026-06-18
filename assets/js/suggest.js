@@ -3,6 +3,13 @@ const suggestBox = document.querySelector(".suggest-box");
 let timeout;
 let controller;
 
+suggestBox.addEventListener("click", function (e) {
+  if (e.target.classList.contains("suggest-item")) {
+    input.value = e.target.dataset.name;
+    suggestBox.innerHTML = "";
+  }
+});
+
 input.addEventListener("input", function () {
   clearTimeout(timeout);
 
@@ -14,8 +21,6 @@ input.addEventListener("input", function () {
   }
 
   timeout = setTimeout(() => {
-    suggestBox.innerHTML =
-      "<div class='loading-result-search'> Đang tìm ...</div>";
     // huy request cu
     if (controller) controller.abort();
     controller = new AbortController();
@@ -38,19 +43,12 @@ input.addEventListener("input", function () {
           return;
         }
 
-        suggestBox.addEventListener("click", function (e) {
-          if (e.target.classList.contains("suggest-item")) {
-            input.value = e.target.dataset.name;
-            suggestBox.innerHTML = "";
-          }
-        });
-
         data.forEach((item) => {
           const div = document.createElement("div");
           div.classList.add("suggest-item");
           div.dataset.name = item.name;
           div.dataset.id = item.id;
-
+          div.textContent = item.name;
           suggestBox.append(div);
         });
       });

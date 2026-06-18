@@ -1,0 +1,10 @@
+.suggest-box {
+  width: 25rem;
+  height: auto;
+}
+
+.suggest-item {
+  display: block;
+  height: 1.5rem;
+  max-width: 20rem;
+}
