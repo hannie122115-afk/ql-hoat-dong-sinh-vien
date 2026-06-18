@@ -123,7 +123,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Đơn vị</h3>
                     </div>
                     <div class="register-input-block ">
-                        <input type="text" name="unit" class="search-input" data-type="unit">
+                        <input type="text" name="unit" class="search-input" data-type="unit" id="unit">
                         <div class="suggest-box"></div>
                     </div>
                     <small>Gõ tên đơn vị để tìm kiếm và chọn</small><br>
@@ -142,8 +142,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <h3>Ngành</h3>
                     </div>
                     <div class="register-input-block register-class-search">
-                        <input type="text" name="class" id="">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" name="class" class="search-input" data-type="class" id="">
+                        <div class="suggest-box"></div>
                     </div>
                     <small>Gõ tên ngành để tìm kiếm và chọn</small> <br>
                     <?php if(!empty($error['class'])): ?>
