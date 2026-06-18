@@ -58,30 +58,33 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $error['year'] = "Khóa không được để trống!";
     }
 
-    try{
-        $conn->beginTransaction();
+    if(empty($error)){
 
-        $sql1 = "INSERT INTO taikhoandangnhap (Email, MatKhau) VALUES (?, ?)";
-        $stmt1 = $conn->prepare($sql1);
-        $stmt1->execute([$email, $password]);
+        $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
-        $userId = $conn->lastInsertId();
+        try{
+            $conn->beginTransaction();
 
-        $sql2 = "INSERT INTO sinhvien (MSSV, MaTaiKhoan, MaNghanh, HoTen, GioiTinh, NgaySinh, SoDienThoai) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt2 = $conn->prepare($sql2);
-        $stmt2->execute([$mssv, $userId, $class, $fullname, $gender, $birth, $tel]);
+            $sql1 = "INSERT INTO taikhoandangnhap (Email, MatKhau) VALUES (?, ?)";
+            $stmt1 = $conn->prepare($sql1);
+            $stmt1->execute([$email, $password_hashed]);
 
-        $conn->commit();
-        $_SESSION['success_message'] = "Đăng ký thành công! Vui lòng đăng nhập.";
-        header("Location: Login.php");
-        exit;
-        
-    }catch(PDOException $e){
-        $conn->rollBack();
-        echo "Lỗi đăng ký: " . $e->getMessage();
+            $userId = $conn->lastInsertId();
+
+            $sql2 = "INSERT INTO sinhvien (MSSV, MaTaiKhoan, MaNghanh, HoTen, GioiTinh, NgaySinh, SoDienThoai) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt2 = $conn->prepare($sql2);
+            $stmt2->execute([$mssv, $userId, $class, $fullname, $gender, $birth, $tel]);
+
+            $conn->commit();
+            $_SESSION['success_message'] = "Đăng ký thành công! Vui lòng đăng nhập.";
+            header("Location: Login.php");
+            exit;
+                
+        }catch(PDOException $e){
+            $conn->rollBack();
+            echo "Lỗi đăng ký: " . $e->getMessage();
+        }
     }
-
-    
 
 }
 
@@ -96,6 +99,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <title>Đăng ký</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="assets/css/search.css">
+    <link rel="stylesheet" href="assets/css/password.css">
 </head>
 <body>
     
@@ -274,8 +278,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         </span>
                         <h3>Mật khẩu</h3>
                     </div>
-                    <div class="register-input-block">
-                        <input type="password" name="password" value="<?= htmlspecialchars($password ?? '') ?>" id="" placeholder="Nhập vào mật khẩu của bạn">
+                    <div class="register-input-block password-block">
+                        <input type="text" name="password" value="<?= htmlspecialchars($password ?? '') ?>" placeholder="Nhập vào mật khẩu của bạn" class="hidden-password">
+                        <i class="fa-solid fa-eye toggle-password-icon"></i>
                     </div>
                     <?php if(!empty($error['password'])): ?>
                         <small style="color:red">
@@ -291,8 +296,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         </span>
                         <h3>Xác nhận mật khẩu</h3>
                     </div>
-                    <div class="register-input-block">
-                        <input type="password" name="password_confirm" id="" value="<?= htmlspecialchars($password_confirm ?? '') ?>" placeholder="Nhập lại mật khẩu của bạn một lần nữa">
+                    <div class="register-input-block password-block">
+                        <input type="text" name="password_confirm" value="<?= htmlspecialchars($password_confirm ?? '') ?>" placeholder="Nhập lại mật khẩu của bạn một lần nữa" class="hidden-password">
+                        <i class="fa-solid fa-eye toggle-password-icon"></i>
                     </div>
                     <?php if(!empty($error['password_confirm'])): ?>
                         <small style="color:red">
@@ -320,5 +326,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     </div>
 
     <script src="assets/js/suggest.js"></script>
+    <script src="assets/js/password.js"></script>
 </body>
 </html>
