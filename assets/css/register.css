@@ -1,0 +1,14 @@
+.hidden-password {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
+/* ================================================ */
+
+body {
+  min-height: 100vh;
+  background-image: url(../images/register-background1.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}

@@ -99,18 +99,71 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <title>Đăng ký</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="assets/css/search.css">
-    <link rel="stylesheet" href="assets/css/password.css">
+    <link rel="stylesheet" href="assets/css/register.css">
 </head>
 <body>
+    <header>
+        <div class="register-header">
+            <div class="register-header-left">
+                <div class="register-header-logo">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <h2>SAMS</h2>
+                </div>
+                <div class="register-header-tiltle">
+                    Hệ thống quản lý hoạt động sinh viên
+                </div>
+            </div>
+
+            <div class="register-header-right">
+                Bạn đã có tài khoản?
+                <b>
+                    <a href="login.php">Đăng nhập</a>
+                </b>
+            </div>
+        </div>
+    </header>
     
     <div class="register-container">
+        <div class="register-describe">
+            <h1>Đăng ký tài khoản</h1>
+            <span>Tạo tài khoản để bắt đầu hành trình tham gia các hoạt động và sự kiện dành cho sinh viên.</span>
+            <div class="register-describe-block">
+
+                <div class="register-describe-item">
+                    <div class="register-describe-logo">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <div class="register-describe-tiltle">
+                        <h3>Kết nối</h3>
+                        <span>Kết nối với cộng đồng sinh viên năng động</span>
+                    </div>
+                </div>
+                
+                <div class="register-describe-item">
+                    <div class="register-describe-logo">
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+                    <div class="register-describe-tiltle">
+                        <h3>Tham gia</h3>
+                        <span>Tham gia các hoạt động sự kiện bổ ích</span>
+                    </div>
+                </div>
+
+                <div class="register-describe-item">
+                    <div class="register-describe-logo">
+                        <i class="fa-solid fa-chart-simple"></i>
+                    </div>
+                    <div class="register-describe-tiltle">
+                        <h3>Phát triển</h3>
+                        <span>Phát triển kỹ năng và tích lũy kinh nghiệm</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
         <div class="register-form">
             <form action="#" method="post">
-                <div class="register-logo">
-                    <i class="fa-solid fa-user-plus"></i>
-                </div>
-                <h1>Đăng ký tài khoản</h1>
-                <small>Tạo tài khoản để bắt đầu hành trình của bạn</small>
+                
 
                 <div class="register-block">
                     <div class="register-title-block">
@@ -311,17 +364,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <input type="submit" value="Đăng ký">
                 </div>
             </form>
-        </div>
-        <div class="register-another">
-            <small>hoặc</small>
-            <h3>
-                Bạn đã có tài khoản?
-                <a href="">
-                    <b>
-                        Đăng nhập ngay
-                    </b>
-                </a>
-            </h3>
         </div>
     </div>
 
