@@ -3,12 +3,141 @@
   text-security: disc;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+* {
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* ================================================ */
 
 body {
   min-height: 100vh;
-  background-image: url(../images/register-background1.png);
+  /* background-image: url(../images/register-background2.png); */
+  background-color: #f8fafe;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  width: min(1300px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+/* =====================register-header============= */
+
+.register-header,
+.register-header-left,
+.register-header-logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.register-header {
+  border-bottom: 0.1rem solid silver;
+}
+
+.register-header-left {
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.register-header-logo {
+  gap: 0.5rem;
+}
+
+.register-header-logo > i {
+  font-size: x-large;
+  color: #295fea;
+}
+
+.register-header-right > b {
+  color: #295fea;
+}
+
+.register-header-right > b:hover,
+.register-header-logo:hover {
+  cursor: pointer;
+}
+
+/* =====================register-container============= */
+
+.register-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  padding-top: 2rem;
+}
+
+/* register-describe */
+
+.register-describe {
+  width: 100%;
+  max-width: 30rem;
+}
+
+.register-describe > h1 {
+  color: #082157;
+}
+
+.register-describe > span {
+  font-weight: 400;
+  color: #64748b;
+}
+
+.register-describe-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.register-describe-logo {
+  width: 1.1rem;
+  height: auto;
+  color: #295fea;
+  background-color: #d8e4ff;
+  padding: 0.6rem;
+  border-radius: 0.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-describe-title > h3 {
+  color: #082157;
+  margin-bottom: 0rem;
+  font-size: 1rem;
+}
+
+.register-describe-title > span {
+  color: #64748b;
+  font-size: small;
+}
+
+/* register-form */
+
+.register-form {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.register-form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.register-block-email {
+  grid-column: 1 / -1;
 }
