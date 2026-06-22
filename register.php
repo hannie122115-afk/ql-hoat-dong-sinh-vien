@@ -206,10 +206,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <h3>Đơn vị</h3>
                         </div>
                         <div class="register-input-block ">
-                            <input type="text" name="unit" class="search-input" data-type="unit" value="<?= htmlspecialchars($unit ?? '') ?>" id="unit">
-                            <div class="suggest-box"></div>
+                            <input type="text" name="unit" class="search-input" data-type="unit" value="<?= htmlspecialchars($unit ?? '') ?>" id="unit" placeholder="Gõ tên đơn vị để tìm kiếm và chọn">
+                            
                         </div>
-                        <small>Gõ tên đơn vị để tìm kiếm và chọn</small><br>
+                        <div class="suggest-box"></div>
                         <?php if(!empty($error['unit'])): ?>
                             <small style="color:red">
                                 <?= $error['unit'] ?>
@@ -225,10 +225,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <h3>Ngành</h3>
                         </div>
                         <div class="register-input-block register-class-search">
-                            <input type="text" name="class" class="search-input" data-type="class" value="<?= htmlspecialchars($class ?? '') ?>" id="">
-                            <div class="suggest-box"></div>
+                            <input type="text" name="class" class="search-input" data-type="class" value="<?= htmlspecialchars($class ?? '') ?>" id="" placeholder="Gõ tên ngành để tìm kiếm và chọn">
+                            
                         </div>
-                        <small>Gõ tên ngành để tìm kiếm và chọn</small> <br>
+                        <div class="suggest-box"></div>
                         <?php if(!empty($error['class'])): ?>
                             <small style="color:red">
                                 <?= $error['class'] ?>
@@ -239,12 +239,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <div class="register-block">
                         <div class="register-title-block">
                             <span>
-                                <i class="fa-regular fa-calendar"></i>
+                                <i class="fa-solid fa-graduation-cap"></i>
                             </span>
                             <h3>Khóa</h3>
                         </div>
                         <div class="register-input-block">
-                            <input type="text" name="year" value="<?= htmlspecialchars($year ?? '') ?>" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            <input type="text" name="year" value="<?= htmlspecialchars($year ?? '') ?>" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Vui lòng nhập định dạng số">
                         </div>
                         <?php if(!empty($error['year'])): ?>
                             <small style="color:red">
@@ -260,11 +260,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             </span>
                             <h3>Giới tính</h3>
                         </div>
-                        <div class="register-input-block">
-                            <div class="register-gender">
+                        <div class="register-input-block register-gender ">
+                            <div class="register-input-gender">
                                 <input type="radio" name="gender" id="" value="male" checked> Nam
                             </div>
-                            <div class="register-gender">
+                            <div class="register-input-gender">
                                 <input type="radio" name="gender" id="" value="female"> Nữ
                             </div>
                         </div>
@@ -280,7 +280,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         </div>
                         <div class="register-input-block register-birth">
                             <input type="date" name="birth" value="<?= htmlspecialchars($birth ?? '') ?>" id="" >
-                            <i class="fa-regular fa-calendar"></i>
+                            <!-- <i class="fa-regular fa-calendar"></i> -->
                         </div>
                         <?php if(!empty($error['birth'])): ?>
                             <small style="color:red">
@@ -334,6 +334,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <input type="text" name="password" value="<?= htmlspecialchars($password ?? '') ?>" placeholder="Nhập vào mật khẩu của bạn" class="hidden-password">
                             <i class="fa-solid fa-eye toggle-password-icon"></i>
                         </div>
+                        <small>Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</small>
                         <?php if(!empty($error['password'])): ?>
                             <small style="color:red">
                                 <?= $error['password'] ?>
@@ -361,7 +362,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     
                     <div class="register-submit">
                         <div class="register-btn-submit">
-                            <input type="submit" value="Đăng ký">
+                            <input type="submit" value="Đăng ký tài khoản">
                         </div>
                         <span>Bằng việc đăng ký, bạn đồng ý với 
                             <b><a href="#">Điều khoản sử dụng</a></b>
