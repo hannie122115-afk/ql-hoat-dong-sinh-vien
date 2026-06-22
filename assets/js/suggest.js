@@ -4,7 +4,6 @@ let controller;
 let unitId = null;
 
 input.forEach((input) => {
-  // const suggestBox = input.nextElementSibling;
   const suggestBox = input.parentElement.nextElementSibling;
   suggestBox.addEventListener("click", function (e) {
     if (e.target.classList.contains("suggest-item")) {
