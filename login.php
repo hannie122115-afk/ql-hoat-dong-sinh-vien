@@ -84,6 +84,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     <div class="register-container">
       <div class="register-describe">
+        <?php if(isset($_SESSION['success_message'])){ ?>
+          <div class="success-login-message">
+            <?= $_SESSION['success_message']; ?>
+          </div>
+        <?php unset($_SESSION['success_message']); } ?>
         <h1>Đăng nhập</h1>
         <span>Đăng nhập ngay để bắt đầu hành trình của bạn</span>
         <div class="register-describe-block">
@@ -118,13 +123,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
               </div>
           </div>
 
-        </div>
-
-        <?php if(isset($_SESSION['success_message'])){ ?>
-          <div class="success_login_message">
-            <?= $_SESSION['success_message']; ?>
-          </div>
-        <?php unset($_SESSION['success_message']); } ?>
+        </div>  
       </div>
 
       <div class="login-form register-form">
