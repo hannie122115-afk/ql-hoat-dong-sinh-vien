@@ -6,9 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <div>ĐÂY LÀ TRANG SINH VIÊN</div>
-    <div> 
-        <a href="../logout.php">Đăng xuất</a>
-    </div>
+    <div>ĐÂY LÀ TRANG CLB</div>
 </body>
 </html>

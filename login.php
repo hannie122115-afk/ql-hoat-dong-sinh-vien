@@ -35,11 +35,22 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         if((int)$user['Role'] == 0){
           header("Location: user/homepage.php");
           exit;
-        } else{
-          header("Location: admin/homepage.php");
+        } elseif((int)$user['Role'] == 1){
+            header("Location: manager/homepage.php");
+            exit;
+            } else{
+                header("Location: admin/homepage.php");
+                exit;   
+              }
+      } elseif(strcmp($password, $user['MatKhau']) == 0){
+        if((int)$user['Role'] == 1){
+          header("Location: manager/homepage.php");
           exit;
+        }elseif((int)$user['Role'] != 1 && (int)$user['Role'] != 0){
+          header("Location: admin/homepage.php");
+          exit;  
         }
-      } else{
+      }else{
         $error['password'] = "Mật khẩu không chính xác. Vui lòng thử lại.";
       }
     }
