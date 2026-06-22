@@ -1,10 +1,12 @@
 <?php 
+if(session_status() === PHP_SESSION_NONE){
+    session_start();
+}
+
 if(!isset($_SESSION['user_id'])){
     header("Location: ../login.php");
     exit;
 }
-
-
 ?>
 
 
@@ -15,6 +17,7 @@ if(!isset($_SESSION['user_id'])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang chủ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/search.css">
 
 </head>
 <body>
@@ -31,8 +34,11 @@ if(!isset($_SESSION['user_id'])){
             </div>
 
             <div class="homepage-search-act">
-                <input type="text" name="activity" class="search-input" data-type="activity">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <div class="homepage-btn-search-act">
+                    <input type="text" name="activity" class="search-input" data-type="activity" id="activity">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="suggest-box"></div>
             </div>
 
             <div class="homepage-header-left">
@@ -238,5 +244,9 @@ if(!isset($_SESSION['user_id'])){
             </div>
         </div>
     </div>
+
+    <script src="../assets/js/suggest.js"></script>
+
 </body>
+
 </html>

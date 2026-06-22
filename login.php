@@ -32,10 +32,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
       if(password_verify($password, $user['MatKhau'])){
         $_SESSION['user_id'] = $user['MaTaiKhoan'];
         $_SESSION['email'] = $user['Email'];
+        $_SESSION['role'] = $user['Role'];
+
         if((int)$user['Role'] == 0){
           header("Location: user/homepage.php");
           exit;
         } elseif((int)$user['Role'] == 1){
+
+            $stmt = $conn->prepare("
+                SELECT MaToChuc
+                FROM ToChuc
+                WHERE MaTaiKhoan = ?
+                LIMIT 1");
+            $stmt->execute([$user['MaTaiKhoan']]);
+            $org = $stmt->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['org_id'] = $org['MaToChuc'];
             header("Location: manager/homepage.php");
             exit;
             } else{
@@ -43,7 +54,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 exit;   
               }
       } elseif(strcmp($password, $user['MatKhau']) == 0){
+        $_SESSION['user_id'] = $user['MaTaiKhoan'];
+        $_SESSION['email'] = $user['Email'];
+        $_SESSION['role'] = $user['Role'];
         if((int)$user['Role'] == 1){
+          $stmt = $conn->prepare("
+                SELECT MaToChuc
+                FROM ToChuc
+                WHERE MaTaiKhoan = ?
+                LIMIT 1");
+          $stmt->execute([$user['MaTaiKhoan']]);
+          $org = $stmt->fetch(PDO::FETCH_ASSOC);
+          $_SESSION['org_id'] = $org['MaToChuc'];
           header("Location: manager/homepage.php");
           exit;
         }elseif((int)$user['Role'] != 1 && (int)$user['Role'] != 0){

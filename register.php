@@ -207,7 +207,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         </div>
                         <div class="register-input-block ">
                             <input type="text" name="unit" class="search-input" data-type="unit" value="<?= htmlspecialchars($unit ?? '') ?>" id="unit" placeholder="Gõ tên đơn vị để tìm kiếm và chọn">
-                            
                         </div>
                         <div class="suggest-box"></div>
                         <?php if(!empty($error['unit'])): ?>

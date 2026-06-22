@@ -1,7 +1,15 @@
 <?php
 
+if(session_status() === PHP_SESSION_NONE){
+    session_start();
+}
+
 require_once "../config/db.php";
 header('Content-Type: application/json');
+
+$user_id = $_SESSION['user_id'] ?? null;
+$user_role = $_SESSION['role'] ?? null;
+$org_id = $_SESSION['org_id'] ?? null;
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_POST['type'])){
     $keyword = trim($_POST['keyword']);
@@ -18,6 +26,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_P
         exit;
     }
     
+    $params = [];
 
     switch($type){
         case "unit":
@@ -27,6 +36,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_P
                         FROM DonVi
                         WHERE TenDonVi LIKE ?
                         LIMIT 8";
+            $params = [$search];
             break;
         case "class":
             if(!$unit_id){
@@ -41,18 +51,34 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_P
                         WHERE dv.MaDonVi = ?
                             AND n.TenNganh LIKE ?
                         LIMIT 8";
+            $params = [$unit_id, $search];
             break;
+        case "activity":
+            if((int)$user_role === 1){
+                $sql = "SELECT MaHoatDong as id
+                                , TenHoatDong as name
+                                FROM HoatDong 
+                                WHERE MaToChuc = ?
+                                    AND TenHoatDong LIKE ?
+                                LIMIT 8";
+                $params = [$org_id, $search];
+            } else{
+                $sql = "SELECT MaHoatDong as id
+                                , TenHoatDong as name
+                                FROM HoatDong 
+                                WHERE TenHoatDong LIKE ?
+                                LIMIT 8";
+                $params = [$search];
+            }
+            break;
+
         default:
             echo json_encode([]);
             exit;
     }
 
     $stmt = $conn->prepare($sql);
-    if($type == "class"){
-        $stmt->execute([$unit_id, $search]);//execute chỉ nhận dạng mảng 
-    } else{
-        $stmt->execute([$search]);
-    }
+    $stmt->execute($params);
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($data);
 

@@ -14,8 +14,8 @@ input.forEach((input) => {
         unitId = e.target.dataset.id;
 
         // xoa noi dung class neu unit thay doi
-        if (document.querySelector("[data-type='class'"))
-          document.querySelector("[data-type='class'").value = "";
+        if (document.querySelector("[data-type='class']"))
+          document.querySelector("[data-type='class']").value = "";
       }
       suggestBox.innerHTML = "";
     }
@@ -54,7 +54,15 @@ input.forEach((input) => {
         formData.append("unit_id", unitId);
       }
 
-      fetch("includes/search.php", {
+      let linkSearchPHP = "";
+
+      if (input.dataset.type === "unit" || input.dataset.type === "class") {
+        linkSearchPHP = "includes/search.php";
+      } else {
+        linkSearchPHP = "../includes/search.php";
+      }
+
+      fetch(linkSearchPHP, {
         method: "POST",
         body: formData,
         signal: controller.signal, //cho phep huy request
