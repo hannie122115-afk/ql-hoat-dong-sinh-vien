@@ -57,59 +57,111 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đăng nhập</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/register.css">
   </head>
   <body>
-    <div class="login-container">
-      <div class="login-form">
-        <form action="#" method="post">
-          <div class="login-logo">
-            <i class="fa-light fa-user-graduate"></i>
+
+    <header>
+        <div class="register-header">
+            <div class="register-header-left">
+                <div class="register-header-logo">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <h2>SAMS</h2>
+                </div>
+                <div class="register-header-tiltle">
+                    Hệ thống quản lý hoạt động sinh viên
+                </div>
+            </div>
+            <div class="register-header-right">
+              Nếu bạn chưa có tài khoản?
+              <b>
+                  <a href="login.php">Đăng ký ngay</a>
+              </b>
+            </div>
+        </div>
+    </header>
+
+    <div class="register-container">
+      <div class="register-describe">
+        <h1>Đăng nhập</h1>
+        <span>Đăng nhập ngay để bắt đầu hành trình của bạn</span>
+        <div class="register-describe-block">
+
+          <div class="register-describe-item">
+              <div class="register-describe-logo">
+                  <i class="fa-solid fa-user-plus"></i>
+              </div>
+              <div class="register-describe-title">
+                  <h3>Kết nối</h3>
+                  <span>Kết nối với cộng đồng sinh viên năng động</span>
+              </div>
           </div>
-          <h1>Đăng nhập</h1>
-          <small>Đăng nhập để bắt đầu hành trình của bạn</small>
+          
+          <div class="register-describe-item">
+              <div class="register-describe-logo">
+                  <i class="fa-regular fa-calendar"></i>
+              </div>
+              <div class="register-describe-title">
+                  <h3>Tham gia</h3>
+                  <span>Tham gia các hoạt động sự kiện bổ ích</span>
+              </div>
+          </div>
 
-          <?php if(isset($_SESSION['success_message'])){ ?>
-            <div class="success_login_message">
-              <?= $_SESSION['success_message']; ?>
-            </div>
-          <?php unset($_SESSION['success_message']); } ?>
+          <div class="register-describe-item">
+              <div class="register-describe-logo">
+                  <i class="fa-solid fa-chart-simple"></i>
+              </div>
+              <div class="register-describe-title">
+                  <h3>Phát triển</h3>
+                  <span>Phát triển kỹ năng và tích lũy kinh nghiệm</span>
+              </div>
+          </div>
 
-          <div class="login-block">
-            <div class="login-title-block">
-              <h3>Email</h3>
+        </div>
+
+        <?php if(isset($_SESSION['success_message'])){ ?>
+          <div class="success_login_message">
+            <?= $_SESSION['success_message']; ?>
+          </div>
+        <?php unset($_SESSION['success_message']); } ?>
+      </div>
+
+      <div class="login-form register-form">
+        <form action="#" method="post">
+          <div class="login-form-container ">
+            <div class="login-block register-block">
+              <div class="login-title-block register-title-block">
+                <span>
+                  <i class="fa-regular fa-envelope"></i>
+                </span>
+                <h3>Email</h3>
+              </div>
+              <div class="login-input-block register-input-block">
+                
+                <input
+                  type="text"
+                  name="email"
+                  id=""
+                  value="<?= htmlspecialchars($email ?? '') ?>"
+                  placeholder="Nhập email của bạn"
+                />
+              </div>
+              <?php if(!empty($error['email'])): ?>
+              <small style="color: red"> <?= $error['email'] ?> </small>
+              <?php endif;?>
             </div>
-            <div class="login-input-block">
+
+          <div class="login-block register-block">
+            <div class="login-title-block register-title-block">
               <span>
                 <i class="fa-regular fa-envelope"></i>
               </span>
-              <input
-                type="text"
-                name="email"
-                id=""
-                value="<?= htmlspecialchars($email ?? '') ?>"
-                placeholder="Nhập email của bạn"
-              />
-            </div>
-            <?php if(!empty($error['email'])): ?>
-            <small style="color: red"> <?= $error['email'] ?> </small>
-            <?php endif;?>
-          </div>
-
-          <div class="login-block">
-            <div class="login-title-block">
               <h3>Mật khẩu</h3>
             </div>
-            <div class="login-input-block">
-              <span>
-                <i class="fa-regular fa-envelope"></i>
-              </span>
-              <input
-                type="password"
-                name="password"
-                id=""
-                value="<?= htmlspecialchars($password ?? '') ?>"
-                placeholder="Nhập mật khẩu của bạn"
-              />
+            <div class="login-input-block register-input-block password-block">
+              <input type="text" name="password" value="<?= htmlspecialchars($password ?? '') ?>" placeholder="Nhập vào mật khẩu của bạn" class="hidden-password">
+                <i class="fa-solid fa-eye toggle-password-icon"></i>
             </div>
             <?php if(!empty($error['password'])): ?>
             <small style="color: red"> <?= $error['password'] ?> </small>
@@ -128,23 +180,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             </div>
           </div>
 
-          <div class="login-btn">
+          <div class="login-btn register-submit register-btn-submit">
             <input type="submit" value="Đăng nhập" />
+          </div>
           </div>
         </form>
       </div>
-      <div class="register-another">
-            <small>hoặc</small>
-            <div class="login-google-btn"></div>
-            <h3>
-                Nếu bạn chưa có tài khoản?
-                <a href="">
-                    <b>
-                        Đăng ký ngay
-                    </b>
-                </a>
-            </h3>
-        </div>
     </div>
   </body>
+
+    <script src="assets/js/password.js"></script>
+
 </html>

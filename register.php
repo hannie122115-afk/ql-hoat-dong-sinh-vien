@@ -117,7 +117,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             <div class="register-header-right">
                 Bạn đã có tài khoản?
                 <b>
-                    <a href="login.php">Đăng nhập</a>
+                    <a href="login.php">Đăng nhập ngay</a>
                 </b>
             </div>
         </div>
