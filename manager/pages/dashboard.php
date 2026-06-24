@@ -19,8 +19,7 @@ $stmt1 = $conn->prepare("SELECT
                             ON hd.MaHoatDong = dk.MaHoatDong
                         WHERE hd.MaToChuc = ?
                             AND hd.ThoiGianBatDau > NOW()
-                        GROUP BY hd.MaHoatDong
-                        LIMIT 4");
+                        GROUP BY hd.MaHoatDong");
 $stmt1->execute([$org['MaToChuc']]);
 
 $stmt2 = $conn->prepare("SELECT 
@@ -31,8 +30,7 @@ $stmt2 = $conn->prepare("SELECT
                             ON hd.MaHoatDong = dk.MaHoatDong
                         WHERE hd.MaToChuc = ?
                             AND (NOW() BETWEEN hd.ThoiGianBatDau AND hd.ThoiGianKetThuc)
-                        GROUP BY hd.MaHoatDong
-                        LIMIT 4");
+                        GROUP BY hd.MaHoatDong");
 $stmt2->execute([$org['MaToChuc']]);
 
 $stmt3 = $conn->prepare("SELECT 
@@ -43,8 +41,7 @@ $stmt3 = $conn->prepare("SELECT
                             ON hd.MaHoatDong = dk.MaHoatDong
                         WHERE hd.MaToChuc = ?
                             AND hd.ThoiGianKetThuc < NOW()
-                        GROUP BY hd.MaHoatDong
-                        LIMIT 4");
+                        GROUP BY hd.MaHoatDong");
 $stmt3->execute([$org['MaToChuc']]);
 
 
@@ -57,6 +54,7 @@ $stmt3->execute([$org['MaToChuc']]);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="../assets/css/card.css">
 </head>
 <body>
     <h1>ĐÂY LÀ TRANG CHỦ</h1>
@@ -71,7 +69,7 @@ $stmt3->execute([$org['MaToChuc']]);
             <?php $count = 0;
             while($row = $stmt1->fetch(PDO::FETCH_ASSOC)){ 
                 $count++;?>
-            <div class="card-item <?= $count > 4 ? 'hidden-card' : '' ?>">  
+            <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>">  
                 <div class="img-card-item">
                     <img src="<?= $row['HinhAnh'] ?>" alt="">
                 </div>
@@ -112,7 +110,7 @@ $stmt3->execute([$org['MaToChuc']]);
             <?php $count = 0;
             while($row = $stmt2->fetch(PDO::FETCH_ASSOC)){ 
                 $count++; ?>
-            <div class="card-item <?= $count > 4 ? 'hidden-card' : '' ?>">  
+            <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>">  
                 <div class="img-card-item">
                     <img src="<?= $row['HinhAnh'] ?>" alt="">
                 </div>
@@ -153,7 +151,7 @@ $stmt3->execute([$org['MaToChuc']]);
             <?php $count = 0;
             while($row = $stmt3->fetch(PDO::FETCH_ASSOC)){ 
                 $count++;?>
-            <div class="card-item <?= $count > 4 ? 'hidden-card' : '' ?>">  
+            <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>">  
                 <div class="img-card-item">
                     <img src="<?= $row['HinhAnh'] ?>" alt="">
                 </div>
