@@ -1,12 +1,7 @@
 <?php 
-if(session_status() === PHP_SESSION_NONE){
-    session_start();
-}
+require_once "auth.php";
 
-if(!isset($_SESSION['user_id'])){
-    header("Location: ../login.php");
-    exit;
-}
+
 ?>
 
 
@@ -51,82 +46,84 @@ if(!isset($_SESSION['user_id'])){
                 <div class="notify-bell">
                     <i class="fa-regular fa-bell"></i>
                 </div>
-                <div class="homepage-header-user">
-                    <div class="header-group-img">
-                        <img src="" alt="">
+                <div class="homepage-header-org">
+                    <div class="header-org-img">
+                        <img src="<?= $org['AnhDaiDien'] ?>" alt="Ảnh đại diện">
                     </div>
-                    <div class="header-group-name">
-                        <b>name</b>
-                        <span>name mini</span>
+                    <div class="header-org-name">
+                        <b><?= $org['TenToChuc'] ?></b>
+                        <span><?= $unit['TenDonVi'] ?></span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="homepage-container">
-        <div class="homepage-left-container">
-            <div class="homepage-left">
-                <div class="homepage-left-group">
-                    <div class="header-group-img">
-                        <img src="" alt="">
+    <div class="container">
+        <div class="left-container">
+            <div class="left-side">
+                <div class="homepage-left-org">
+                    <div class="header-org-img">
+                        <img src="<?= $org['AnhDaiDien'] ?>" alt="Ảnh đại diện">
                     </div>
-                    <div class="header-group-name">
-                        <b>name</b>
-                        <span>name mini</span>
+                    <div class="header-org-name">
+                        <b><?= $org['TenToChuc'] ?></b>
+                        <span><?= $unit['TenDonVi'] ?></span>
                     </div>
                 </div>
-                <div class="homepage-left-navbar">
-                    <div class="homepage-left-navbar-item">
-                        <i class="fa-regular fa-house"></i>
+                <div class="navbar">
+                    <div class="navbar-item" data-page="dashboard">
+                        <i class="fa-solid fa-house"></i>
                         <span>Trang chủ</span>
                     </div>
                     
-                    <div class="homepage-left-navbar-item">
+                    <div class="navbar-item" data-page="created-act">
                         <i class="fa-regular fa-square-plus"></i>
                         <span>Tạo hoạt động</span>
                     </div>
 
-                    <div class="homepage-left-navbar-item">
+                    <div class="navbar-item" data-page="activity">
                         <i class="fa-solid fa-chart-gantt"></i>
                         <span>Quản lý hoạt động</span>
                     </div>
 
-                    <div class="homepage-left-navbar-item">
+                    <div class="navbar-item" data-page="statistic">
                         <i class="fa-solid fa-chart-simple"></i>
                         <span>Báo cáo thống kê</span>
                     </div>
 
-                    <div class="homepage-left-navbar-item">
+                    <div class="navbar-item" data-page="profile">
                         <i class="fa-solid fa-user"></i>
                         <span>Hồ sơ</span>
                     </div>
 
-                    <div class="homepage-left-navbar-item">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>Đăng xuất</span>
+                    <div class="navbar-item">
+                        <a href="../logout.php">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Đăng xuất</span>
+                        </a>
                     </div>
 
                 </div>
-                <div class="homepage-left-overview">
+                <div class="left-side-overview">
                     <h3>Tổng quan</h3>
-                    <div class="homepage-left-overview-item">
+                    <div class="left-side-overview-item">
                         <i class="fa-regular fa-calendar"></i>
                         <div class="homepage-left-overview-item-amount">
-                            <h4>15</h4>
-                            <span>Sự kiện đã tạo</span>
+                            <h4><?= $tongSoHD ?></h4>
+                            <span>Hoạt động đã tạo</span>
                         </div>
                     </div>
                     
-                    <div class="homepage-left-overview-item">
+                    <div class="left-side-overview-item">
                         <i class="fa-solid fa-user-group"></i>
                         <div class="homepage-left-overview-item-amount">
-                            <h4>150</h4>
+                            <h4><?= $tongLuotDK ?></h4>
                             <span>Lượt đăng ký</span>
                         </div>
                     </div>
                     
-                    <div class="homepage-left-overview-item">
+                    <div class="left-side-overview-item">
                         <i class="fa-regular fa-circle-check"></i>
                         <div class="homepage-left-overview-item-amount">
                             <h4>15</h4>
@@ -138,114 +135,13 @@ if(!isset($_SESSION['user_id'])){
             </div>
         </div>
 
-        <div class="homepage-right-container">
-            <h1>Xin chào, username!</h1>
-            <div class="homepage-right-card-box">
-                <div class="homepage-right-card-title">
-                    <i class="fa-regular fa-calendar"></i>
-                    <h3>Sắp diễn ra</h3>
-                </div>
-                <div class="homepage-right-card-container">
-                    <div class="homepage-right-card">  
-                        <div class="homepage-right-img-card">
-                            <img src="" alt="">
-                        </div>
-                        <div class="homepage-right-title-card">
-                            <div class="homepage-right-date-card">Để ngày z-index cao
-                                <h3>ngay</h3>
-                                <span>thang may</span>
-                            </div>
-                            <h4>ten hoat dong</h4>
-                            <div class="homepage-right-info-card">
-                                <div class="homepage-right-info-card-item">
-                                    <i class="fa-regular fa-clock"></i>
-                                    <span>gio dien ra</span>
-                                </div>
-                                <div class="homepage-right-info-card-item">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    <span>gio dien ra</span>
-                                </div>
-                                <div class="homepage-right-info-card-item">
-                                    <i class="fa-solid fa-user-group"></i>
-                                    <span>100/200 nguoi dang ky</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="homepage-right-card-box">
-                <div class="homepage-right-card-title">
-                    <i class="fa-regular fa-calendar"></i>
-                    <h3>Sắp diễn ra</h3>
-                </div>
-                <div class="homepage-right-card-container">
-                    <div class="homepage-right-card">  
-                        <div class="homepage-right-img-card">
-                            <img src="" alt="">
-                        </div>
-                        <div class="homepage-right-title-card">
-                            <div class="homepage-right-date-card">Để ngày z-index cao
-                                <h3>ngay</h3>
-                                <span>thang may</span>
-                            </div>
-                            <h4>ten hoat dong</h4>
-                            <div class="homepage-right-info-card">
-                                <div class="homepage-right-info-card-item">
-                                    <i class="fa-regular fa-clock"></i>
-                                    <span>gio dien ra</span>
-                                </div>
-                                <div class="homepage-right-info-card-item">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    <span>gio dien ra</span>
-                                </div>
-                                <div class="homepage-right-info-card-item">
-                                    <i class="fa-solid fa-user-group"></i>
-                                    <span>100/200 nguoi dang ky</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="homepage-right-card-box">
-                <div class="homepage-right-card-title">
-                    <i class="fa-regular fa-calendar"></i>
-                    <h3>Sắp diễn ra</h3>
-                </div>
-                <div class="homepage-right-card-container">
-                    <div class="homepage-right-card">  
-                        <div class="homepage-right-img-card">
-                            <img src="" alt="">
-                        </div>
-                        <div class="homepage-right-title-card">
-                            <div class="homepage-right-date-card">Để ngày z-index cao
-                                <h3>ngay</h3>
-                                <span>thang may</span>
-                            </div>
-                            <h4>ten hoat dong</h4>
-                            <div class="homepage-right-info-card">
-                                <div class="homepage-right-info-card-item">
-                                    <i class="fa-regular fa-clock"></i>
-                                    <span>gio dien ra</span>
-                                </div>
-                                <div class="homepage-right-info-card-item">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    <span>gio dien ra</span>
-                                </div>
-                                <div class="homepage-right-info-card-item">
-                                    <i class="fa-solid fa-user-group"></i>
-                                    <span>100/200 nguoi dang ky</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="right-container">
+            
         </div>
     </div>
 
     <script src="../assets/js/suggest.js"></script>
+    <script src="../assets/js/navbar.js"></script>
 
 </body>
 
