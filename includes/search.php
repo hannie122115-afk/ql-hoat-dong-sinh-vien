@@ -71,7 +71,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_P
                 $params = [$search];
             }
             break;
-
+        case "bonus":
+            $sql = "SELECT MaMucCongDiem as id
+                            , TenMucCongDiem as name
+                            FROM MucCongDiemRenLuyen 
+                            WHERE TenMucCongDiem LIKE ?
+                            LIMIT 8";
+            $params = [$search];
+            break;
         default:
             echo json_encode([]);
             exit;

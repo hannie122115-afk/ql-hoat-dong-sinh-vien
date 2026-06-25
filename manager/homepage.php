@@ -51,10 +51,10 @@ require_once "auth.php";
 
             <div class="homepage-header-left">
                 <div class="btn-add-act">
-                    <a href="#">
+                    <button>
                         <i class="fa-solid fa-plus"></i>
                         <b>Thêm hoạt động</b>
-                    </a>
+                    </button>
                 </div>
                 <div class="notify-bell">
                     <i class="fa-regular fa-bell"></i>
@@ -155,10 +155,8 @@ require_once "auth.php";
 
     <script src="../assets/js/suggest.js"></script>
     <script src="../assets/js/navbar.js"></script>
-    <script src="../assets/js/card.js"></script>
- 
-
-
+    <script src="../assets/js/manager-pages.js"></script>
+    
 </body>
 
 </html>

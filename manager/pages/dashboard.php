@@ -44,9 +44,6 @@ $stmt3 = $conn->prepare("SELECT
                         GROUP BY hd.MaHoatDong");
 $stmt3->execute([$org['MaToChuc']]);
 
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +51,7 @@ $stmt3->execute([$org['MaToChuc']]);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../assets/css/card.css">
+    <link rel="stylesheet" href="../assets/css/manager-pages.css">
 </head>
 <body>
     <h1>ĐÂY LÀ TRANG CHỦ</h1>
@@ -183,5 +180,8 @@ $stmt3->execute([$org['MaToChuc']]);
         </div>
         <div class="see-all-card-btn">Xem tất cả</div>
     </div>
+
+    <!-- <script src="../assets/js/manager-pages.js"></script> -->
+
 </body>
 </html>

@@ -1,0 +1,24 @@
+/* ==========CARD - DASHBOARD=========== */
+
+.hidden-card-item {
+  display: none;
+}
+
+/* =============STEP - CREATED-ACT ====== */
+
+.step-block {
+  display: none;
+}
+
+.step-block.active {
+  display: block;
+}
+
+.step-line-item {
+  opacity: 0.5;
+}
+
+.step-line-item.active {
+  opacity: 1;
+  font-weight: bold;
+}
