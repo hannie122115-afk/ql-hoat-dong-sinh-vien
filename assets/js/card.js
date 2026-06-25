@@ -1,24 +1,4 @@
-// toggle
-
-// const seeAllBtn = document.querySelectorAll(".see-all-card-btn");
-// seeAllBtn.forEach((btn) => {
-//   btn.addEventListener("click", function () {
-//     const container = this.previousElementSibling;
-
-//     this.classList.toggle("isShowing");
-//     if (this.classList.contains("isShowing")) {
-//       container.querySelectorAll(".hidden-card-item").forEach((card) => {
-//         card.style.display = "block";
-//       });
-//       this.textContent = "Thu gọn";
-//     } else {
-//       container.querySelectorAll(".hidden-card-item").forEach((card) => {
-//         card.style.display = "none";
-//       });
-//       this.textContent = "Xem tất cả";
-//     }
-//   });
-// });
+// ===============toggle===================
 
 document.addEventListener("click", function (e) {
   if (!e.target.classList.contains("see-all-card-btn")) {
@@ -39,6 +19,6 @@ document.addEventListener("click", function (e) {
     cardContainer.querySelectorAll(".hidden-card-item").forEach((card) => {
       card.style.display = "none";
     });
-    btn.textContent = "Xem tất cả";
+    btn.textContent = "Xem tất cả ";
   }
 });
