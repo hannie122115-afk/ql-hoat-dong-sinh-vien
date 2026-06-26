@@ -58,3 +58,26 @@ document.addEventListener("click", function (e) {
     }
   }
 });
+
+// ===============error - created-act===================
+
+document.addEventListener(
+  "blur",
+  function (e) {
+    if (e.target.classList.contains("validate-input")) {
+      const input = e.target;
+      const errMessage = input
+        .closest(".act-info-item")
+        .querySelector(".error-message");
+      if (input.value.trim() === "") {
+        errMessage.textContent = "Không được để trống nội dung này.";
+      } else {
+        errMessage.textContent = "";
+      }
+    }
+  },
+  true,
+);
+
+// ===============save-data - created-act===================
+
