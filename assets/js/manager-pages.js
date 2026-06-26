@@ -46,10 +46,43 @@ function showStep(step) {
   currentStep = step;
 }
 
+const activityData = {
+  step1: {
+    actName: "",
+    actObject: "",
+    actLocate: "",
+    actStart: "",
+    actMaxSlot: "",
+    actEnd: "",
+    actBonus: "",
+    actPoint: "",
+    actContent: "",
+    actImg: "",
+  },
+  step2: {},
+};
+
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("btn-step-next")) {
-    if (currentStep < 3) {
-      showStep(currentStep + 1);
+    if (currentStep === 1) {
+      activityData.step1.actName = document.querySelector("#act-name").value;
+      activityData.step1.actObject =
+        document.querySelector("#act-object").value;
+      activityData.step1.actLocate =
+        document.querySelector("#act-locate").value;
+      activityData.step1.actStart = document.querySelector("#act-start").value;
+      activityData.step1.actMaxSlot =
+        document.querySelector("#act-max-slot").value;
+      activityData.step1.actEnd = document.querySelector("#act-end").value;
+      activityData.step1.actBonus = document.querySelector("#bonus").value;
+      activityData.step1.actPoint = document.querySelector("#act-point").value;
+      activityData.step1.actContent =
+        document.querySelector("#act-content").value;
+      activityData.step1.actImg = document.querySelector("#act-img").value;
+      showStep(2);
+    } else if (currentStep === 2) {
+      // code sau
+      showStep(3);
     }
   }
   if (e.target.classList.contains("btn-step-previous")) {
@@ -74,10 +107,21 @@ document.addEventListener(
       } else {
         errMessage.textContent = "";
       }
+
+      if (input.classList.contains("act-point")) {
+        const maxPoint = document.querySelector("#bonus").dataset.maxPoint;
+
+        console.log("Đang kiểm tra điểm");
+        if (parseInt(input.value) > parseInt(maxPoint)) {
+          errMessage.textContent =
+            "Điểm rèn luyện nhập vào không được lớn hơn điểm rèn luyện tối đa ở mục đã chọn.";
+        } else {
+          errMessage.textContent = "";
+        }
+      }
     }
   },
   true,
 );
 
 // ===============save-data - created-act===================
-

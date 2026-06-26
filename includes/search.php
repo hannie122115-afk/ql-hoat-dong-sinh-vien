@@ -74,6 +74,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_P
         case "bonus":
             $sql = "SELECT MaMucCongDiem as id
                             , TenMucCongDiem as name
+                            , DiemToiDa as maxPoint
                             FROM MucCongDiemRenLuyen 
                             WHERE TenMucCongDiem LIKE ?
                             LIMIT 8";

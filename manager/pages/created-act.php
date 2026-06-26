@@ -12,6 +12,8 @@ if(!isset($_SESSION['user_id'])){
 require_once "../../config/db.php";
 require_once "../auth.php";
 
+
+
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $actName = $_POST['act-name'] ?? '';
     $actLocate = $_POST['act-locate'] ?? '';
@@ -125,7 +127,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Điểm rèn luyện</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-point" id="act-point" placeholder="Nhập điểm rèn luyện" class="validate-input">
+                                    <input type="text" name="act-point" id="act-point" placeholder="Nhập điểm rèn luyện" class="validate-input act-point">
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Nhập điểm rèn luyện sinh viên nhận được khi tham gia.</span>
