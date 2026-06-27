@@ -43,8 +43,10 @@ require_once "auth.php";
 
             <div class="homepage-search-act">
                 <div class="homepage-btn-search-act">
-                    <input type="text" name="activity" class="search-input" data-type="activity" id="activity">
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" name="activity" class="search-input" data-type="activity" id="activity" >
+                        <button type="button" id="btn-search-act">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
                 </div>
                 <div class="suggest-box"></div>
             </div>

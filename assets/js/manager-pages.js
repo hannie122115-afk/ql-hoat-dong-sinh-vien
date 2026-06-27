@@ -1,5 +1,30 @@
 console.log("js loaded");
+// ===============search-card - dashboard===================
+function searchAct() {
+  const inputAct = document.getElementById("activity");
+  let keyword = inputAct.value.trim();
+  let url = `pages/dashboard.php?keyword=${encodeURIComponent(keyword)}`;
+  const content = document.querySelector(".right-container");
+  fetch(url)
+    .then((res) => res.text())
+    .then((data) => {
+      content.innerHTML = data;
+    });
+}
 
+document
+  .getElementById("btn-search-act")
+  .addEventListener("click", function (e) {
+    e.preventDefault();
+    searchAct();
+  });
+
+document.getElementById("activity").addEventListener("keydown", function (e) {
+  if (e.key === "Enter" || e.keyCode === 13) {
+    e.preventDefault();
+    searchAct();
+  }
+});
 // ===============toggle-card - dashboard===================
 
 document.addEventListener("click", function (e) {

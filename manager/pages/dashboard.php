@@ -11,38 +11,86 @@ if(!isset($_SESSION['user_id'])){
 require_once "../../config/db.php";
 require_once "../auth.php";
 
-$stmt1 = $conn->prepare("SELECT 
-                            hd.*,
-                            COUNT(dk.MSSV) AS total
-                        FROM HoatDong hd
-                        LEFT JOIN DangKy dk
-                            ON hd.MaHoatDong = dk.MaHoatDong
-                        WHERE hd.MaToChuc = ?
-                            AND hd.ThoiGianBatDau > NOW()
-                        GROUP BY hd.MaHoatDong");
-$stmt1->execute([$org['MaToChuc']]);
+$keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+$search = "%$keyword%";
 
-$stmt2 = $conn->prepare("SELECT 
-                            hd.*,
-                            COUNT(dk.MSSV) AS total
-                        FROM HoatDong hd
-                        LEFT JOIN DangKy dk
-                            ON hd.MaHoatDong = dk.MaHoatDong
-                        WHERE hd.MaToChuc = ?
-                            AND (NOW() BETWEEN hd.ThoiGianBatDau AND hd.ThoiGianKetThuc)
-                        GROUP BY hd.MaHoatDong");
-$stmt2->execute([$org['MaToChuc']]);
+// $stmt1 = $conn->prepare("SELECT 
+//                             hd.*,
+//                             COUNT(dk.MSSV) AS total
+//                         FROM HoatDong hd
+//                         LEFT JOIN DangKy dk
+//                             ON hd.MaHoatDong = dk.MaHoatDong
+//                         WHERE hd.MaToChuc = ?
+//                             AND hd.ThoiGianBatDau > NOW()
+//                         GROUP BY hd.MaHoatDong");
+// $stmt1->execute([$org['MaToChuc']]);
 
-$stmt3 = $conn->prepare("SELECT 
-                            hd.*,
-                            COUNT(dk.MSSV) AS total
-                        FROM HoatDong hd
-                        LEFT JOIN DangKy dk
-                            ON hd.MaHoatDong = dk.MaHoatDong
-                        WHERE hd.MaToChuc = ?
-                            AND hd.ThoiGianKetThuc < NOW()
-                        GROUP BY hd.MaHoatDong");
-$stmt3->execute([$org['MaToChuc']]);
+$sql1 = "SELECT 
+            hd.*,
+            COUNT(dk.MSSV) AS total
+        FROM HoatDong hd
+        LEFT JOIN DangKy dk
+            ON hd.MaHoatDong = dk.MaHoatDong
+        WHERE hd.MaToChuc = ?
+            AND hd.ThoiGianBatDau > NOW() ";
+if(!empty($keyword)){
+    $sql1 .= "AND hd.TenHoatDong LIKE ?";
+}
+$sql1 .= "GROUP BY hd.MaHoatDong";
+$stmt1 = $conn->prepare($sql1);
+empty($keyword) ? $stmt1->execute([$org['MaToChuc']]) : $stmt1->execute([$org['MaToChuc'], $search]);
+
+// $stmt2 = $conn->prepare("SELECT 
+//                             hd.*,
+//                             COUNT(dk.MSSV) AS total
+//                         FROM HoatDong hd
+//                         LEFT JOIN DangKy dk
+//                             ON hd.MaHoatDong = dk.MaHoatDong
+//                         WHERE hd.MaToChuc = ?
+//                             AND (NOW() BETWEEN hd.ThoiGianBatDau AND hd.ThoiGianKetThuc)
+//                         GROUP BY hd.MaHoatDong");
+// $stmt2->execute([$org['MaToChuc']]);
+
+$sql2 = "SELECT 
+            hd.*,
+            COUNT(dk.MSSV) AS total
+        FROM HoatDong hd
+        LEFT JOIN DangKy dk
+            ON hd.MaHoatDong = dk.MaHoatDong
+        WHERE hd.MaToChuc = ?
+            AND (NOW() BETWEEN hd.ThoiGianBatDau AND hd.ThoiGianKetThuc) ";
+if(!empty($keyword)){
+    $sql2 .= "AND hd.TenHoatDong LIKE ?";
+}
+$sql2 .= "GROUP BY hd.MaHoatDong";
+$stmt2 = $conn->prepare($sql2);
+empty($keyword) ? $stmt2->execute([$org['MaToChuc']]) : $stmt2->execute([$org['MaToChuc'], $search]);
+
+// $stmt3 = $conn->prepare("SELECT 
+//                             hd.*,
+//                             COUNT(dk.MSSV) AS total
+//                         FROM HoatDong hd
+//                         LEFT JOIN DangKy dk
+//                             ON hd.MaHoatDong = dk.MaHoatDong
+//                         WHERE hd.MaToChuc = ?
+//                             AND hd.ThoiGianKetThuc < NOW()
+//                         GROUP BY hd.MaHoatDong");
+// $stmt3->execute([$org['MaToChuc']]);
+
+$sql3 = "SELECT 
+            hd.*,
+            COUNT(dk.MSSV) AS total
+        FROM HoatDong hd
+        LEFT JOIN DangKy dk
+            ON hd.MaHoatDong = dk.MaHoatDong
+        WHERE hd.MaToChuc = ?
+            AND hd.ThoiGianKetThuc < NOW() ";
+if(!empty($keyword)){
+    $sql3 .= "AND hd.TenHoatDong LIKE ?";
+}
+$sql3 .= "GROUP BY hd.MaHoatDong";
+$stmt3 = $conn->prepare($sql3);
+empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['MaToChuc'], $search]);
 
 ?>
 <!DOCTYPE html>
