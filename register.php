@@ -71,9 +71,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $userId = $conn->lastInsertId();
 
-            $sql2 = "INSERT INTO sinhvien (MSSV, MaTaiKhoan, MaNghanh, HoTen, GioiTinh, NgaySinh, SoDienThoai) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql2 = "INSERT INTO sinhvien (MSSV, MaTaiKhoan, MaNghanh, HoTen, Khoa, GioiTinh, NgaySinh, SoDienThoai) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt2 = $conn->prepare($sql2);
-            $stmt2->execute([$mssv, $userId, $class, $fullname, $gender, $birth, $tel]);
+            $stmt2->execute([$mssv, $userId, $class, $fullname, $year, $gender, $birth, $tel]);
 
             $conn->commit();
             $_SESSION['success_message'] = "Đăng ký thành công! Vui lòng đăng nhập.";

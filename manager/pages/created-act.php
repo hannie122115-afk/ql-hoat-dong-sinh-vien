@@ -32,6 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/manager-pages.css">
 </head>
 <body>
@@ -61,8 +62,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <h1>ĐÂY LÀ BƯỚC 1</h1>
                 <div class="act-info-container">
                     <div class="step1-block act-info-block">
-                        <h3>Thông tin hoạt động</h3>
-                        <span>Nhập các thông tin cơ bản của hoạt động</span>
+                        <div class="act-title-block">
+                            <span>
+                            <i class="fa-solid fa-circle-info"></i>
+                            </span>
+                            <h3>Thông tin hoạt động</h3>
+                            <span>Nhập các thông tin cơ bản của hoạt động</span>
+                        </div>
                         <div class="act-info">
                             <div class="act-info-item">
                                 <h4>Tên hoạt động</h4>
@@ -135,33 +141,124 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         </div>
                     </div>
                     <div class="step1-block act-content-block">
-                        <h3>Nội dung hoạt động</h3>
-                        <span>Mô tả chi tiết về hoạt động để thu hút sinh viên tham gia</span>
+                        <div class="act-title-block">
+                            <span>
+                            <i class="fa-solid fa-camera"></i>
+                            </span>
+                            <h3>Nội dung hoạt động</h3>
+                            <span>Mô tả chi tiết về hoạt động để thu hút sinh viên tham gia</span>
+                        </div>
                         <div class="act-info-item act-content-item">
                             <h4>Nội dung chi tiết</h4>
                             <div class="act-info-item-input">
-                                <input type="text" name="act-content" id="act-content" placeholder="Nhập nội dung chi tiết của hoạt động" class="validate-input">
+                                <textarea name="act-content" id="act-content" placeholder="Nhập nội dung chi tiết của hoạt động" class="validate-input"></textarea>
                             </div>
                             <div class="error-message"></div>
                         </div>
-                        <div class="act-content-item">
+                        <div class="act-content-item act-info-item-input">
                             <h4>Hình ảnh hoạt động</h4>
                             <div class="act-info-item-input">
                                 <input type="file" name="act-img" id="act-img" >
                             </div>
                         </div>
                     </div>
-                    <div class="step1-block">
-                        <div class="btn-step-next">Tiếp theo</div>
-                    </div>
+                </div>
+                <div class="btn-block">
+                    <div class="btn-step-next">Tiếp theo</div>
                 </div>
             </div>
             <!-- STEP 2 -->
             <div class="step-block" id="step2">
                 <h1>ĐÂY LÀ BƯỚC 2</h1>
-                <div class="btn-step-next">Tiếp theo</div>
-                <div class="btn-step-previous">Trở lại</div>
-
+                <div class="act-question-container">
+                    <div class="step2-block auto-ques-block" >
+                        <div class="act-title-block">
+                            <span>
+                            <i class="fa-solid fa-circle-question"></i>
+                            </span>
+                            <h3>Câu hỏi tự động</h3>
+                            <span>Các thông tin này sẽ được tự động điền dựa trên thông tin tài khoảng của người tham gia</span>
+                        </div>
+                        <div class="auto-ques-container">
+                            <div class="auto-ques-item">
+                                <label class="auto-ques-checkbox">
+                                    <input type="checkbox" name="" id="">
+                                    <span class="auto-ques-checkmark"></span>
+                                </label>
+                                Mã số sinh viên
+                            </div>
+                            <div class="auto-ques-item">
+                                <label class="auto-ques-checkbox">
+                                    <input type="checkbox" name="" id="">
+                                    <span class="auto-ques-checkmark"></span>
+                                </label>
+                                Họ tên
+                            </div>
+                            <div class="auto-ques-item">
+                                <label class="auto-ques-checkbox">
+                                    <input type="checkbox" name="" id="">
+                                    <span class="auto-ques-checkmark"></span>
+                                </label>
+                                Nghành
+                            </div>
+                            <div class="auto-ques-item">
+                                <label class="auto-ques-checkbox">
+                                    <input type="checkbox" name="" id="">
+                                    <span class="auto-ques-checkmark"></span>
+                                </label>
+                                Khóa
+                            </div>
+                            <div class="auto-ques-item">
+                                <label class="auto-ques-checkbox">
+                                    <input type="checkbox" name="" id="">
+                                    <span class="auto-ques-checkmark"></span>
+                                </label>
+                                Đơn vị trường
+                            </div>
+                            <div class="auto-ques-item">
+                                <label class="auto-ques-checkbox">
+                                    <input type="checkbox" name="" id="">
+                                    <span class="auto-ques-checkmark"></span>
+                                </label>
+                                Giới tính
+                            </div>
+                            <div class="auto-ques-item">
+                                <label class="auto-ques-checkbox">
+                                    <input type="checkbox" name="" id="">
+                                    <span class="auto-ques-checkmark"></span>
+                                </label>
+                                Số điện thoại 
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="step2-block custom-ques-block">
+                        <div class="act-title-block">
+                            <span>
+                            <i class="fa-solid fa-clock"></i>
+                            </span>
+                            <h3>Câu hỏi bổ sung</h3>
+                            <span>Tạo các câu hỏi để thu thập thêm thông tin từ người tham gia (không bắt buộc).</span>
+                        </div>
+                        <div class="custom-ques-container">
+                            <!-- <div class="custom-ques-item">
+                                <div class="custom-ques-input">
+                                    <input type="text" name="" id="">
+                                </div>
+                                <div class="save-custom-ques-btn">Lưu</div>
+                                <div class="cancel-custom-ques-btn">Hủy</div>
+                            </div> -->
+                        </div>
+                        <div class="add-question-btn">
+                            Thêm câu hỏi
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="btn-block">
+                    <div class="btn-step-next">Tiếp theo</div>
+                    <div class="btn-step-previous">Trở lại</div>
+                </div>
             </div>
             <!-- STEP 3 -->
             <div class="step-block" id="step3">
