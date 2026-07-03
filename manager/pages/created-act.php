@@ -12,16 +12,58 @@ if(!isset($_SESSION['user_id'])){
 require_once "../../config/db.php";
 require_once "../auth.php";
 
+// mở gói actData
+$actData = json_decode(file_get_contents("php://input"), true);
 
+$step1 = $actData['step1'];
+$actName = $step1['act-name'] ?? '';
+$actLocate = $step1['act-locate'] ?? '';
+$actObject = $step1['act-object'] ?? '';
+$actStart = $step1['act-start'] ?? '';
+$actMaxSlot = $step1['act-max-slot'] ?? '';
+$actEnd = $step1['act-end'] ?? '';
+$actBonus = $step1['bonus'] ?? '';
+$actPoint = $step1['act-point'] ?? '';
+$actContent = $step1['act-content'] ?? '';
+$actImgAvt = $step1['act-img-avt'] ?? '';
+$actImgCover = $step1['act-img-cover'] ?? '';
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $actName = $_POST['act-name'] ?? '';
-    $actLocate = $_POST['act-locate'] ?? '';
-    $actStart = $_POST['act-start'] ?? '';
-    $actMaxSlot = $_POST['act-max-slot'] ?? '';
-    $actEnd = $_POST['act-end'] ?? '';
-    
+$sql1 = "INSERT INTO (
+            TenHoatDong
+            ,DiaDiem
+            ,DoiTuongThamGia
+            ,SoLuongToiDa
+            ,ThoiGianBatDau
+            ,ThoiGianKetThuc
+            ,MaMucCongDiem
+            ,DiemRenLuyen
+            ,NoiDungHD
+            ,AnhAvt
+            ,AnhBia )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$stmt1 = $conn->prepare($sql1);
+$stmt1->execute([$actName, $actLocate, $actObject, $actMaxSlot, $actStart, $actEnd, $actBonus, $actPoint, $actContent, $actImgAvt, $actImgCover]);
+$lastActId = $conn->lastInsertId();
+$actCode = "HD".str_pad($lastId, 4, "0", STR_PAD_LEFT);
+
+$step2 = $actData['step2'];
+$autoQuestions = $step2['autoQuestions'];
+$customQuestions = $step2['customQuestions'];
+
+foreach($autoQuestions as $question){
+    $sql2 = "INSERT INTO (
+                MaHoatDong
+                ,LoaiCauHoi
+                ,TenHienThi)
+            VALUE (?, ?, ?)";
+    $stmt2 = $conn->prepare($sql2);
+    $stmt2->execute([$actCode, "auto", $question]);
 }
+
+
+
+
+
 
 ?>
 
@@ -124,11 +166,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Mục cộng điểm</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="bonus" class="search-input validate-input" data-type="bonus" value="" id="bonus" placeholder="Gõ mục cộng điểm rèn luyện để tìm kiếm và chọn">
+                                    <input type="text" class="search-input validate-input" data-type="bonus" value="" id="bonus" placeholder="Gõ mục cộng điểm rèn luyện để tìm kiếm và chọn">
                                 </div>
                                 <div class="suggest-box"></div>
                                 <div class="error-message"></div>
                             </div>
+                            <input type="hidden" name="bonus" id="bonusId">
 
                             <div class="act-info-item">
                                 <h4>Điểm rèn luyện</h4>
@@ -157,8 +200,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         </div>
                         <div class="act-content-item act-info-item-input">
                             <h4>Hình ảnh hoạt động</h4>
+                            <span>Chọn ảnh 1 ảnh đại diện và 1 ảnh bìa cho hoạt động</span>
                             <div class="act-info-item-input">
-                                <input type="file" name="act-img" id="act-img" >
+                                <input type="file" name="act-img-avt" id="act-img-avt" >
+                                <input type="file" name="act-img-cover" id="act-img-cover" >
                             </div>
                         </div>
                     </div>
@@ -182,49 +227,49 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         <div class="auto-ques-container">
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="" id="">
+                                    <input type="checkbox" name="auto-ques" value="Mã số sinh viên">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Mã số sinh viên
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="" id="">
+                                    <input type="checkbox" name="auto-ques" value="Họ tên">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Họ tên
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="" id="">
+                                    <input type="checkbox" name="auto-ques" value="Nghành">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Nghành
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="" id="">
+                                    <input type="checkbox" name="auto-ques" value="Khóa">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Khóa
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="" id="">
+                                    <input type="checkbox" name="auto-ques" value="Đơn vị trường">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Đơn vị trường
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="" id="">
+                                    <input type="checkbox" name="auto-ques" value="Giới tính">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Giới tính
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="" id="">
+                                    <input type="checkbox" name="auto-ques" value="Số điện thoại">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Số điện thoại 
@@ -263,7 +308,131 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             <!-- STEP 3 -->
             <div class="step-block" id="step3">
                 <h1>ĐÂY LÀ BƯỚC 3</h1>
+                <div class="preview-container-step3">
+                    <div class="preview-block-step3">
+                        <div class="act-title-block">
+                            <h3>Thông tin hoạt động</h3>
+                        </div>
+                        <div class="preview-info-content">
+                            <div class="preview-info-item">
+                                <div class="preview-info-left">
+                                    <span>
+                                        <i class="fa-regular fa-clipboard"></i>
+                                    </span>
+                                    <h4>Tên hoạt động</h4>
+                                </div>
+                                <div class="preview-info-right" id="preview-act-name">
+                                    
+                                </div>
+                            </div>
+                            <div class="preview-info-item">
+                                <div class="preview-info-left">
+                                    <span>
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </span>
+                                    <h4>Địa điểm</h4>
+                                </div>
+                                <div class="preview-info-right" id="preview-act-locate">
+                                    
+                                </div>
+                            </div>
+                            <div class="preview-info-item">
+                                <div class="preview-info-left">
+                                    <span>
+                                        <i class="fa-solid fa-user-group"></i>
+                                    </span>
+                                    <h4>Số lượng tối đa</h4>
+                                </div>
+                                <div class="preview-info-right" id="preview-act-amount">
+                                    
+                                </div>
+                            </div>
+                            <div class="preview-info-item">
+                                <div class="preview-info-left">
+                                    <span>
+                                        <i class="fa-solid fa-clock"></i>
+                                    </span>
+                                    <h4>Thời gian bắt đầu</h4>
+                                </div>
+                                <div class="preview-info-right" id="preview-act-start">
+                                    
+                                </div>
+                            </div>
+                            <div class="preview-info-item">
+                                <div class="preview-info-left">
+                                    <span>
+                                        <i class="fa-solid fa-clock"></i>
+                                    </span>
+                                    <h4>Thời gian kết thúc</h4>
+                                </div>
+                                <div class="preview-info-right" id="preview-act-end">
+                                    
+                                </div>
+                            </div>
+                            <div class="preview-info-item">
+                                <div class="preview-info-left">
+                                    <span>
+                                        <i class="fa-solid fa-star"></i>
+                                    </span>
+                                    <h4>Điểm rèn luyện</h4>
+                                </div>
+                                <div class="preview-info-right" id="preview-act-score">
+                                    
+                                </div>
+                            </div>
+                            <div class="preview-info-item">
+                                <div class="preview-info-left">
+                                    <span>
+                                        <i class="fa-solid fa-clipboard-list"></i>
+                                    </span>
+                                    <h4>Mục cộng điểm</h4>
+                                </div>
+                                <div class="preview-info-right" id="preview-act-bonus">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="preview-block-step3">
+                        <div class="act-title-block">
+                            <h3>Nội dung hoạt động</h3>
+                        </div>
+                        <div id="preview-act-describe">
+
+                        </div>
+                    </div>
+                    <div class="preview-block-step3">
+                        <div class="act-title-block">
+                            <h3>Hình ảnh hoạt động</h3>
+                        </div>
+                        <div class="preview-act-img">
+                            <img src="" alt="Hình ảnh hoạt động" id="preview-act-img-avt">
+                            <img src="" alt="Hình ảnh hoạt động" id="preview-act-img-cover">
+                        </div>
+                    </div>
+                    <div class="preview-block-step3">
+                        <div class="act-title-block">
+                            <h3>Form đăng ký tham gia</h3>
+                        </div>
+                        <h4>Thông tin mặc định</h4>
+                        <div id="preview-block-auto-ques">
+                            <!-- <div class="preview-auto-ques-item">
+                                <div class="number-auto-ques"></div>
+                                <h4></h4>
+                            </div> -->
+                        </div>
+                        <h4>Các câu hỏi bổ sung</h4>
+                        <div id="preview-block-custom-ques">
+                            <!-- <div class="preview-custom-ques-item">
+                                <div class="number-custom-ques"></div>
+                                <div class="ques-content"></div>
+                                <div class="answer-content"></div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
                 <div class="btn-step-previous">Trở lại</div>
+                <button type="submit" id="btn-submit-act">Tạo hoạt động</button>
             </div>
         </form>
     </div>

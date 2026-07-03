@@ -82,12 +82,11 @@ const activityData = {
     actBonus: "",
     actPoint: "",
     actContent: "",
-    actImg: "",
+    actImgAvt: "",
+    actImgCover: "",
   },
   step2: {
-    autoQuestions: {
-      aqId: "",
-    },
+    autoQuestions: [],
     customQuestions: [],
   },
 };
@@ -124,10 +123,24 @@ document.addEventListener("click", function (e) {
       activityData.step1.actPoint = document.querySelector("#act-point").value;
       activityData.step1.actContent =
         document.querySelector("#act-content").value;
-      activityData.step1.actImg = document.querySelector("#act-img").value;
+      activityData.step1.actImgAvt =
+        document.querySelector("#act-img-avt").value;
+      activityData.step1.actImgCover =
+        document.querySelector("#act-img-cover").value;
       showStep(2);
     } else if (currentStep === 2) {
-      // code sau
+      activityData.step2.autoQuestions = [];
+      const checkBoxes = document.querySelectorAll(
+        ".auto-ques-container input[type='checkbox']:checked",
+      );
+      checkBoxes.forEach((checkbox) => {
+        activityData.step2.autoQuestions.push(checkbox.value);
+      });
+
+      renderPreview();
+      document.getElementById("bonusId").value = document.querySelector(
+        "[data-type='bonus']",
+      ).dataset.id;
       showStep(3);
     }
   }
@@ -235,8 +248,9 @@ document.addEventListener("click", function (e) {
           valueInputCustom;
       }
     } else {
+      const newId = Date.now();
       activityData.step2.customQuestions.push({
-        cqId: Date.now(),
+        cqId: newId,
         cqContent: valueInputCustom,
       });
     }
@@ -248,8 +262,9 @@ document.addEventListener("click", function (e) {
     divSaveBtn.remove();
     divCancelBtn.remove();
 
-    const HTMLbtn = `<div class="edit-custom-ques-btn">Chỉnh sửa</div>
-                    <div class="del-custom-ques-btn">Xóa</div>`;
+    const HTMLbtn = `
+        <div class="edit-custom-ques-btn" data-id="{newId}">Chỉnh sửa</div>
+        <div class="del-custom-ques-btn" data-id="{newId}">Xóa</div>`;
     customItem1.insertAdjacentHTML("beforeend", HTMLbtn);
   }
 
@@ -304,4 +319,81 @@ document.addEventListener("click", function (e) {
   }
 });
 
-// ===============editQuestion - created-act===================
+// ===============step3 - created-act===================
+
+function renderPreview() {
+  const previewContainer = document.querySelector(".preview-container-step3");
+
+  document.getElementById("preview-act-name").textContent =
+    activityData.step1.actName;
+  document.getElementById("preview-act-locate").textContent =
+    activityData.step1.actLocate;
+  document.getElementById("preview-act-amount").textContent =
+    activityData.step1.actMaxSlot;
+  document.getElementById("preview-act-start").textContent =
+    activityData.step1.actStart;
+  document.getElementById("preview-act-end").textContent =
+    activityData.step1.actEnd;
+  document.getElementById("preview-act-score").textContent =
+    activityData.step1.actPoint;
+  document.getElementById("preview-act-bonus").textContent =
+    activityData.step1.actBonus;
+  document.getElementById("preview-act-describe").textContent =
+    activityData.step1.actContent;
+  document.getElementById("preview-act-img-avt").src =
+    activityData.step1.actImgAvt;
+  document.getElementById("preview-act-img-cover").src =
+    activityData.step1.actImgCover;
+
+  const autoQuesBlock = document.getElementById("preview-block-auto-ques");
+  autoQuesBlock.innerHTML = "";
+
+  if (activityData.step2.autoQuestions.length > 0) {
+    let numberAutoQues = 0;
+    activityData.step2.autoQuestions.forEach((autoQues) => {
+      numberAutoQues += 1;
+      autoQuesBlock.innerHTML += `
+        <div class="preview-auto-ques-item">
+            <div class="preview-auto-ques">
+              <span class="number-auto-ques">${numberAutoQues}</span>
+              <span>${autoQues}</span>
+            </div>
+            <input type="text" disabled placeholder="Hệ thống tự động điền...">
+        </div>
+      `;
+    });
+  }
+
+  const customQuesBlock = document.getElementById("preview-block-custom-ques");
+  customQuesBlock.innerHTML = "";
+
+  if (activityData.step2.customQuestions.length > 0) {
+    let numberCustomQues = 0;
+    activityData.step2.customQuestions.forEach((customQues) => {
+      numberCustomQues += 1;
+      customQuesBlock.innerHTML += `
+        <div class="preview-custom-ques-item">
+            <div class="preview-custom-ques">
+              <span class="number-custom-ques">${numberCustomQues}</span>
+              <span>${customQues.cqContent}</span>
+            </div>
+            <input type="text" disabled placeholder="Nhập vào câu trả lời của bạn...">
+        </div>
+      `;
+    });
+  }
+}
+
+// ===============created-act===================
+document.addEventListener("Click", (e) => {
+  if (!e.target.getElementById("btn-submit-act")) {
+    return;
+  }
+  fetch("created-act.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(activityData), //chuyển chuỗi để truyền đi
+  });
+});

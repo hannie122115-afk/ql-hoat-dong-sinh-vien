@@ -13,6 +13,7 @@ document.addEventListener("click", function (e) {
     suggestBox.previousElementSibling.querySelector(".search-input");
 
   input.value = e.target.dataset.name;
+  input.dataset.id = e.target.dataset.id;
 
   if (input.dataset.type === "bonus") {
     input.dataset.maxPoint = e.target.dataset.maxPoint;
