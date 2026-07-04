@@ -1,3 +1,5 @@
+// const { act } = require("react");
+
 console.log("js loaded");
 // ===============searchCard - dashboard===================
 function searchAct() {
@@ -80,6 +82,7 @@ const activityData = {
     actMaxSlot: "",
     actEnd: "",
     actBonus: "",
+    actBonusId: "",
     actPoint: "",
     actContent: "",
     actImgAvt: "",
@@ -120,6 +123,12 @@ document.addEventListener("click", function (e) {
         document.querySelector("#act-max-slot").value;
       activityData.step1.actEnd = document.querySelector("#act-end").value;
       activityData.step1.actBonus = document.querySelector("#bonus").value;
+
+      document.getElementById("bonusId").value = document.querySelector(
+        "[data-type='bonus']",
+      ).dataset.id;
+      activityData.step1.actBonusId = document.getElementById("bonusId").value;
+
       activityData.step1.actPoint = document.querySelector("#act-point").value;
       activityData.step1.actContent =
         document.querySelector("#act-content").value;
@@ -129,18 +138,27 @@ document.addEventListener("click", function (e) {
         document.querySelector("#act-img-cover").value;
       showStep(2);
     } else if (currentStep === 2) {
+      const unsaveCustomQues = document.querySelectorAll(
+        ".custom-ques-input input:not(.is-saved",
+      );
+      if (unsaveCustomQues.length > 0) {
+        alert("Vui lòng chọn 'lưu' hoặc 'hủy bỏ' câu hỏi để tiếp tục.");
+        unsaveCustomQues[0].focus();
+        return;
+      }
+
       activityData.step2.autoQuestions = [];
       const checkBoxes = document.querySelectorAll(
         ".auto-ques-container input[type='checkbox']:checked",
       );
       checkBoxes.forEach((checkbox) => {
-        activityData.step2.autoQuestions.push(checkbox.value);
+        activityData.step2.autoQuestions.push({
+          aqType: checkbox.dataset.id,
+          aqContent: checkbox.value,
+        });
       });
 
       renderPreview();
-      document.getElementById("bonusId").value = document.querySelector(
-        "[data-type='bonus']",
-      ).dataset.id;
       showStep(3);
     }
   }
@@ -169,11 +187,19 @@ document.addEventListener(
 
       if (input.classList.contains("act-point")) {
         const maxPoint = document.querySelector("#bonus").dataset.maxPoint;
-
-        console.log("Đang kiểm tra điểm");
         if (parseInt(input.value) > parseInt(maxPoint)) {
+          errMessage.textContent = `Điểm rèn luyện nhập vào không được lớn hơn điểm rèn luyện tối đa ở mục đã chọn. Điểm rèn luyện tối đa của mục này là: ${maxPoint}`;
+        } else {
+          errMessage.textContent = "";
+        }
+      }
+      // ràng buộc định dạng file tải lên là ảnh
+      if (input.classList.contains("act-img-input")) {
+        const file = input.files[0];
+        if (!file.type.startsWith("image/")) {
           errMessage.textContent =
-            "Điểm rèn luyện nhập vào không được lớn hơn điểm rèn luyện tối đa ở mục đã chọn.";
+            "Chỉ chọn file định dạng hình ảnh (png, jpg, jpeg...)!. Vui lòng chọn lại";
+          input.value = "";
         } else {
           errMessage.textContent = "";
         }
@@ -182,6 +208,63 @@ document.addEventListener(
   },
   true,
 );
+
+// ràng buộc ngày
+
+function initDateTime() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  const hh = String(today.getHours()).padStart(2, "0");
+  const mi = String(today.getMinutes()).padStart(2, "0");
+
+  const actStartInput = document.getElementById("act-start");
+  if (actStartInput) {
+    actStartInput.min = `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+    console.log("toi buoc actStart");
+  }
+
+  const actEndInput = document.getElementById("act-end");
+  if (actEndInput && actStartInput) {
+    actEndInput.min = `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+
+    actStartInput.addEventListener("change", function () {
+      const now = new Date();
+      const selected = new Date(this.value);
+      if (selected < now) {
+        alert("Thời gian bắt đầu phải từ thời điểm hiện tại trở đi.");
+        this.value = "";
+      }
+
+      actEndInput.min = actStartInput.value;
+      if (actEndInput.value && actEndInput.value < actStartInput.value) {
+        actEndInput.value = actStartInput.value;
+      }
+    });
+  }
+}
+
+// document.addEventListener("change", function (e) {
+//   const actImgInput = e.target.closest(".act-img-input");
+//   if (!actImgInput) {
+//     return;
+//   }
+//   const errMessage = actImgInput
+//     .closest(".act-info-item")
+//     .querySelector(".error-message");
+
+//   if (actImgInput.files.length === 0) {
+//     return;
+//   }
+//   const file = actImgInput.files[0];
+//   if (!file.type.startsWith("images/")) {
+//     errMessage.textContent =
+//       "Chỉ chọn file định dạng hình ảnh (png, jpg, jpeg...)!";
+//     actImgInput.value = "";
+//   }
+//   errMessage.textContent = "";
+// });
 
 // ===============addQuestion - created-act===================
 
@@ -340,10 +423,14 @@ function renderPreview() {
     activityData.step1.actBonus;
   document.getElementById("preview-act-describe").textContent =
     activityData.step1.actContent;
+
+  // lưu tạm thời ảnh
+  const avtFile = document.getElementById("act-img-avt").files[0];
   document.getElementById("preview-act-img-avt").src =
-    activityData.step1.actImgAvt;
+    URL.createObjectURL(avtFile);
+  const coverFile = document.getElementById("act-img-cover").files[0];
   document.getElementById("preview-act-img-cover").src =
-    activityData.step1.actImgCover;
+    URL.createObjectURL(coverFile);
 
   const autoQuesBlock = document.getElementById("preview-block-auto-ques");
   autoQuesBlock.innerHTML = "";
@@ -356,7 +443,7 @@ function renderPreview() {
         <div class="preview-auto-ques-item">
             <div class="preview-auto-ques">
               <span class="number-auto-ques">${numberAutoQues}</span>
-              <span>${autoQues}</span>
+              <span>${autoQues.aqContent}</span>
             </div>
             <input type="text" disabled placeholder="Hệ thống tự động điền...">
         </div>
@@ -385,15 +472,32 @@ function renderPreview() {
 }
 
 // ===============created-act===================
-document.addEventListener("Click", (e) => {
-  if (!e.target.getElementById("btn-submit-act")) {
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btn-submit-act");
+  if (!btn) {
     return;
   }
-  fetch("created-act.php", {
+
+  e.preventDefault();
+  // vì có file ảnh nên dùng form data mới gửi đc dữ liệu
+  const formData = new FormData();
+  formData.append("activityData", JSON.stringify(activityData));
+  formData.append("actImgAvt", document.getElementById("act-img-avt").files[0]);
+  formData.append(
+    "actImgCover",
+    document.getElementById("act-img-cover").files[0],
+  );
+
+  fetch("pages/created-act.php", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(activityData), //chuyển chuỗi để truyền đi
-  });
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        loadPage(`pages/act-detail.php`);
+      } else {
+        alert(data.message);
+      }
+    });
 });

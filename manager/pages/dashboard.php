@@ -14,17 +14,6 @@ require_once "../auth.php";
 $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
 $search = "%$keyword%";
 
-// $stmt1 = $conn->prepare("SELECT 
-//                             hd.*,
-//                             COUNT(dk.MSSV) AS total
-//                         FROM HoatDong hd
-//                         LEFT JOIN DangKy dk
-//                             ON hd.MaHoatDong = dk.MaHoatDong
-//                         WHERE hd.MaToChuc = ?
-//                             AND hd.ThoiGianBatDau > NOW()
-//                         GROUP BY hd.MaHoatDong");
-// $stmt1->execute([$org['MaToChuc']]);
-
 $sql1 = "SELECT 
             hd.*,
             COUNT(dk.MSSV) AS total
@@ -40,17 +29,6 @@ $sql1 .= "GROUP BY hd.MaHoatDong";
 $stmt1 = $conn->prepare($sql1);
 empty($keyword) ? $stmt1->execute([$org['MaToChuc']]) : $stmt1->execute([$org['MaToChuc'], $search]);
 
-// $stmt2 = $conn->prepare("SELECT 
-//                             hd.*,
-//                             COUNT(dk.MSSV) AS total
-//                         FROM HoatDong hd
-//                         LEFT JOIN DangKy dk
-//                             ON hd.MaHoatDong = dk.MaHoatDong
-//                         WHERE hd.MaToChuc = ?
-//                             AND (NOW() BETWEEN hd.ThoiGianBatDau AND hd.ThoiGianKetThuc)
-//                         GROUP BY hd.MaHoatDong");
-// $stmt2->execute([$org['MaToChuc']]);
-
 $sql2 = "SELECT 
             hd.*,
             COUNT(dk.MSSV) AS total
@@ -65,17 +43,6 @@ if(!empty($keyword)){
 $sql2 .= "GROUP BY hd.MaHoatDong";
 $stmt2 = $conn->prepare($sql2);
 empty($keyword) ? $stmt2->execute([$org['MaToChuc']]) : $stmt2->execute([$org['MaToChuc'], $search]);
-
-// $stmt3 = $conn->prepare("SELECT 
-//                             hd.*,
-//                             COUNT(dk.MSSV) AS total
-//                         FROM HoatDong hd
-//                         LEFT JOIN DangKy dk
-//                             ON hd.MaHoatDong = dk.MaHoatDong
-//                         WHERE hd.MaToChuc = ?
-//                             AND hd.ThoiGianKetThuc < NOW()
-//                         GROUP BY hd.MaHoatDong");
-// $stmt3->execute([$org['MaToChuc']]);
 
 $sql3 = "SELECT 
             hd.*,
@@ -116,10 +83,10 @@ empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['M
                 $count++;?>
             <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>">  
                 <div class="img-card-item">
-                    <img src="<?= $row['HinhAnh'] ?>" alt="">
+                    <img src="<?= $row['AnhAvt'] ?>" alt="">
                 </div>
                 <div class="title-card-item">
-                    <div class="date-card-item">Để ngày z-index cao
+                    <div class="date-card-item">
                         <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
                         $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
                         <h3><?= $dateStart->format('d'); ?></h3>

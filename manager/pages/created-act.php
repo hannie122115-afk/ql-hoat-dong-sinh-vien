@@ -12,59 +12,133 @@ if(!isset($_SESSION['user_id'])){
 require_once "../../config/db.php";
 require_once "../auth.php";
 
-// mở gói actData
-$actData = json_decode(file_get_contents("php://input"), true);
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    try{
+            
+        // mở gói actData
 
-$step1 = $actData['step1'];
-$actName = $step1['act-name'] ?? '';
-$actLocate = $step1['act-locate'] ?? '';
-$actObject = $step1['act-object'] ?? '';
-$actStart = $step1['act-start'] ?? '';
-$actMaxSlot = $step1['act-max-slot'] ?? '';
-$actEnd = $step1['act-end'] ?? '';
-$actBonus = $step1['bonus'] ?? '';
-$actPoint = $step1['act-point'] ?? '';
-$actContent = $step1['act-content'] ?? '';
-$actImgAvt = $step1['act-img-avt'] ?? '';
-$actImgCover = $step1['act-img-cover'] ?? '';
+        if(!isset($_POST["activityData"])){
+            throw new Exception("Thiếu dữ liệu!");
+        }
+        $actData = json_decode($_POST["activityData"], true);
+        if(is_null($actData)){
+            throw new Exception("Dữ liệu sai định dạng!");
+        }
 
-$sql1 = "INSERT INTO (
-            TenHoatDong
-            ,DiaDiem
-            ,DoiTuongThamGia
-            ,SoLuongToiDa
-            ,ThoiGianBatDau
-            ,ThoiGianKetThuc
-            ,MaMucCongDiem
-            ,DiemRenLuyen
-            ,NoiDungHD
-            ,AnhAvt
-            ,AnhBia )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-$stmt1 = $conn->prepare($sql1);
-$stmt1->execute([$actName, $actLocate, $actObject, $actMaxSlot, $actStart, $actEnd, $actBonus, $actPoint, $actContent, $actImgAvt, $actImgCover]);
-$lastActId = $conn->lastInsertId();
-$actCode = "HD".str_pad($lastId, 4, "0", STR_PAD_LEFT);
+        $step1 = $actData['step1'];
+        $actName = $step1['actName'] ?? '';
+        $actLocate = $step1['actLocate'] ?? '';
+        $actObject = $step1['actObject'] ?? '';
+        $actStart = $step1['actStart'] ?? '';
+        $actMaxSlot = $step1['actMaxSlot'] ?? '';
+        $actEnd = $step1['actEnd'] ?? '';
+        // $actBonus = $step1['actBonus'] ?? '';
 
-$step2 = $actData['step2'];
-$autoQuestions = $step2['autoQuestions'];
-$customQuestions = $step2['customQuestions'];
+        $actBonus = $step1['actBonusId'] ?? '';
 
-foreach($autoQuestions as $question){
-    $sql2 = "INSERT INTO (
-                MaHoatDong
-                ,LoaiCauHoi
-                ,TenHienThi)
-            VALUE (?, ?, ?)";
-    $stmt2 = $conn->prepare($sql2);
-    $stmt2->execute([$actCode, "auto", $question]);
+        $actPoint = $step1['actPoint'] ?? '';
+        $actContent = $step1['actContent'] ?? '';
+
+        // Xử lý upload ảnh 
+        $uploadDir = "../assets/images/uploads/";
+        if(!is_dir($uploadDir)){
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $pathAvt  = "";
+        if(isset($_FILES["actImgAvt"]) && $_FILES["actImgAvt"]["error"] === UPLOAD_ERR_OK){
+            $pathAvt = $uploadDir. time(). "_avt_". basename($_FILES["actImgAvt"]["name"]);
+            move_uploaded_file($_FILES["actImgAvt"]["tmp_name"], $pathAvt);
+        }
+
+        $pathCover  = "";
+        if(isset($_FILES["actImgCover"]) && $_FILES["actImgCover"]["error"] === UPLOAD_ERR_OK){
+            $pathCover = $uploadDir. time(). "_cover_". basename($_FILES["actImgCover"]["name"]);
+            move_uploaded_file($_FILES["actImgCover"]["tmp_name"], $pathCover);
+        }
+
+        $actImgAvt = $_FILES["actImgAvt"];
+        $actImgCover = $_FILES["actImgCover"];
+
+        $sql1 = "INSERT INTO HoatDong(
+                    MaHoatDong
+                    ,MaToChuc
+                    ,TenHoatDong
+                    ,DiaDiem
+                    ,DoiTuongThamGia
+                    ,SoLuongToiDa
+                    ,ThoiGianBatDau
+                    ,ThoiGianKetThuc
+                    ,MaMucCongDiem
+                    ,DiemRenLuyen
+                    ,NoiDungHD
+                    ,AnhAvt
+                    ,AnhBia )
+                VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->execute(["a", $org['MaToChuc'], $actName, $actLocate, $actObject, $actMaxSlot, $actStart, $actEnd, $actBonus, $actPoint, $actContent, $pathAvt, $pathCover]);
+        $lastActId = $conn->lastInsertId();
+        $actCode = "HD".str_pad($lastActId, 4, "0", STR_PAD_LEFT);
+
+        $sql2 = "UPDATE HoatDong
+                SET MaHoatDong = ?
+                WHERE Id = ?";
+        $stmt = $conn->prepare($sql2);
+        $stmt->execute([$actCode, $lastActId]);
+
+        $step2 = $actData['step2'];
+        $autoQuestions = $step2['autoQuestions'];
+        $customQuestions = $step2['customQuestions'];
+
+        foreach($autoQuestions as $question){
+            $sql3 = "INSERT INTO CauHoiDangKy(
+                        MaCauHoi
+                        ,MaHoatDong
+                        ,LoaiCauHoi
+                        ,TenHienThi)
+                    VALUES (?, ?, ?, ?)";
+            $stmt2 = $conn->prepare($sql3);
+            $stmt2->execute(["b", $actCode, $question['aqType'], $question['aqContent'],]);
+            $lastAqId = $conn->lastInsertId();
+            $AqCode = "HD".str_pad($lastAqId, 4, "0", STR_PAD_LEFT);
+
+            $sql4 = "UPDATE CauHoiDangKy
+                    SET MaCauHoi = ?
+                    WHERE Id = ?";
+            $stmt = $conn->prepare($sql4);
+            $stmt->execute([$AqCode, $lastAqId]);
+
+        }
+
+        foreach($customQuestions as $question){
+            $sql5 = "INSERT INTO CauHoiDangKy(
+                        MaCauHoi
+                        ,MaHoatDong
+                        ,LoaiCauHoi
+                        ,TenHienThi)
+                    VALUES (?, ?, ?, ?)";
+            $stmt2 = $conn->prepare($sql5);
+            $stmt2->execute(["c", $actCode, "custom", $question['cqContent'],]);
+            $lastCqId = $conn->lastInsertId();
+            $CqCode = "HD".str_pad($lastCqId, 4, "0", STR_PAD_LEFT);
+
+            $sql6 = "UPDATE CauHoiDangKy
+                    SET MaCauHoi = ?
+                    WHERE Id = ?";
+            $stmt = $conn->prepare($sql6);
+            $stmt->execute([$CqCode, $lastCqId]);
+        }
+
+        echo json_encode(["success" => true, "message" => "Thêm hoạt động thành công"]);
+        exit;
+    }catch(Exception $e){
+        echo json_encode([
+            "success" => false,
+            "message" => $e->getMessage()
+        ]);
+    }
+
 }
-
-
-
-
-
-
 ?>
 
 
@@ -98,7 +172,7 @@ foreach($autoQuestions as $question){
             </div>
         </div>
 
-        <form action="#" method="post">
+        <form action="" method="post">
                 <!-- STEP 1 -->
             <div class="step-block active" id="step1">
                 <h1>ĐÂY LÀ BƯỚC 1</h1>
@@ -148,7 +222,7 @@ foreach($autoQuestions as $question){
                             <div class="act-info-item">
                                 <h4>Số lượng tối đa</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-max-slot" id="act-max-slot" placeholder="Nhập số lượng tối đa (để trống nếu không giới hạn)" class="validate-input">
+                                    <input type="text" name="act-max-slot" id="act-max-slot" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '')" maxlength='5' placeholder="Nhập số lượng tối đa (để trống nếu không giới hạn)" class="validate-input">
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Số lượng sinh viên tối đa có thể đăng ký tham gia.</span>
@@ -176,7 +250,7 @@ foreach($autoQuestions as $question){
                             <div class="act-info-item">
                                 <h4>Điểm rèn luyện</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-point" id="act-point" placeholder="Nhập điểm rèn luyện" class="validate-input act-point">
+                                    <input type="text" name="act-point" id="act-point" inputmode="numeric" placeholder="Nhập điểm rèn luyện" class="validate-input act-point" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '')" maxlength='2'>
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Nhập điểm rèn luyện sinh viên nhận được khi tham gia.</span>
@@ -198,13 +272,21 @@ foreach($autoQuestions as $question){
                             </div>
                             <div class="error-message"></div>
                         </div>
-                        <div class="act-content-item act-info-item-input">
+                        <div class="act-info-item act-content-item">
                             <h4>Hình ảnh hoạt động</h4>
-                            <span>Chọn ảnh 1 ảnh đại diện và 1 ảnh bìa cho hoạt động</span>
+                            <span>Chọn ảnh 1 ảnh đại diện cho hoạt động</span>
                             <div class="act-info-item-input">
-                                <input type="file" name="act-img-avt" id="act-img-avt" >
-                                <input type="file" name="act-img-cover" id="act-img-cover" >
+                                <input type="file" name="act-img-avt" id="act-img-avt" class="act-img-input validate-input">
                             </div>
+                            <div class="error-message"></div>
+                        </div>
+                        <div class="act-info-item act-content-item">
+                            <h4>Hình ảnh hoạt động</h4>
+                            <span>Chọn ảnh 1 ảnh bìa cho hoạt động</span>
+                            <div class="act-info-item-input">
+                                <input type="file" name="act-img-cover" id="act-img-cover" class="act-img-input validate-input">
+                            </div>
+                            <div class="error-message"></div>
                         </div>
                     </div>
                 </div>
@@ -227,49 +309,49 @@ foreach($autoQuestions as $question){
                         <div class="auto-ques-container">
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Mã số sinh viên">
+                                    <input type="checkbox" name="auto-ques" value="Mã số sinh viên" data-id="mssv">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Mã số sinh viên
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Họ tên">
+                                    <input type="checkbox" name="auto-ques" value="Họ tên" data-id="fullname">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Họ tên
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Nghành">
+                                    <input type="checkbox" name="auto-ques" value="Nghành" data-id="class">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Nghành
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Khóa">
+                                    <input type="checkbox" name="auto-ques" value="Khóa" data-id="year">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Khóa
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Đơn vị trường">
+                                    <input type="checkbox" name="auto-ques" value="Đơn vị trường" data-id="unit">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Đơn vị trường
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Giới tính">
+                                    <input type="checkbox" name="auto-ques" value="Giới tính" data-id="gender">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Giới tính
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Số điện thoại">
+                                    <input type="checkbox" name="auto-ques" value="Số điện thoại" data-id="tel">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Số điện thoại 
@@ -436,7 +518,7 @@ foreach($autoQuestions as $question){
             </div>
         </form>
     </div>
-        <!-- <script src="../../assets/js/step.js"></script> -->
+        <!-- <script src="../../assets/js/manager-pages.js"></script> -->
 
     <!-- <script src="../assets/js/manager-pages.js"></script> -->
     <!-- <script src="../assets/js/suggest.js"></script> -->
