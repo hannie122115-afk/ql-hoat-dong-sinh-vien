@@ -110,7 +110,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $stmt2 = $conn->prepare($sql3);
             $stmt2->execute(["b", $actCode, $question['aqType'], $question['aqContent'],]);
             $lastAqId = $conn->lastInsertId();
-            $AqCode = "HD".str_pad($lastAqId, 4, "0", STR_PAD_LEFT);
+            $AqCode = "CH".str_pad($lastAqId, 4, "0", STR_PAD_LEFT);
 
             $sql4 = "UPDATE CauHoiDangKy
                     SET MaCauHoi = ?
@@ -130,7 +130,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $stmt2 = $conn->prepare($sql5);
             $stmt2->execute(["c", $actCode, "custom", $question['cqContent'],]);
             $lastCqId = $conn->lastInsertId();
-            $CqCode = "HD".str_pad($lastCqId, 4, "0", STR_PAD_LEFT);
+            $CqCode = "CH".str_pad($lastCqId, 4, "0", STR_PAD_LEFT);
 
             $sql6 = "UPDATE CauHoiDangKy
                     SET MaCauHoi = ?
@@ -322,49 +322,49 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         <div class="auto-ques-container">
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Mã số sinh viên" data-id="mssv">
+                                    <input type="checkbox" name="auto-ques" value="Mã số sinh viên" data-id="MSSV">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Mã số sinh viên
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Họ tên" data-id="fullname">
+                                    <input type="checkbox" name="auto-ques" value="Họ tên" data-id="HoTen">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Họ tên
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Nghành" data-id="class">
+                                    <input type="checkbox" name="auto-ques" value="Ngành" data-id="TenNganh">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
-                                Nghành
+                                Ngành
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Khóa" data-id="year">
+                                    <input type="checkbox" name="auto-ques" value="Khóa" data-id="Khoa">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Khóa
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Đơn vị trường" data-id="unit">
+                                    <input type="checkbox" name="auto-ques" value="Đơn vị trường" data-id="TenDonVi">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Đơn vị trường
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Giới tính" data-id="gender">
+                                    <input type="checkbox" name="auto-ques" value="Giới tính" data-id="GioiTinh">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Giới tính
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Số điện thoại" data-id="tel">
+                                    <input type="checkbox" name="auto-ques" value="Số điện thoại" data-id="SoDienThoai">
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Số điện thoại 

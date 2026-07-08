@@ -44,8 +44,13 @@ $stmt4 = $conn->prepare($sql4);
 $stmt4->execute([$org['MaDonVi']]);
 $unit = $stmt4->fetch(PDO::FETCH_ASSOC);
 
-
-
+$sql5 = "SELECT * 
+        FROM CauHoiDangKy
+        WHERE MaHoatDong = ?";
+$stmt5 = $conn->prepare($sql5);
+$stmt5->execute([$actId]);
+$questions = $stmt5->fetchAll(PDO::FETCH_ASSOC);
+$index = 0;
 
 ?>
 
@@ -55,6 +60,7 @@ $unit = $stmt4->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="../assets/css/user-pages.css">
 </head>
 <body>
     ĐÂY LÀ TRANG CHI TIẾT HOẠT ĐỘNG 
@@ -77,20 +83,49 @@ $unit = $stmt4->fetch(PDO::FETCH_ASSOC);
             </div>
             
             <div class="act-detail-item">
-                <button class="act-detail-btn">
+                <button class="act-detail-btn detail-btn">
                     <i class="fa-solid fa-circle-info"></i>
                     <span>Chi tiết hoạt động</span>
                 </button>
-                <button class="act-detail-register-btn">
+                <button class="act-detail-btn register-btn">
                     <i class="fa-solid fa-pen"></i>
                     <span>Đăng ký</span>
                 </button>
             </div>
         </div>
 
-        <div class="act-detail-describe">
+        <div class="act-detail-describe act-detail-block active" id="act-detail-1" >
             <h3>Chi tiết hoạt động</h3>
             <p><?= $act['NoiDungHD'] ?></p>
+        </div>
+
+        <div class="act-detail-register act-detail-block" id="act-detail-2">
+            <div class="act-detail-register-title">
+                <h3>Thông tin đăng ký</h3>
+                <span>Vui lòng điền đầy đủ thông tin vào form bên dưới để đăng ký tham gia hoạt động.</span>
+            </div>
+            <div class="act-detail-register-form">
+                <form action="">
+                    <?php 
+                        foreach($questions as $row) {
+                        if($row['LoaiCauHoi'] != "custom"){
+                            $index++;?>
+                    <div class="auto-ques-form">
+                        <h4><?= $index ?>. <?=  $row['TenHienThi'] ?></h4>
+                        <input type="text" name="" id="" value="<?= $user[$row['LoaiCauHoi']] ?>" readonly>
+                    </div>
+                    <?php } }?>
+
+                    <?php foreach($questions as $row) {
+                        if($row['LoaiCauHoi'] == "custom"){
+                            $index++;?>
+                    <div class="auto-ques-form">
+                        <h4><?= $index ?>. <?= $row['TenHienThi'] ?></h4>
+                        <input type="text" name="" id="" >
+                    </div>
+                    <?php } }?>
+                </form>
+            </div>
         </div>
 
         <div class="act-detail-info">
