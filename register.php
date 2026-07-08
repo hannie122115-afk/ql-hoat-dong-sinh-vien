@@ -12,11 +12,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $fullname = $_POST['fullname'] ?? '';
     $mssv = $_POST['mssv'] ?? '';
     $unit = $_POST['unit'] ?? '';
+    $unitId = $_POST['unitId'] ?? '';
     $class = $_POST['class'] ?? '';
+    $classId = $_POST['classId'] ?? '';
     $year = $_POST['year'] ?? '';
     $gender = $_POST['gender'] ?? '';
     $birth = $_POST['birth'] ?? '';
     $tel = $_POST['tel'] ?? '';
+    $avt = "../assets/images/default/avt-user-default.webp";
 
     if(empty($fullname)){
         $error['fullname'] = "Họ tên không được để trống!";
@@ -71,9 +74,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $userId = $conn->lastInsertId();
 
-            $sql2 = "INSERT INTO sinhvien (MSSV, MaTaiKhoan, MaNghanh, HoTen, Khoa, GioiTinh, NgaySinh, SoDienThoai) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql2 = "INSERT INTO sinhvien (MSSV, MaTaiKhoan, MaDonVi, MaNghanh, HoTen, Khoa, GioiTinh, NgaySinh, SoDienThoai, AnhDaiDien) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt2 = $conn->prepare($sql2);
-            $stmt2->execute([$mssv, $userId, $class, $fullname, $year, $gender, $birth, $tel]);
+            $stmt2->execute([$mssv, $userId, $unitId, $classId, $fullname, $year, $gender, $birth, $tel, $avt]);
 
             $conn->commit();
             $_SESSION['success_message'] = "Đăng ký thành công! Vui lòng đăng nhập.";
@@ -206,7 +209,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <h3>Đơn vị</h3>
                         </div>
                         <div class="register-input-block ">
-                            <input type="text" name="unit" class="search-input" data-type="unit" value="<?= htmlspecialchars($unit ?? '') ?>" id="unit" placeholder="Gõ tên đơn vị để tìm kiếm và chọn">
+                            <input type="text" class="search-input" data-type="unit" name="unit" value="<?= htmlspecialchars($unit ?? '') ?>" id="unit" placeholder="Gõ tên đơn vị để tìm kiếm và chọn">
                         </div>
                         <div class="suggest-box"></div>
                         <?php if(!empty($error['unit'])): ?>
@@ -214,6 +217,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                 <?= $error['unit'] ?>
                             </small>
                         <?php endif; ?>
+                        <input type="hidden" name="unitId" id="unitId" value="<?= htmlspecialchars($unitId ?? '') ?>">
                     </div>
                     
                     <div class="register-block">
@@ -224,7 +228,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <h3>Ngành</h3>
                         </div>
                         <div class="register-input-block register-class-search">
-                            <input type="text" name="class" class="search-input" data-type="class" value="<?= htmlspecialchars($class ?? '') ?>" id="" placeholder="Gõ tên ngành để tìm kiếm và chọn">
+                            <input type="text" class="search-input" data-type="class" name="class" value="<?= htmlspecialchars($class ?? '') ?>" id="" placeholder="Gõ tên ngành để tìm kiếm và chọn">
                             
                         </div>
                         <div class="suggest-box"></div>
@@ -233,6 +237,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                 <?= $error['class'] ?>
                             </small>
                         <?php endif; ?>
+                        <input type="hidden" name="classId" id="classId" value="<?= htmlspecialchars($unitId ?? '') ?>">
                     </div>
                     
                     <div class="register-block">

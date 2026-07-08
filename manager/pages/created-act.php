@@ -39,22 +39,32 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $actPoint = $step1['actPoint'] ?? '';
         $actContent = $step1['actContent'] ?? '';
 
-        // Xử lý upload ảnh 
-        $uploadDir = "../assets/images/uploads/";
-        if(!is_dir($uploadDir)){
+        // Xử lý upload ảnh
+        $uploadDir = "../../assets/images/uploads/activity/";
+        $dbDir = "../assets/images/uploads/activity/";
+
+        if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
 
-        $pathAvt  = "";
-        if(isset($_FILES["actImgAvt"]) && $_FILES["actImgAvt"]["error"] === UPLOAD_ERR_OK){
-            $pathAvt = $uploadDir. time(). "_avt_". basename($_FILES["actImgAvt"]["name"]);
-            move_uploaded_file($_FILES["actImgAvt"]["tmp_name"], $pathAvt);
+        $pathAvt = "";
+        if (isset($_FILES["actImgAvt"]) && $_FILES["actImgAvt"]["error"] === UPLOAD_ERR_OK) {
+
+            $fileName = time() . "_avt_" . basename($_FILES["actImgAvt"]["name"]);
+
+            if (move_uploaded_file($_FILES["actImgAvt"]["tmp_name"], $uploadDir . $fileName)) {
+                $pathAvt = $dbDir . $fileName;
+            }
         }
 
-        $pathCover  = "";
-        if(isset($_FILES["actImgCover"]) && $_FILES["actImgCover"]["error"] === UPLOAD_ERR_OK){
-            $pathCover = $uploadDir. time(). "_cover_". basename($_FILES["actImgCover"]["name"]);
-            move_uploaded_file($_FILES["actImgCover"]["tmp_name"], $pathCover);
+        $pathCover = "";
+        if (isset($_FILES["actImgCover"]) && $_FILES["actImgCover"]["error"] === UPLOAD_ERR_OK) {
+
+            $fileName = time() . "_cover_" . basename($_FILES["actImgCover"]["name"]);
+
+            if (move_uploaded_file($_FILES["actImgCover"]["tmp_name"], $uploadDir . $fileName)) {
+                $pathCover = $dbDir . $fileName;
+            }
         }
 
         $actImgAvt = $_FILES["actImgAvt"];
@@ -129,7 +139,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $stmt->execute([$CqCode, $lastCqId]);
         }
 
-        echo json_encode(["success" => true, "message" => "Thêm hoạt động thành công"]);
+        echo json_encode([
+            "success" => true, 
+            "message" => "Thêm hoạt động thành công",
+            "actCode" => $actCode]);
         exit;
     }catch(Exception $e){
         echo json_encode([

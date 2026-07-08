@@ -1,6 +1,5 @@
-// const { act } = require("react");
-
 console.log("js loaded");
+
 // ===============searchCard - dashboard===================
 function searchAct() {
   const inputAct = document.getElementById("activity");
@@ -245,27 +244,6 @@ function initDateTime() {
   }
 }
 
-// document.addEventListener("change", function (e) {
-//   const actImgInput = e.target.closest(".act-img-input");
-//   if (!actImgInput) {
-//     return;
-//   }
-//   const errMessage = actImgInput
-//     .closest(".act-info-item")
-//     .querySelector(".error-message");
-
-//   if (actImgInput.files.length === 0) {
-//     return;
-//   }
-//   const file = actImgInput.files[0];
-//   if (!file.type.startsWith("images/")) {
-//     errMessage.textContent =
-//       "Chỉ chọn file định dạng hình ảnh (png, jpg, jpeg...)!";
-//     actImgInput.value = "";
-//   }
-//   errMessage.textContent = "";
-// });
-
 // ===============addQuestion - created-act===================
 
 document.addEventListener("click", function (e) {
@@ -495,7 +473,7 @@ document.addEventListener("click", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        loadPage(`pages/act-detail.php`);
+        loadPage(`pages/act-detail.php?id=${data.actCode}`);
       } else {
         alert(data.message);
       }

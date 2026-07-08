@@ -20,14 +20,13 @@ $sql1 = "SELECT
         FROM HoatDong hd
         LEFT JOIN DangKy dk
             ON hd.MaHoatDong = dk.MaHoatDong
-        WHERE hd.MaToChuc = ?
-            AND hd.ThoiGianBatDau > NOW() ";
+        WHERE hd.ThoiGianBatDau > NOW() ";
 if(!empty($keyword)){
     $sql1 .= "AND hd.TenHoatDong LIKE ?";
 }
 $sql1 .= "GROUP BY hd.MaHoatDong";
 $stmt1 = $conn->prepare($sql1);
-empty($keyword) ? $stmt1->execute([$org['MaToChuc']]) : $stmt1->execute([$org['MaToChuc'], $search]);
+empty($keyword) ? $stmt1->execute() : $stmt1->execute([$search]);
 
 $sql2 = "SELECT 
             hd.*,
@@ -35,14 +34,13 @@ $sql2 = "SELECT
         FROM HoatDong hd
         LEFT JOIN DangKy dk
             ON hd.MaHoatDong = dk.MaHoatDong
-        WHERE hd.MaToChuc = ?
-            AND (NOW() BETWEEN hd.ThoiGianBatDau AND hd.ThoiGianKetThuc) ";
+        WHERE (NOW() BETWEEN hd.ThoiGianBatDau AND hd.ThoiGianKetThuc) ";
 if(!empty($keyword)){
     $sql2 .= "AND hd.TenHoatDong LIKE ?";
 }
 $sql2 .= "GROUP BY hd.MaHoatDong";
 $stmt2 = $conn->prepare($sql2);
-empty($keyword) ? $stmt2->execute([$org['MaToChuc']]) : $stmt2->execute([$org['MaToChuc'], $search]);
+empty($keyword) ? $stmt2->execute() : $stmt2->execute([$search]);
 
 $sql3 = "SELECT 
             hd.*,
@@ -50,14 +48,13 @@ $sql3 = "SELECT
         FROM HoatDong hd
         LEFT JOIN DangKy dk
             ON hd.MaHoatDong = dk.MaHoatDong
-        WHERE hd.MaToChuc = ?
-            AND hd.ThoiGianKetThuc < NOW() ";
+        WHERE hd.ThoiGianKetThuc < NOW() ";
 if(!empty($keyword)){
     $sql3 .= "AND hd.TenHoatDong LIKE ?";
 }
 $sql3 .= "GROUP BY hd.MaHoatDong";
 $stmt3 = $conn->prepare($sql3);
-empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['MaToChuc'], $search]);
+empty($keyword) ? $stmt3->execute() : $stmt3->execute([$search]);
 
 ?>
 <!DOCTYPE html>
@@ -71,7 +68,7 @@ empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['M
 <body>
     <h1>ĐÂY LÀ TRANG CHỦ</h1>
 
-    <h1>Xin chào, <?= $org['TenToChuc'] ?>!</h1>
+    <h1>Xin chào, <?= $user['HoTen'] ?>!</h1>
     <div class="container">
         <div class="title-container">
             <i class="fa-regular fa-calendar"></i>
@@ -81,7 +78,7 @@ empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['M
             <?php $count = 0;
             while($row = $stmt1->fetch(PDO::FETCH_ASSOC)){ 
                 $count++;?>
-            <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>">  
+            <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>" data-id="<?= $row['MaHoatDong'] ?>">  
                 <div class="img-card-item">
                     <img src="<?= $row['AnhAvt'] ?>" alt="">
                 </div>
@@ -126,6 +123,7 @@ empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['M
                 <div class="img-card-item">
                     <img src="<?= $row['HinhAnh'] ?>" alt="">
                 </div>
+                <h1><?= $row['MaHoatDong'] ?></h1>
                 <div class="title-card-item">
                     <div class="date-card-item">Để ngày z-index cao
                         <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
@@ -195,8 +193,6 @@ empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['M
         </div>
         <div class="see-all-card-btn">Xem tất cả</div>
     </div>
-
-    <!-- <script src="../assets/js/manager-pages.js"></script> -->
 
 </body>
 </html>

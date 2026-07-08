@@ -1,3 +1,5 @@
+// ================= mật khẩu =============
+
 const toggleIcons = document.querySelectorAll(".toggle-password-icon");
 
 toggleIcons.forEach(function (e) {

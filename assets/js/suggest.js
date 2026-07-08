@@ -15,6 +15,14 @@ document.addEventListener("click", function (e) {
   input.value = e.target.dataset.name;
   input.dataset.id = e.target.dataset.id;
 
+  if (input.dataset.type === "class") {
+    document.getElementById("classId").value = e.target.dataset.id;
+  }
+
+  if (input.dataset.type === "unit") {
+    document.getElementById("unitId").value = e.target.dataset.id;
+  }
+
   if (input.dataset.type === "bonus") {
     input.dataset.maxPoint = e.target.dataset.maxPoint;
   }
@@ -35,6 +43,14 @@ document.addEventListener("input", function (e) {
   if (!input.classList.contains("search-input")) {
     return;
   }
+
+  const hiddenInput = input
+    .closest(".register-block, .act-info-item")
+    .querySelector("input[type='hidden']");
+  if (hiddenInput) {
+    hiddenInput.value = "";
+  }
+  delete input.dataset.id;
 
   const suggestBox = input.parentElement.nextElementSibling;
 

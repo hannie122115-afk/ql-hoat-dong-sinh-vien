@@ -149,7 +149,7 @@ require_once "auth.php";
                 </div>
             </div>
         </div>
-
+        
         <div class="right-container">
             
         </div>

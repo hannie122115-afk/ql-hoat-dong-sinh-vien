@@ -15,7 +15,8 @@
 const content = document.querySelector(".right-container");
 
 function loadPage(url) {
-  fetch(url)
+  const separator = url.includes("?") ? "&" : "?";
+  fetch(url + separator + "t=" + Date.now())
     .then((res) => res.text())
     .then((data) => {
       content.innerHTML = data;
@@ -26,10 +27,18 @@ function loadPage(url) {
     });
 }
 
-const navbarItem = document.querySelectorAll(".navbar-item");
+loadPage("pages/dashboard.php");
 
+const navbarItem = document.querySelectorAll(".navbar-item");
 navbarItem.forEach((item) => {
   item.addEventListener("click", function () {
     loadPage(`pages/${this.dataset.page}.php`);
   });
+});
+
+document.addEventListener("click", function (e) {
+  const card = e.target.closest(".card-item");
+  if (!card) return;
+  const idCard = card.dataset.id;
+  loadPage(`pages/act-detail.php?id=${idCard}`);
 });
