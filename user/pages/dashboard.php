@@ -121,7 +121,7 @@ empty($keyword) ? $stmt3->execute() : $stmt3->execute([$search]);
                 $count++; ?>
             <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>">  
                 <div class="img-card-item">
-                    <img src="<?= $row['HinhAnh'] ?>" alt="">
+                    <img src="<?= $row['AnhAvt'] ?>" alt="">
                 </div>
                 <h1><?= $row['MaHoatDong'] ?></h1>
                 <div class="title-card-item">

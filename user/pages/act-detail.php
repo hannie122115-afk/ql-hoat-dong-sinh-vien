@@ -52,6 +52,46 @@ $stmt5->execute([$actId]);
 $questions = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 $index = 0;
 
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+    $answers = $_POST['answers'] ?? [];
+    try{
+        $sql6 = "INSERT INTO DangKy (MSSV, MaHoatDong) VALUES (?, ?)";
+        $stmt6 = $conn->prepare($sql6);
+        $stmt6->execute([$user['MSSV'], $actId]);
+        foreach($answers as $quesId => $answer){
+            $sql7 = "INSERT INTO CauTraLoi(MSSV, MaHoatDong, MaCauHoi, NoiDung) VALUES (?, ?, ?, ?)";
+            $stmt7 = $conn->prepare($sql7);
+            $stmt7->execute([
+                $user['MSSV'],
+                $actId,
+                $quesId, 
+                $answer
+            ]);
+        }
+
+        echo json_encode([
+            "success" => true, 
+            "message" => "Đăng ký hoạt động thành công",
+            "actCode" => $actId]);
+            exit;
+        }catch(Exception $e){
+            echo json_encode([
+                "success" => false,
+                "message" => $e->getMessage()
+            ]);
+            exit;
+    }
+}
+
+$sql8 = "SELECT *
+        FROM DangKy
+        WHERE MSSV = ?
+        AND MaHoatDong = ?";
+$stmt8 = $conn->prepare($sql8);
+$stmt8->execute([$user['MSSV'], $actId]);
+$isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -87,11 +127,22 @@ $index = 0;
                     <i class="fa-solid fa-circle-info"></i>
                     <span>Chi tiết hoạt động</span>
                 </button>
-                <button class="act-detail-btn register-btn">
-                    <i class="fa-solid fa-pen"></i>
-                    <span>Đăng ký</span>
-                </button>
+                <?php if($isRegistered): ?>
+                    <button class="registered-btn">
+                        <span>Đã đăng ký</span>
+                    </button>
+                <?php else: ?>
+                    <button class="act-detail-btn register-btn">
+                        <i class="fa-solid fa-pen"></i>
+                        <span>Đăng ký</span>
+                    </button>
+                <?php endif; ?>
             </div>
+            <?php if($isRegistered): ?>
+                <div class="success-register-message">
+                    Đăng ký tham gia hoạt động thành công!
+                </div>
+            <?php endif; ?>
         </div>
 
         <div class="act-detail-describe act-detail-block active" id="act-detail-1" >
@@ -105,14 +156,14 @@ $index = 0;
                 <span>Vui lòng điền đầy đủ thông tin vào form bên dưới để đăng ký tham gia hoạt động.</span>
             </div>
             <div class="act-detail-register-form">
-                <form action="">
+                <form action="" id="act-register-form">
                     <?php 
                         foreach($questions as $row) {
                         if($row['LoaiCauHoi'] != "custom"){
                             $index++;?>
                     <div class="auto-ques-form">
                         <h4><?= $index ?>. <?=  $row['TenHienThi'] ?></h4>
-                        <input type="text" name="" id="" value="<?= $user[$row['LoaiCauHoi']] ?>" readonly>
+                        <input type="text" name="answers[<?= $row['MaCauHoi'] ?>]" id="" value="<?= ($row['LoaiCauHoi'] == 'GioiTinh') ? ($user[$row['LoaiCauHoi']] == 0 ? "Nam" : "Nữ") : $user[$row['LoaiCauHoi']] ?>" readonly>
                     </div>
                     <?php } }?>
 
@@ -121,10 +172,14 @@ $index = 0;
                             $index++;?>
                     <div class="auto-ques-form">
                         <h4><?= $index ?>. <?= $row['TenHienThi'] ?></h4>
-                        <input type="text" name="" id="" >
+                        <input type="text" name="answers[<?= $row['MaCauHoi'] ?>]" id="" >
                     </div>
                     <?php } }?>
+                    <div id="register-act-btn">
+                        <button class="register-act-btn" data-id="<?= $act['MaHoatDong'] ?>">Đăng ký</button>
+                    </div>
                 </form>
+                
             </div>
         </div>
 

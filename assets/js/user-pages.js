@@ -1,3 +1,12 @@
+// =================chuyenSangActDetail - dashboard============
+let currentActId = null;
+document.addEventListener("click", (e) => {
+  const card = e.target.closest(".card-item");
+  if (!card) return;
+  currentActId = card.dataset.id;
+  loadPage(`pages/act-detail.php?id=${currentActId}`);
+});
+
 // =================showBTN - act-detail============
 let currentCta = 1;
 
@@ -16,3 +25,50 @@ document.addEventListener("click", (e) => {
     showCta(2);
   }
 });
+
+// ================registerBtn - act-detail============
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#register-act-btn");
+  if (!btn) {
+    return;
+  }
+  e.preventDefault();
+  const actId = btn.dataset.actId;
+  const form = document.querySelector("#act-register-form");
+  const inputs = form.querySelectorAll("input[type='text']");
+
+  let isValid = true;
+  inputs.forEach((input) => {
+    if (input.readOnly) return;
+    if (input.value.trim() === "") {
+      alert("Vui lòng trả lời đầy đủ các câu hỏi!");
+      input.style.border = "1px solid red";
+      input.focus();
+      return;
+    } else {
+      input.style.border = "";
+    }
+  });
+
+  const formData = new FormData(form);
+  fetch(`pages/act-detail.php?id=${currentActId}`, {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        loadPage(`pages/act-detail.php?id=${currentActId}`);
+      } else {
+        alert(data.message);
+      }
+    });
+});
+
+// const valueInputCustom = inputCustom.value.trim();
+//     if (valueInputCustom === "") {
+//       alert("Vui lòng nhập nội dung câu hỏi trước khi lưu");
+//       inputCustom.focus();
+//       return;
+//     }
