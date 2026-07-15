@@ -97,7 +97,7 @@ require_once "auth.php";
                         <span>Tạo hoạt động</span>
                     </div>
 
-                    <div class="navbar-item" data-page="activity">
+                    <div class="navbar-item" data-page="act-management">
                         <i class="fa-solid fa-chart-gantt"></i>
                         <span>Quản lý hoạt động</span>
                     </div>

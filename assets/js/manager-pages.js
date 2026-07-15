@@ -1,7 +1,9 @@
+// const { act } = require("react");
+
 console.log("js loaded");
 
 // ===============searchCard - dashboard===================
-function searchAct() {
+function searchActCard() {
   const inputAct = document.getElementById("activity");
   let keyword = inputAct.value.trim();
   let url = `pages/dashboard.php?keyword=${encodeURIComponent(keyword)}`;
@@ -12,18 +14,18 @@ function searchAct() {
       content.innerHTML = data;
     });
 }
-
+//
 document
   .getElementById("btn-search-act")
   .addEventListener("click", function (e) {
     e.preventDefault();
-    searchAct();
+    searchActCard();
   });
 
 document.getElementById("activity").addEventListener("keydown", function (e) {
   if (e.key === "Enter" || e.keyCode === 13) {
     e.preventDefault();
-    searchAct();
+    searchActCard();
   }
 });
 // ===============toggleCard - dashboard===================
@@ -102,6 +104,10 @@ document.addEventListener("click", function (e) {
 
       let isValid = true;
       inputs.forEach((input) => {
+        if (input.dataset.required === "false" && input.type === "file") {
+          return;
+        }
+
         if (input.value.trim() === "") {
           isValid = false;
         }
@@ -131,10 +137,20 @@ document.addEventListener("click", function (e) {
       activityData.step1.actPoint = document.querySelector("#act-point").value;
       activityData.step1.actContent =
         document.querySelector("#act-content").value;
-      activityData.step1.actImgAvt =
-        document.querySelector("#act-img-avt").value;
-      activityData.step1.actImgCover =
-        document.querySelector("#act-img-cover").value;
+      // activityData.step1.actImgAvt =
+      //   document.querySelector("#act-img-avt").value;
+      // activityData.step1.actImgCover =
+      //   document.querySelector("#act-img-cover").value;
+
+      const avtFile = document.getElementById("act-img-avt").files[0];
+      const coverFile = document.getElementById("act-img-cover").files[0];
+      if (avtFile) {
+        activityData.step1.actImgAvt = URL.createObjectURL(avtFile);
+      }
+      if (coverFile) {
+        activityData.step1.actImgCover = URL.createObjectURL(coverFile);
+      }
+
       showStep(2);
     } else if (currentStep === 2) {
       const unsaveCustomQues = document.querySelectorAll(
@@ -156,7 +172,6 @@ document.addEventListener("click", function (e) {
           aqContent: checkbox.value,
         });
       });
-
       renderPreview();
       showStep(3);
     }
@@ -255,8 +270,12 @@ document.addEventListener("click", function (e) {
   const customContainer = btnAdd.parentElement.querySelector(
     ".custom-ques-container",
   );
+
+  const tempId = Date.now().toString();
+
   const divCustomItem = document.createElement("div");
   divCustomItem.classList.add("custom-ques-item");
+  divCustomItem.dataset.id = tempId;
   customContainer.append(divCustomItem);
 
   const divCustomInput = document.createElement("div");
@@ -270,11 +289,13 @@ document.addEventListener("click", function (e) {
   const divBtnSave = document.createElement("div");
   divBtnSave.classList.add("save-custom-ques-btn");
   divBtnSave.textContent = "Lưu";
+  divBtnSave.dataset.id = tempId;
   divCustomItem.append(divBtnSave);
 
   const divBtnCancel = document.createElement("div");
   divBtnCancel.classList.add("cancel-custom-ques-btn");
   divBtnCancel.textContent = "Hủy";
+  divBtnCancel.dataset.id = tempId;
   divCustomItem.append(divBtnCancel);
 });
 
@@ -288,6 +309,7 @@ document.addEventListener("click", function (e) {
     const inputCustom = customItem1.querySelector(".custom-ques-input input");
     const divSaveBtn = customItem1.querySelector(".save-custom-ques-btn");
     const divCancelBtn = customItem1.querySelector(".cancel-custom-ques-btn");
+    const questionId = btnSave.dataset.id;
 
     if (!inputCustom) return;
 
@@ -298,34 +320,61 @@ document.addEventListener("click", function (e) {
       return;
     }
 
-    const existingId = btnSave.dataset.id ? Number(btnSave.dataset.id) : null;
-
-    if (existingId) {
-      const questionIndex = activityData.step2.customQuestions.findIndex(
-        (item) => item.cqId === existingId,
-      );
-      if (questionIndex !== -1) {
-        activityData.step2.customQuestions[questionIndex].cqContent =
-          valueInputCustom;
+    const questionIndex = activityData.step2.customQuestions.findIndex(
+      (item) => item.cqId == questionId,
+    );
+    if (questionIndex !== -1) {
+      // nếu có tồn tại => sửa câu hỏi cũ trong eidt act
+      activityData.step2.customQuestions[questionIndex].cqContent =
+        valueInputCustom;
+      if (activityData.step2.customQuestions[questionIndex].status === "old") {
+        activityData.step2.customQuestions[questionIndex].status = "update";
       }
     } else {
-      const newId = Date.now();
+      // nếu chưa tồn tại => thêm câu hỏi mới trong create act
       activityData.step2.customQuestions.push({
-        cqId: newId,
+        cqId: questionId,
         cqContent: valueInputCustom,
+        status: "new",
       });
-    }
 
+      // let buttonId;
+      // const existingId = btnSave.dataset.id || null;
+
+      // if (existingId) {
+      //   buttonId = existingId;
+      //   const questionIndex = activityData.step2.customQuestions.findIndex(
+      //     (item) => item.cqId == existingId,
+      //   );
+      //   if (questionIndex !== -1) {
+      //     activityData.step2.customQuestions[questionIndex].cqContent =
+      //       valueInputCustom;
+      //     if (
+      //       activityData.step2.customQuestions[questionIndex].status === "old"
+      //     ) {
+      //       activityData.step2.customQuestions[questionIndex].status = "update";
+      //     }
+      //   }
+      // } else {
+      //   buttonId = Date.now();
+
+      //   activityData.step2.customQuestions.push({
+      //     cqId: buttonId,
+      //     cqContent: valueInputCustom,
+      //     status: "new",
+      //   });
+      // }
+    }
     inputCustom.readOnly = true;
     inputCustom.classList.add("is-saved");
 
     // xóa form nhập tạm thời
     divSaveBtn.remove();
     divCancelBtn.remove();
-
+    // customItem1.dataset.id = buttonId;
     const HTMLbtn = `
-        <div class="edit-custom-ques-btn" data-id="{newId}">Chỉnh sửa</div>
-        <div class="del-custom-ques-btn" data-id="{newId}">Xóa</div>`;
+        <div class="edit-custom-ques-btn" data-id="${questionId}">Chỉnh sửa</div>
+        <div class="del-custom-ques-btn" data-id="${questionId}">Xóa</div>`;
     customItem1.insertAdjacentHTML("beforeend", HTMLbtn);
   }
 
@@ -333,9 +382,32 @@ document.addEventListener("click", function (e) {
   const btnCancel = e.target.closest(".cancel-custom-ques-btn");
   if (btnCancel) {
     const customItem2 = btnCancel.parentElement;
-    if (customItem2) {
+    const questionId = btnCancel.dataset.id;
+
+    const existingQuestion = activityData.step2.customQuestions.find(
+      (item) => item.cqId == questionId,
+    );
+    if (existingQuestion) {
+      // Nếu câu hỏi đã tồn tại thì hủy = hủy chỉnh sửa, vẫn lưu câu hỏi cũ
+      const inputCustom = customItem2.querySelector(".custom-ques-input input");
+      inputCustom.value = existingQuestion.cqContent;
+      inputCustom.readOnly = true;
+      inputCustom.classList.add("is-saved");
+
+      customItem2.querySelector(".save-custom-ques-btn").remove();
+      btnCancel.remove();
+
+      const HTMLbtn = `
+          <div class="edit-custom-ques-btn" data-id="${questionId}">Chỉnh sửa</div>
+          <div class="del-custom-ques-btn" data-id="${questionId}">Xóa</div>`;
+      customItem2.insertAdjacentHTML("beforeend", HTMLbtn);
+    } else {
       customItem2.remove();
     }
+
+    // if (customItem2) {
+    //   customItem2.remove();
+    // }
   }
 
   // edit question
@@ -345,6 +417,7 @@ document.addEventListener("click", function (e) {
     const inputCustom = customItem3.querySelector(".custom-ques-input input");
     const divEditBtn = customItem3.querySelector(".edit-custom-ques-btn");
     const divDelBtn = customItem3.querySelector(".del-custom-ques-btn");
+    // const questionId = btnEdit.dataset.id;
 
     if (!inputCustom) return;
 
@@ -355,34 +428,57 @@ document.addEventListener("click", function (e) {
     divEditBtn.remove();
     divDelBtn.remove();
 
-    const HTMLbtn = `<div class="save-custom-ques-btn">Lưu</div>
-                    <div class="cancel-custom-ques-btn">Hủy</div>`;
+    const questionId = customItem3.dataset.id;
+    const HTMLbtn = `
+    <div class="save-custom-ques-btn" data-id="${questionId}">Lưu</div>
+    <div class="cancel-custom-ques-btn" data-id="${questionId}">Hủy</div>`;
     customItem3.insertAdjacentHTML("beforeend", HTMLbtn);
   }
 
   // delete question
   const btnDel = e.target.closest(".del-custom-ques-btn");
   if (btnDel) {
-    const questionId = Number(btnDel.dataset.id);
-    activityData.step2.customQuestions =
-      activityData.step2.customQuestions.filter(
-        (item) => item.cqId !== questionId,
-      );
-    const customItem4 = btnDel.parentElement;
-    const divEditBtn = customItem4.querySelector(".edit-custom-ques-btn");
-    const divDelBtn = customItem4.querySelector(".del-custom-ques-btn");
-    const divInputCustom = customItem4.querySelector(".custom-ques-input");
-    if (customItem4) {
-      divEditBtn.remove();
-      divDelBtn.remove();
-      divInputCustom.remove();
+    const questionId = btnDel.dataset.id;
+    const questionIndex = activityData.step2.customQuestions.findIndex(
+      (item) => item.cqId == questionId,
+    );
+    if (questionIndex !== -1) {
+      if (activityData.step2.customQuestions[questionIndex].status === "new") {
+        activityData.step2.customQuestions.splice(questionIndex, 1);
+      } else {
+        activityData.step2.customQuestions[questionIndex].status = "delete";
+      }
     }
+
+    // const question = activityData.step2.customQuestions.find(
+    //   (item) => item.cqId == questionId,
+    // );
+    // if (question) {
+    //   if (question.status === "new") {
+    //     activityData.step2.customQuestions =
+    //       activityData.step2.customQuestions.filter(
+    //         (item) => item.cqId == questionId,
+    //       );
+    //   } else {
+    //     question.status = "delete";
+    //   }
+    // }
+
+    const customItem = btnDel.parentElement;
+    customItem.remove();
+    return;
+    // if (question && question.status === "new") {
+    //   customItem.remove();
+    // } else {
+    //   renderCustomQuestions();
+    // }
   }
 });
 
 // ===============step3 - created-act===================
 
 function renderPreview() {
+  console.log("renderPreview");
   const previewContainer = document.querySelector(".preview-container-step3");
 
   document.getElementById("preview-act-name").textContent =
@@ -403,12 +499,20 @@ function renderPreview() {
     activityData.step1.actContent;
 
   // lưu tạm thời ảnh
-  const avtFile = document.getElementById("act-img-avt").files[0];
+  // const avtFile = document.getElementById("act-img-avt").files[0];
+  // document.getElementById("preview-act-img-avt").src =
+  //   URL.createObjectURL(avtFile);
+  // activityData.step1.actImgAvt = avtFile ? URL.createObjectURL(avtFile) : "";
+  // const coverFile = document.getElementById("act-img-cover").files[0];
+  // document.getElementById("preview-act-img-cover").src =
+  //   URL.createObjectURL(coverFile);
+  // activityData.step1.actImgCover = coverFile
+  //   ? URL.createObjectURL(coverFile)
+  //   : "";
   document.getElementById("preview-act-img-avt").src =
-    URL.createObjectURL(avtFile);
-  const coverFile = document.getElementById("act-img-cover").files[0];
+    activityData.step1.actImgAvt || "";
   document.getElementById("preview-act-img-cover").src =
-    URL.createObjectURL(coverFile);
+    activityData.step1.actImgCover || "";
 
   const autoQuesBlock = document.getElementById("preview-block-auto-ques");
   autoQuesBlock.innerHTML = "";
@@ -432,9 +536,12 @@ function renderPreview() {
   const customQuesBlock = document.getElementById("preview-block-custom-ques");
   customQuesBlock.innerHTML = "";
 
-  if (activityData.step2.customQuestions.length > 0) {
+  const visibleQuestions = activityData.step2.customQuestions.filter(
+    (item) => item.status !== "delete",
+  );
+  if (visibleQuestions.length > 0) {
     let numberCustomQues = 0;
-    activityData.step2.customQuestions.forEach((customQues) => {
+    visibleQuestions.forEach((customQues) => {
       numberCustomQues += 1;
       customQuesBlock.innerHTML += `
         <div class="preview-custom-ques-item">
@@ -467,6 +574,196 @@ document.addEventListener("click", (e) => {
   );
 
   fetch("pages/created-act.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        loadPage(`pages/act-detail.php?id=${data.actCode}`);
+      } else {
+        alert(data.message);
+      }
+    });
+});
+
+// ===============searchAct - activity-Management===================
+
+function searchActManagement() {
+  const inputAct = document.getElementById("act-management");
+  let keyword = inputAct.value.trim();
+  let url = `pages/act-management.php?keyword=${encodeURIComponent(keyword)}`;
+  const content = document.querySelector(".right-container");
+  fetch(url)
+    .then((res) => res.text())
+    .then((data) => {
+      content.innerHTML = data;
+    });
+}
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest("#btn-search-act-management");
+  if (!btn) return;
+  e.preventDefault();
+  searchActManagement();
+});
+
+document.addEventListener("keydown", function (e) {
+  const input = e.target.closest("#act-management");
+  if (!input) return;
+  if (e.key === "Enter" || e.keyCode === 13) {
+    e.preventDefault();
+    searchActManagement();
+  }
+});
+
+// =================chuyenSangEditActManagement - act-management============
+let currentActId = null;
+document.addEventListener("click", (e) => {
+  const rowAct = e.target.closest(".row-act-management");
+  if (!rowAct) return;
+  currentActId = rowAct.dataset.id;
+  loadPage(`pages/edit-management-act.php?id=${currentActId}`);
+});
+
+// =================renderCustomQuestions - edit-management-act============
+function renderCustomQuestions() {
+  const container = document.querySelector(".custom-ques-container");
+  container.innerHTML = "";
+  activityData.step2.customQuestions
+    .filter((item) => item.status !== "delete")
+    .forEach((question) => {
+      const div = document.createElement("div");
+      div.classList.add("custom-ques-item");
+      div.dataset.id = question.cqId;
+
+      div.innerHTML = `
+        <div class="custom-ques-input">
+            <input
+                type="text"
+                value="${question.cqContent}"
+                readonly
+                class="is-saved">
+        </div>
+
+        <div class="edit-custom-ques-btn"
+              data-id="${question.cqId}">
+              Chỉnh sửa
+        </div>
+
+        <div class="del-custom-ques-btn"
+              data-id="${question.cqId}">
+              Xóa
+        </div>
+    `;
+
+      container.append(div);
+    });
+}
+
+// =================khoi tao trang edit - edit-management-act============
+
+function initEditActivity() {
+  console.log("init");
+  const editData = document.getElementById("edit-data");
+  if (!editData) return;
+  const customQuestions = JSON.parse(editData.dataset.custom);
+  activityData.step2.customQuestions = customQuestions.map((item) => ({
+    cqId: item.MaCauHoi,
+    cqContent: item.TenHienThi,
+    status: "old",
+  }));
+
+  activityData.step1.actName = document.getElementById("act-name").value;
+  activityData.step1.actLocate = document.getElementById("act-locate").value;
+  activityData.step1.actObject = document.getElementById("act-object").value;
+  activityData.step1.actStart = document.getElementById("act-start").value;
+  activityData.step1.actEnd = document.getElementById("act-end").value;
+  activityData.step1.actMaxSlot = document.getElementById("act-max-slot").value;
+  activityData.step1.actPoint = document.getElementById("act-point").value;
+  activityData.step1.actBonus = document.getElementById("bonus").value;
+  activityData.step1.actContent = document.getElementById("act-content").value;
+  // ảnh cũ
+
+  activityData.step1.actImgAvt = document.getElementById("img-avt-present")
+    ? document.getElementById("img-avt-present").src
+    : "";
+
+  activityData.step1.actImgCover = document.getElementById("img-cover-present")
+    ? document.getElementById("img-cover-present").src
+    : "";
+  renderCustomQuestions();
+  renderPreview();
+}
+
+// =================bat su kien thay doi anh - edit-management-act============
+document.addEventListener("change", function (e) {
+  if (e.target.id === "act-img-avt") {
+    const file = e.target.files[0];
+    if (file) {
+      activityData.step1.actImgAvt = URL.createObjectURL(file);
+    }
+  }
+
+  if (e.target.id === "act-img-cover") {
+    const file = e.target.files[0];
+    if (file) {
+      activityData.step1.actImgCover = URL.createObjectURL(file);
+    }
+  }
+});
+
+// ===============updateAct - edit-management-act===================
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btn-update-act");
+  if (!btn) {
+    return;
+  }
+
+  e.preventDefault();
+
+  activityData.step1.actName = document.getElementById("act-name").value;
+  activityData.step1.actLocate = document.getElementById("act-locate").value;
+  activityData.step1.actObject = document.getElementById("act-object").value;
+  activityData.step1.actStart = document.getElementById("act-start").value;
+  activityData.step1.actEnd = document.getElementById("act-end").value;
+  activityData.step1.actMaxSlot = document.getElementById("act-max-slot").value;
+  activityData.step1.actPoint = document.getElementById("act-point").value;
+  activityData.step1.actBonus = document.getElementById("bonus").value;
+  activityData.step1.actContent = document.getElementById("act-content").value;
+
+  const bonusIdInput = document.getElementById("bonusId");
+  if (bonusIdInput) {
+    activityData.step1.actBonusId = bonusIdInput.value;
+  } else {
+    const bonusDataset = document.querySelector("[data-type='bonus']");
+    activityData.step1.actBonusId = bonusDataset ? bonusDataset.dataset.id : "";
+  }
+
+  activityData.step2.autoQuestions = [];
+  const checkBoxes = document.querySelectorAll(
+    ".auto-ques-container input[type='checkbox']:checked",
+  );
+  checkBoxes.forEach((checkbox) => {
+    activityData.step2.autoQuestions.push({
+      aqType: checkbox.dataset.id,
+      aqContent: checkbox.value,
+    });
+  });
+
+  // vì có file ảnh nên dùng form data mới gửi đc dữ liệu
+  const formData = new FormData();
+  formData.append("actId", currentActId);
+  formData.append("activityData", JSON.stringify(activityData));
+  const avtFile = document.getElementById("act-img-avt").files[0];
+  if (avtFile) {
+    formData.append("actImgAvt", avtFile);
+  }
+  const coverFile = document.getElementById("act-img-cover").files[0];
+  if (coverFile) {
+    formData.append("actImgCover", coverFile);
+  }
+
+  fetch(`pages/edit-management-act.php?id=${currentActId}`, {
     method: "POST",
     body: formData,
   })

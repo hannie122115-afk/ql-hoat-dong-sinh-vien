@@ -1,24 +1,34 @@
- <?php 
-// if(session_status() === PHP_SESSION_NONE){
-//     session_start();
-// }
-// require_once "../../config/db.php";
-// require_once "../auth.php";
+<?php 
+if(session_status() === PHP_SESSION_NONE){
+    session_start();
+}
 
-// $sql1 = "SELECT 
-//             hd.*,
-//             COUNT(dk.MSSV) AS total
-//         FROM HoatDong hd
-//         LEFT JOIN DangKy dk
-//             ON hd.MaHoatDong = dk.MaHoatDong";
-// if(!empty($keyword)){
-//     $sql1 .= "AND hd.TenHoatDong LIKE ?";
-// }
-// $sql1 .= "GROUP BY hd.MaHoatDong";
-// $stmt1 = $conn->prepare($sql1);
-// empty($keyword) ? $stmt1->execute() : $stmt1->execute([$search]);
+if(!isset($_SESSION['user_id'])){
+    header("Location: ../../login.php");
+    exit;
+}
 
-?> 
+require_once "../../config/db.php";
+require_once "../auth.php";
+
+$keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+$search = "%$keyword%";
+
+$sql1 = "SELECT 
+            hd.*,
+            COUNT(dk.MSSV) AS total
+        FROM HoatDong hd
+        LEFT JOIN DangKy dk
+            ON hd.MaHoatDong = dk.MaHoatDong
+        WHERE hd.MaToChuc = ? ";
+if(!empty($keyword)){
+    $sql1 .= "AND hd.TenHoatDong LIKE ? ";
+}
+$sql1 .= "GROUP BY hd.MaHoatDong";
+$stmt1 = $conn->prepare($sql1);
+empty($keyword) ? $stmt1->execute([$org['MaToChuc']]) : $stmt1->execute([$org['MaToChuc'], $search]);
+
+?>
 
 
 <!DOCTYPE html>
@@ -29,18 +39,17 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>ĐÂY LÀ TRANG HOẠT ĐỘNG ĐẪ ĐĂNG KÝ</h1>
-
-    <div class="registered-act-container">
-        <div class="registered-act-header">
-            <div class="registered-act-title">
+    <h1>ĐÂY LÀ TRANG QUẢN LÝ HOẠT ĐỘNG</h1>
+    <div class="management-act-container">
+        <div class="management-act-header">
+            <div class="management-act-title">
                 <h2>Quản lý hoạt động</h2>
                 <span>Danh sách các hoạt động do CLB tạo và quản lý</span>
             </div>
-            <div class="registered-search-act">
-                <div class="registered-btn-search-act">
-                        <input type="text" name="activity" class="search-input" data-type="activity" id="activity" placeholder="Tìm kiếm hoạt động...">
-                        <button type="button" id="btn-search-act">
+            <div class="management-search-act">
+                <div class="management-btn-search-act">
+                        <input type="text" name="activity" class="search-input" data-type="activity" id="act-management" placeholder="Tìm kiếm hoạt động...">
+                        <button type="button" id="btn-search-act-management">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                 </div>
@@ -56,7 +65,7 @@
             </div>
         </div>
 
-        <table class="registered-act-table">
+        <table class="management-act-table">
             <thead>
                 <tr>
                     <th>STT</th>
@@ -70,39 +79,38 @@
             </thead>
             <tbody>
                 <?php $stt = 1; 
-                while ($act1 = $stmt->fetch(PDO::FETCH_ASSOC)):?>
+                while ($act1 = $stmt1->fetch(PDO::FETCH_ASSOC)):?>
                 <tr>
                     <td><?= $stt++ ?></td>
                     <td>
-                        <div class="registered-act-info">
+                        <div class="management-act-info">
                             <img src="<?= $act1['AnhBia'] ?>" alt="">
                             <h4><?= $act1['TenHoatDong'] ?></h4>
                         </div>
                     </td>
                     <td>
-                        <div class="registered-act-time">
+                        <div class="management-act-time">
                             <?php 
                                 $dateStart = new DateTime($act1['ThoiGianBatDau']); 
                                 $dateEnd = new DateTime($act1['ThoiGianKetThuc']);
                             ?>
-                            <span><?= $dateStart->format('d/m/Y') ?></span>
-                            <span><?= $dateStart->format('H:i') ?> - <?= $dateEnd->format('H:i') ?></span>
+                            <span><?= $dateStart->format('H:i') ?>, <?= $dateStart->format('d/m/Y') ?> - <?= $dateEnd->format('H:i') ?>, <?= $dateEnd->format('d/m/Y') ?></span>
                         </div>
                     </td>
                     <td>
-                        <div class="registered-act-locate">
+                        <div class="management-act-locate">
                             <i class="fa-solid fa-location-dot"></i>
                             <span><?= $act1['DiaDiem'] ?></span>
                         </div>
                     </td>
                     <td>
-                        <div class="registered-act-amount">
+                        <div class="management-act-amount">
                             <i class="fa-solid fa-user-group"></i>
-                            <span><?= $act['total'] ?>/<?= $act['SoLuongToiDa']?></span>
+                            <span><?= $act1['total'] ?>/<?= $act1['SoLuongToiDa']?></span>
                         </div>
                     </td>
                     <td>
-                        <div class="registered-act-status">
+                        <div class="management-act-status">
                             <?php 
                                 $currentDate = new DateTime();
                                 if($dateStart > $currentDate):
@@ -126,10 +134,10 @@
                             <?php endif ?>
                     </td>
                     <td>
-                        <button class="edit-registered-btn">
+                        <button class="edit-management-act-btn row-act-management" data-id="<?= $act1['MaHoatDong'] ?>">
                             Sửa
                         </button>
-                        <button class="delete-registered-btn">
+                        <button class="delete-management-act-btn">
                             Xóa
                         </button>
                     </td>

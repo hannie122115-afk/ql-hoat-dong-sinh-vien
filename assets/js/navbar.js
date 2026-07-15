@@ -21,6 +21,11 @@ function loadPage(url) {
     .then((data) => {
       content.innerHTML = data;
 
+      if (url.includes("edit-management-act.php")) {
+        console.log("goi init");
+        initEditActivity();
+      }
+
       if (url === "pages/created-act.php") {
         initDateTime();
       }

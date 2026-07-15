@@ -12,7 +12,35 @@ if(!isset($_SESSION['user_id'])){
 require_once "../../config/db.php";
 require_once "../auth.php";
 
+$actManagementId = $_GET['id'] ?? '';
+
+$sql = "SELECT *
+        FROM HoatDong hd, MucCongDiemRenLuyen mcdrl
+        WHERE hd.MaMucCongDiem = mcdrl.MaMucCongDiem
+        AND MaHoatDong = ?";
+$stmt = $conn->prepare($sql);
+$stmt->execute([$actManagementId]);
+$actInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$sql7 = "SELECT LoaiCauHoi
+        FROM CauHoiDangKy
+        WHERE MaHoatDong = ?
+        AND LoaiCauHoi <> 'custom'";
+$stmt7 = $conn->prepare($sql7);
+$stmt7->execute([$actManagementId]);
+$oldAutoQues = $stmt7->fetchAll(PDO::FETCH_COLUMN);
+
+$sql8 = "SELECT MaCauHoi, TenHienThi
+        FROM CauHoiDangKy
+        WHERE MaHoatDong = ?
+        AND LoaiCauHoi = 'custom'";
+$stmt8 = $conn->prepare($sql8);
+$stmt8->execute([$actManagementId]);
+$customQuestions = $stmt8->fetchAll(PDO::FETCH_ASSOC);
+
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    ob_clean(); 
+    header('Content-Type: application/json; charset=utf-8');
     try{
             
         // mở gói actData
@@ -32,7 +60,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $actStart = $step1['actStart'] ?? '';
         $actMaxSlot = $step1['actMaxSlot'] ?? '';
         $actEnd = $step1['actEnd'] ?? '';
-        // $actBonus = $step1['actBonus'] ?? '';
 
         $actBonus = $step1['actBonusId'] ?? '';
 
@@ -47,108 +74,140 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             mkdir($uploadDir, 0777, true);
         }
 
-        $pathAvt = "";
+        $pathAvt = $actInfo['AnhAvt'];
         if (isset($_FILES["actImgAvt"]) && $_FILES["actImgAvt"]["error"] === UPLOAD_ERR_OK) {
 
             $fileName = time() . "_avt_" . basename($_FILES["actImgAvt"]["name"]);
 
             if (move_uploaded_file($_FILES["actImgAvt"]["tmp_name"], $uploadDir . $fileName)) {
+                if (!empty($actInfo['AnhAvt']) && file_exists("../../" . str_replace("../", "", $actInfo['AnhAvt']))) {
+                    @unlink("../../" . str_replace("../", "", $actInfo['AnhAvt']));
+                }
                 $pathAvt = $dbDir . $fileName;
             }
         }
 
-        $pathCover = "";
+        $pathCover = $actInfo['AnhBia'];
         if (isset($_FILES["actImgCover"]) && $_FILES["actImgCover"]["error"] === UPLOAD_ERR_OK) {
 
             $fileName = time() . "_cover_" . basename($_FILES["actImgCover"]["name"]);
 
             if (move_uploaded_file($_FILES["actImgCover"]["tmp_name"], $uploadDir . $fileName)) {
+                if (!empty($actInfo['AnhBia']) && file_exists("../../" . str_replace("../", "", $actInfo['AnhBia']))) {
+                    @unlink("../../" . str_replace("../", "", $actInfo['AnhBia']));
+                }
                 $pathCover = $dbDir . $fileName;
             }
         }
 
-        $actImgAvt = $_FILES["actImgAvt"];
-        $actImgCover = $_FILES["actImgCover"];
+        $actImgAvt = $_FILES["actImgAvt"] ?? null;
+        $actImgCover = $_FILES["actImgCover"] ?? null;
 
-        $sql1 = "INSERT INTO HoatDong(
-                    MaHoatDong
-                    ,MaToChuc
-                    ,TenHoatDong
-                    ,DiaDiem
-                    ,DoiTuongThamGia
-                    ,SoLuongToiDa
-                    ,ThoiGianBatDau
-                    ,ThoiGianKetThuc
-                    ,MaMucCongDiem
-                    ,DiemRenLuyen
-                    ,NoiDungHD
-                    ,AnhAvt
-                    ,AnhBia )
-                VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql1 = "UPDATE HoatDong
+                SET TenHoatDong = ?
+                    ,DiaDiem = ?
+                    ,DoiTuongThamGia = ?
+                    ,SoLuongToiDa = ?
+                    ,ThoiGianBatDau = ?
+                    ,ThoiGianKetThuc = ?
+                    ,MaMucCongDiem = ?
+                    ,DiemRenLuyen = ?
+                    ,NoiDungHD = ?
+                    ,AnhAvt = ?
+                    ,AnhBia = ?
+                WHERE MaHoatDong = ?";
         $stmt1 = $conn->prepare($sql1);
-        $stmt1->execute(["a", $org['MaToChuc'], $actName, $actLocate, $actObject, $actMaxSlot, $actStart, $actEnd, $actBonus, $actPoint, $actContent, $pathAvt, $pathCover]);
-        $lastActId = $conn->lastInsertId();
-        $actCode = "HD".str_pad($lastActId, 4, "0", STR_PAD_LEFT);
-
-        $sql2 = "UPDATE HoatDong
-                SET MaHoatDong = ?
-                WHERE Id = ?";
-        $stmt = $conn->prepare($sql2);
-        $stmt->execute([$actCode, $lastActId]);
+        $stmt1->execute([$actName, $actLocate, $actObject, $actMaxSlot, $actStart, $actEnd, $actBonus, $actPoint, $actContent, $pathAvt, $pathCover, $actManagementId]);
 
         $step2 = $actData['step2'];
         $autoQuestions = $step2['autoQuestions'];
         $customQuestions = $step2['customQuestions'];
 
-        foreach($autoQuestions as $question){
-            $sql3 = "INSERT INTO CauHoiDangKy(
-                        MaCauHoi
-                        ,MaHoatDong
-                        ,LoaiCauHoi
-                        ,TenHienThi)
-                    VALUES (?, ?, ?, ?)";
-            $stmt2 = $conn->prepare($sql3);
-            $stmt2->execute(["b", $actCode, $question['aqType'], $question['aqContent'],]);
-            $lastAqId = $conn->lastInsertId();
-            $AqCode = "CH".str_pad($lastAqId, 4, "0", STR_PAD_LEFT);
+        // Cau hoi tu dong
+        $sql2 = "SELECT LoaiCauHoi
+                FROM CauHoiDangKy
+                WHERE MaHoatDong = ?
+                AND LoaiCauHoi <> 'custom'";
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->execute([$actManagementId]);
+        $oldAutoQues = $stmt2->fetchAll(PDO::FETCH_COLUMN);
 
-            $sql4 = "UPDATE CauHoiDangKy
-                    SET MaCauHoi = ?
-                    WHERE Id = ?";
-            $stmt = $conn->prepare($sql4);
-            $stmt->execute([$AqCode, $lastAqId]);
-
+        $newAutoQues = [];
+        foreach($autoQuestions as $autoQues){
+            $newAutoQues[] = $autoQues['aqType'];
         }
 
-        foreach($customQuestions as $question){
-            $sql5 = "INSERT INTO CauHoiDangKy(
-                        MaCauHoi
-                        ,MaHoatDong
-                        ,LoaiCauHoi
-                        ,TenHienThi)
-                    VALUES (?, ?, ?, ?)";
-            $stmt2 = $conn->prepare($sql5);
-            $stmt2->execute(["c", $actCode, "custom", $question['cqContent'],]);
-            $lastCqId = $conn->lastInsertId();
-            $CqCode = "CH".str_pad($lastCqId, 4, "0", STR_PAD_LEFT);
-
-            $sql6 = "UPDATE CauHoiDangKy
-                    SET MaCauHoi = ?
-                    WHERE Id = ?";
-            $stmt = $conn->prepare($sql6);
-            $stmt->execute([$CqCode, $lastCqId]);
+        foreach($oldAutoQues as $type){
+            if(!in_array($type, $newAutoQues)){
+                $sql3 = "DELETE FROM CauHoiDangKy
+                        WHERE MaHoatDong = ?
+                        AND LoaiCauHoi = ?";
+                $stmt3 = $conn->prepare($sql3);
+                $stmt3->execute([$actManagementId, $type]);
+            }
         }
 
+        foreach($autoQuestions as $autoQues){
+            if(!in_array($autoQues['aqType'], $oldAutoQues)){
+                $sql4 = "INSERT INTO CauHoiDangKy(MaCauHoi, MaHoatDong, LoaiCauHoi, TenHienThi) 
+                        VALUES (?, ?, ?, ?)";
+                $stmt4 = $conn->prepare($sql4);
+                $stmt4->execute(['a', $actManagementId, $autoQues['aqType'], $autoQues['aqContent']]);
+                $lastAqId = $conn->lastInsertId();
+                $AqCode = "CH".str_pad($lastAqId, 4, "0", STR_PAD_LEFT);
+
+                $sql5 = "UPDATE CauHoiDangKy
+                        SET MaCauHoi = ?
+                        WHERE Id = ?";
+                $stmt5 = $conn->prepare($sql5);
+                $stmt5->execute([$AqCode, $lastAqId]);
+            }
+        }
+
+        // Câu hỏi bổ sung
+
+        foreach($customQuestions as $q){
+            switch($q['status']){
+                case "new":
+                    $sql6 = "INSERT INTO CauHoiDangKy(MaCauHoi, MaHoatDong, LoaiCauHoi, TenHienThi) 
+                            VALUES (?, ?, ?, ?)";
+                    $stmt6 = $conn->prepare($sql6);
+                    $stmt6->execute(["a", $actManagementId, "custom", $q['cqContent']]);
+                    $lastAqId = $conn->lastInsertId();
+                    $AqCode = "CH".str_pad($lastAqId, 4, "0", STR_PAD_LEFT);
+
+                    $sql7 = "UPDATE CauHoiDangKy
+                            SET MaCauHoi = ?
+                            WHERE Id = ?";
+                    $stmt7 = $conn->prepare($sql7);
+                    $stmt7->execute([$AqCode, $lastAqId]);
+                    break;
+                case "update":
+                    $sql6 = "UPDATE CauHoiDangKy
+                            SET TenHienThi = ?
+                            WHERE MaCauHoi = ?";
+                    $stmt6 = $conn->prepare($sql6);
+                    $stmt6->execute([$q['cqContent'], $q['cqId']]);
+                    break;
+                case "delete":
+                    $sql6 = "DELETE FROM CauHoiDangKy
+                            WHERE MaCauHoi = ?";
+                    $stmt6 = $conn->prepare($sql6);
+                    $stmt6->execute([$q['cqId']]);
+                    break;
+            }
+        }
         echo json_encode([
             "success" => true, 
-            "message" => "Thêm hoạt động thành công",
-            "actCode" => $actCode]);
+            "message" => "Sửa hoạt động thành công",
+            "actCode" => $actManagementId]);
         exit;
     }catch(Exception $e){
         echo json_encode([
             "success" => false,
             "message" => $e->getMessage()
         ]);
+        exit;
     }
 
 }
@@ -198,11 +257,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <h3>Thông tin hoạt động</h3>
                             <span>Nhập các thông tin cơ bản của hoạt động</span>
                         </div>
+                        
                         <div class="act-info">
                             <div class="act-info-item">
                                 <h4>Tên hoạt động</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-name" id="act-name"  placeholder="Nhập tên hoạt động" class="validate-input">
+                                    <input type="text" name="act-name" id="act-name"  placeholder="Nhập tên hoạt động" class="validate-input" value="<?= $actInfo['TenHoatDong'] ?>">
                                 </div>
                                 <div class="error-message"></div>
                             </div>
@@ -210,7 +270,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Đối tượng tham gia</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-object" id="act-object" placeholder="Nhập đối tượng tham gia hoạt động" class="validate-input">
+                                    <input type="text" name="act-object" id="act-object" placeholder="Nhập đối tượng tham gia hoạt động" class="validate-input" value="<?= $actInfo['DoiTuongThamGia'] ?>">
                                 </div>
                                 <div class="error-message"></div>
                             </div>
@@ -218,7 +278,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Địa điểm</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-locate" id="act-locate" placeholder="Nhập địa điểm tổ chức" class="validate-input">
+                                    <input type="text" name="act-locate" id="act-locate" placeholder="Nhập địa điểm tổ chức" class="validate-input" value="<?= $actInfo['DiaDiem'] ?>">
                                 </div>
                                 <div class="error-message"></div>
                             </div>
@@ -226,7 +286,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Thời gian bắt đầu</h4>
                                 <div class="act-info-item-input">
-                                    <input type="datetime-local" name="act-start" id="act-start" class="validate-input">
+                                    <input type="datetime-local" name="act-start" id="act-start" class="validate-input" value="<?= $actInfo['ThoiGianBatDau'] ?>">
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Thời gian bắt đầu diễn ra hoạt động.</span>
@@ -235,7 +295,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Số lượng tối đa</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-max-slot" id="act-max-slot" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '')" maxlength='5' placeholder="Nhập số lượng tối đa (để trống nếu không giới hạn)" class="validate-input">
+                                    <input type="text" name="act-max-slot" id="act-max-slot" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '')" maxlength='5' placeholder="Nhập số lượng tối đa (để trống nếu không giới hạn)" class="validate-input" value="<?= $actInfo['SoLuongToiDa'] ?>">
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Số lượng sinh viên tối đa có thể đăng ký tham gia.</span>
@@ -244,7 +304,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Thời gian kết thúc</h4>
                                 <div class="act-info-item-input">
-                                    <input type="datetime-local" name="act-end" id="act-end" class="validate-input">
+                                    <input type="datetime-local" name="act-end" id="act-end" class="validate-input" value="<?= $actInfo['ThoiGianKetThuc'] ?>">
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Thời gian kết thúc hoạt động.</span>
@@ -253,7 +313,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Mục cộng điểm</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" class="search-input validate-input" data-type="bonus" value="" id="bonus" placeholder="Gõ mục cộng điểm rèn luyện để tìm kiếm và chọn">
+                                    <input type="text" class="search-input validate-input" data-type="bonus" id="bonus" value="<?= $actInfo['TenMucCongDiem'] ?>">
                                 </div>
                                 <div class="suggest-box"></div>
                                 <div class="error-message"></div>
@@ -263,7 +323,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Điểm rèn luyện</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-point" id="act-point" inputmode="numeric" placeholder="Nhập điểm rèn luyện" class="validate-input act-point" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '')" maxlength='2'>
+                                    <input type="text" name="act-point" id="act-point" inputmode="numeric" placeholder="Nhập điểm rèn luyện" class="validate-input act-point" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '')" maxlength='2' value="<?= $actInfo['DiemRenLuyen'] ?>">
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Nhập điểm rèn luyện sinh viên nhận được khi tham gia.</span>
@@ -281,7 +341,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         <div class="act-info-item act-content-item">
                             <h4>Nội dung chi tiết</h4>
                             <div class="act-info-item-input">
-                                <textarea name="act-content" id="act-content" placeholder="Nhập nội dung chi tiết của hoạt động" class="validate-input"></textarea>
+                                <textarea name="act-content" id="act-content" placeholder="Nhập nội dung chi tiết của hoạt động" class="validate-input" > <?= $actInfo['NoiDungHD'] ?></textarea>
                             </div>
                             <div class="error-message"></div>
                         </div>
@@ -289,17 +349,25 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <h4>Hình ảnh hoạt động</h4>
                             <span>Chọn ảnh 1 ảnh đại diện cho hoạt động</span>
                             <div class="act-info-item-input">
-                                <input type="file" name="act-img-avt" id="act-img-avt" class="act-img-input validate-input" data-required="true">
+                                <div class="img-avt-present">
+                                    <img src="<?= $actInfo['AnhAvt'] ?>" id="img-avt-present">
+                                </div>
+                                <div class="img-cover-new">
+                                    <input type="file" name="act-img-avt" id="act-img-avt" class="act-img-input validate-input" data-required="false">
+                                </div>
                             </div>
-                            <div class="error-message"></div>
                         </div>
                         <div class="act-info-item act-content-item">
                             <h4>Hình ảnh hoạt động</h4>
                             <span>Chọn ảnh 1 ảnh bìa cho hoạt động</span>
                             <div class="act-info-item-input">
-                                <input type="file" name="act-img-cover" id="act-img-cover" class="act-img-input validate-input" data-required="true">
+                                <div class="img-cover-present">
+                                    <img src="<?= $actInfo['AnhBia'] ?>" id="img-cover-present">
+                                </div>
+                                <div class="img-cover-new">
+                                    <input type="file" name="act-img-cover" id="act-img-cover" class="act-img-input validate-input" data-required="false">
+                                </div>
                             </div>
-                            <div class="error-message"></div>
                         </div>
                     </div>
                 </div>
@@ -322,49 +390,49 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         <div class="auto-ques-container">
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Mã số sinh viên" data-id="MSSV">
+                                    <input type="checkbox" name="auto-ques" value="Mã số sinh viên" data-id="MSSV" <?= in_array("MSSV", $oldAutoQues) ? "checked" : "" ?>>
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Mã số sinh viên
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Họ tên" data-id="HoTen">
+                                    <input type="checkbox" name="auto-ques" value="Họ tên" data-id="HoTen" <?= in_array("HoTen", $oldAutoQues) ? "checked" : "" ?>>
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Họ tên
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Ngành" data-id="TenNganh">
+                                    <input type="checkbox" name="auto-ques" value="Ngành" data-id="TenNganh" <?= in_array("TenNganh", $oldAutoQues) ? "checked" : "" ?>>
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Ngành
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Khóa" data-id="Khoa">
+                                    <input type="checkbox" name="auto-ques" value="Khóa" data-id="Khoa" <?= in_array("Khoa", $oldAutoQues) ? "checked" : "" ?>>
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Khóa
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Đơn vị trường" data-id="TenDonVi">
+                                    <input type="checkbox" name="auto-ques" value="Đơn vị trường" data-id="TenDonVi" <?= in_array("TenDonVi", $oldAutoQues) ? "checked" : "" ?>>
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Đơn vị trường
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Giới tính" data-id="GioiTinh">
+                                    <input type="checkbox" name="auto-ques" value="Giới tính" data-id="GioiTinh" <?= in_array("GioiTinh", $oldAutoQues) ? "checked" : "" ?>>
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Giới tính
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Số điện thoại" data-id="SoDienThoai">
+                                    <input type="checkbox" name="auto-ques" value="Số điện thoại" data-id="SoDienThoai" <?= in_array("SoDienThoai", $oldAutoQues) ? "checked" : "" ?>>
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Số điện thoại 
@@ -527,14 +595,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                 </div>
                 <div class="btn-step-previous">Trở lại</div>
-                <button type="submit" id="btn-submit-act">Tạo hoạt động</button>
+                <button type="submit" id="btn-update-act">Cập nhật hoạt động</button>
             </div>
         </form>
     </div>
-        <!-- <script src="../../assets/js/manager-pages.js"></script> -->
 
-    <!-- <script src="../assets/js/manager-pages.js"></script> -->
-    <!-- <script src="../assets/js/suggest.js"></script> -->
-
+    <div id="edit-data"
+     data-custom='<?= htmlspecialchars(json_encode($customQuestions), ENT_QUOTES) ?>'>
+    </div>
 </body>
 </html>

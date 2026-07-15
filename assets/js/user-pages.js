@@ -66,9 +66,3 @@ document.addEventListener("click", (e) => {
     });
 });
 
-// const valueInputCustom = inputCustom.value.trim();
-//     if (valueInputCustom === "") {
-//       alert("Vui lòng nhập nội dung câu hỏi trước khi lưu");
-//       inputCustom.focus();
-//       return;
-//     }

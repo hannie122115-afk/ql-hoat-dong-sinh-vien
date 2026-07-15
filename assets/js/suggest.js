@@ -44,11 +44,10 @@ document.addEventListener("input", function (e) {
     return;
   }
 
-  const hiddenInput = input
-    .closest(".register-block, .act-info-item")
-    .querySelector("input[type='hidden']");
-  if (hiddenInput) {
-    hiddenInput.value = "";
+  const parent = input.closest(".register-block, .act-info-item");
+  if (parent) {
+    const hiddenInput = parent.querySelector("input[type='hidden']");
+    if (hiddenInput) hiddenInput.value = "";
   }
   delete input.dataset.id;
 
