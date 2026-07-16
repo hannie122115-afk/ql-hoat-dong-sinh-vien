@@ -31,6 +31,9 @@ $dateEnd = new DateTime($act['ThoiGianKetThuc']);
 $dateCreate = new DateTime($act['NgayTao']);
 $dateNow = new DateTime();
 
+// $sql2 - "SELECT *
+//         FROM DangKy";
+
 $sql3 = "SELECT * 
         FROM MucCongDiemRenLuyen
         WHERE MaMucCongDiem = ?";
@@ -107,6 +110,8 @@ $bonus = $stmt3->fetch(PDO::FETCH_ASSOC);
         <!-- Danh sach sv -->
         <div class="act-detail-list act-detail-block" id="act-detail-2">
             <h1>DANH SÁCH SINH VIÊN</h1>
+
+
         </div>
 
         <!-- Diem danh -->

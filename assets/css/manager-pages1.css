@@ -1,0 +1,86 @@
+/* ==========CARD - DASHBOARD=========== */
+
+.hidden-card-item {
+  display: none;
+}
+
+/* =============STEP - CREATED-ACT ====== */
+
+.step-block {
+  display: none;
+}
+
+.step-block.active {
+  display: block;
+}
+
+.step-line-item {
+  opacity: 0.5;
+}
+
+.step-line-item.active {
+  opacity: 1;
+  font-weight: bold;
+}
+
+/* =============DELETE-MODEL - ACT-MANAGEMENT ====== */
+.modal {
+  display: none;
+}
+
+.modal.show {
+  display: flex;
+}
+
+/* =============DROPDOWN-STATUS - ACT-MANAGEMENT ====== */
+.status-act-dropdown {
+  position: relative;
+  width: 200px;
+}
+
+.status-dropdown-selected {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: white;
+}
+
+.status-dropdown-menu {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 5px;
+  display: none;
+  z-index: 100;
+}
+
+.status-dropdown-menu.show {
+  display: block;
+}
+
+.status-option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.status-option:hover {
+  background: #f2f2f2;
+}
+
+/* =============CTA - DETAIL-ACT ====== */
+
+.act-detail-block {
+  display: none;
+}
+
+.act-detail-block.active {
+  display: block;
+}

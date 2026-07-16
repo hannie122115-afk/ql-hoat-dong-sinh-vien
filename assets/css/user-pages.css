@@ -1,5 +1,312 @@
-/* =============CTA - DETAIL-ACT ====== */
+/* ==========================================================================
+   1. RESET & BIẾN MÀU SẮC CHỦ ĐẠO (SYSTEM VARIABLES)
+   ========================================================================== */
+:root {
+  --primary-color: #3b82f6; /* Xanh dương chủ đạo */
+  --primary-light: #eff6ff; /* Xanh dương nhạt cho Hover */
+  --primary-hover: #2563eb;
+  --text-dark: #1e293b; /* Chữ tối màu chính */
+  --text-muted: #64748b; /* Chữ xám mờ phụ */
+  --bg-main: #f8fafc; /* Màu nền xám nhạt toàn trang */
+  --border-color: #e2e8f0; /* Màu viền */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  --transition-fast: all 0.2s ease-in-out;
+}
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   2. HỆ THỐNG HEADER (CỐ ĐỊNH PHÍA TRÊN)
+   ========================================================================== */
+header {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  z-index: 999;
+  box-shadow: var(--shadow-sm);
+}
+
+.homepage-header {
+  height: 100%;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* Cụm Logo & Tiêu đề hệ thống bên trái */
+.homepage-header-left:first-of-type {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.homepage-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+}
+
+.homepage-header-logo i {
+  font-size: 1.8rem;
+}
+
+.homepage-header-logo h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.homepage-header-tiltle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-left: 2px solid var(--border-color);
+  padding-left: 1.5rem;
+}
+
+/* Thanh tìm kiếm ở giữa Header */
+.homepage-search-act {
+  flex: 1;
+  max-width: 450px;
+  position: relative;
+}
+
+.homepage-btn-search-act {
+  display: flex;
+  align-items: center;
+  background-color: #f1f5f9;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: var(--transition-fast);
+}
+
+.homepage-btn-search-act:focus-within {
+  background-color: #ffffff;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.homepage-btn-search-act .search-input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+}
+
+.homepage-btn-search-act #btn-search-act {
+  padding: 0.6rem 1.2rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.homepage-btn-search-act #btn-search-act:hover {
+  color: var(--primary-color);
+}
+
+.suggest-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-md);
+  margin-top: 0.5rem;
+  display: none;
+}
+
+/* Cụm Thông báo + User Profile bên phải Header */
+.homepage-header-left:last-of-type {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.btn-add-act button,
+.notify-bell {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f1f5f9;
+  color: var(--text-dark);
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: var(--transition-fast);
+}
+
+.btn-add-act button:hover,
+.notify-bell:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.homepage-header-org {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 0.5rem;
+}
+
+.header-org-img img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-light);
+}
+
+.header-org-name {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.header-org-name b {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.header-org-name span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   3. HỆ THỐNG BỐ CỤC CHÍNH (MAIN CONTAINER SPLIT LAYOUT)
+   ========================================================================== */
+.container {
+  display: flex;
+  margin-top: 70px; /* Bằng chiều cao của Header để không bị đè khuất */
+  min-height: calc(100vh - 70px);
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   A. KHUNG BÊN TRÁI (LEFT CONTAINER - FIXED SIDEBAR)
+   -------------------------------------------------------------------------- */
+.left-container {
+  width: 260px;
+  background-color: #ffffff;
+  border-right: 1px solid var(--border-color);
+  position: fixed;
+  top: 70px;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  z-index: 990;
+}
+
+.left-side {
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Khối User Profile mini hiển thị ở Sidebar */
+.homepage-left-org {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: var(--bg-main);
+  border-radius: 0.5rem;
+}
+
+/* Hệ thống Navigation Bar */
+.navbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.navbar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.navbar-item a {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.navbar-item i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* Trạng thái Hover & Kích hoạt (Active) của Menu */
+.navbar-item:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.navbar-item.active {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   B. KHUNG BÊN PHẢI (RIGHT CONTAINER - CONTENT AREA)
+   -------------------------------------------------------------------------- */
+.right-container {
+  flex: 1;
+  margin-left: 260px; /* Đẩy lùi sang bằng đúng chiều rộng Sidebar trái */
+  padding: 2rem;
+  min-width: 0; /* Ngăn chặn hiện tượng Grid/Table bên trong làm vỡ layout */
+  background-color: var(--bg-main);
+}
+
+/* ==========================================================================
+   4. PHẦN BỔ SUNG TRẠNG THÁI HIỂN THỊ CHI TIẾT HOẠT ĐỘNG
+   ========================================================================== */
 .act-detail-block {
   display: none;
 }
@@ -8,4 +315,263 @@
   display: block;
 }
 
-/* =============HOVER - REGISTERED-ACT ====== */
+/* ==========================================================================
+   5. ĐÁP ỨNG DI ĐỘNG & MÀN HÌNH NHỎ (RESPONSIVE)
+   ========================================================================== */
+@media (max-width: 992px) {
+  .homepage-header-tiltle {
+    display: none; /* Ẩn tiêu đề chữ dài trên tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  .left-container {
+    width: 70px; /* Thu nhỏ sidebar lại chỉ chứa icon trên mobile */
+  }
+  .left-side {
+    padding: 1rem 0.5rem;
+  }
+  .homepage-left-org,
+  .navbar-item span {
+    display: none; /* Ẩn chữ và profile text */
+  }
+  .right-container {
+    margin-left: 70px; /* Thu hẹp lề trái theo sidebar */
+    padding: 1rem;
+  }
+  .homepage-search-act {
+    max-width: 200px;
+  }
+}
+
+/* ==========================================================================
+   HOMEPAGE CONTENT STYLE (TRANG CHỦ ĐỔ VÀO RIGHT-CONTAINER)
+   ========================================================================== */
+
+/* Ẩn tiêu đề test dư thừa của file PHP */
+.right-container > h1:first-of-type {
+  display: none;
+}
+
+/* Lời chào đầu trang chủ */
+.right-container > h1:nth-of-type(2) {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 2rem;
+  letter-spacing: -0.5px;
+}
+
+/* Khối container bọc từng phân loại hoạt động (Tránh đụng độ với hệ thống ngoài) */
+.right-container .container {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Tiêu đề mục (Sắp diễn ra, Đang diễn ra, Đã kết thúc) */
+.right-container .title-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-dark);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+
+.right-container .title-container i {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+}
+
+.right-container .title-container h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   GRID LAYOUT - CARD CONTAINER
+   -------------------------------------------------------------------------- */
+.right-container .card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Trạng thái ẩn card thứ 5 trở đi theo PHP */
+.right-container .hidden-card-item {
+  display: none !important; /* JS sẽ gỡ class này hoặc xử lý nút xem tất cả */
+}
+
+/* Thiết kế Card hoạt động */
+.right-container .card-item {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+}
+
+.right-container .card-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Vùng ảnh bìa của Card */
+.right-container .img-card-item {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  position: relative;
+  background-color: #f1f5f9;
+}
+
+.right-container .img-card-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.right-container .card-item:hover .img-card-item img {
+  transform: scale(1.05);
+}
+
+/* --------------------------------------------------------------------------
+   THIẾT KẾ BADGE NGÀY THÁNG ĐẸP MẮT (Z-INDEX CAO)
+   -------------------------------------------------------------------------- */
+.right-container .date-card-item {
+  position: absolute;
+  top: -140px; /* Đẩy nổi lên trên đè vào góc ảnh */
+  left: 1rem;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  min-width: 60px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1;
+}
+
+.right-container .date-card-item h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+.right-container .date-card-item span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Thân nội dung bên dưới Card */
+.right-container .title-card-item {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative; /* Tạo mốc tọa độ tương đối cho .date-card-item */
+}
+
+/* Tên hoạt động */
+.right-container .title-card-item h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+  /* Giới hạn hiển thị tối đa 2 dòng tiêu đề */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 2.8rem;
+}
+
+/* Khối thông tin chi tiết (Thời gian, Địa điểm, Sĩ số) */
+.right-container .info-card-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto; /* Đẩy cụm thông tin xuống sát đáy card */
+}
+
+.right-container .info-card-item-inside {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.right-container .info-card-item-inside i {
+  font-size: 0.9rem;
+  width: 16px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Highlight nhẹ icon để phân biệt */
+.right-container .info-card-item-inside .fa-location-dot {
+  color: #ef4444; /* Đỏ định vị */
+}
+
+.right-container .info-card-item-inside .fa-user-group {
+  color: var(--primary-color); /* Xanh số lượng */
+}
+
+/* --------------------------------------------------------------------------
+   BUTTON: XEM TẤT CẢ
+   -------------------------------------------------------------------------- */
+.right-container .see-all-card-btn {
+  align-self: center; /* Đưa nút ra chính giữa container */
+  background-color: #f1f5f9;
+  color: var(--text-dark);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2rem;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.right-container .see-all-card-btn:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-color: var(--primary-light);
+}
+
+.right-container .card-item.hidden-card-item {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE CHO KHU VỰC BẢNG CARD
+   -------------------------------------------------------------------------- */
+@media (max-width: 576px) {
+  .right-container .card-container {
+    grid-template-columns: 1fr; /* 1 cột duy nhất trên màn hình điện thoại dọc */
+  }
+}

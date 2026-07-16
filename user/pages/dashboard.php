@@ -63,7 +63,9 @@ empty($keyword) ? $stmt3->execute() : $stmt3->execute([$search]);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../assets/css/manager-pages.css">
+    <!-- <link rel="stylesheet" href="../assets/css/manager-pages.css"> -->
+    <link rel="stylesheet" href="../assets/css/user-pages.css">
+
 </head>
 <body>
     <h1>ĐÂY LÀ TRANG CHỦ</h1>

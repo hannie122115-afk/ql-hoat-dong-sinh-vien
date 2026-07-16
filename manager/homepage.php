@@ -26,6 +26,8 @@ require_once "auth.php";
     <title>Trang chủ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/search.css">
+    <!-- <link rel="stylesheet" href="../assets/css/manager-pages.css"> -->
+
 
 </head>
 <body>
@@ -125,7 +127,7 @@ require_once "auth.php";
                     <div class="left-side-overview-item">
                         <i class="fa-regular fa-calendar"></i>
                         <div class="homepage-left-overview-item-amount">
-                            <h4><?= $tongSoHD ?></h4>
+                            <h5><?= $tongSoHD ?></h5>
                             <span>Hoạt động đã tạo</span>
                         </div>
                     </div>
@@ -133,7 +135,7 @@ require_once "auth.php";
                     <div class="left-side-overview-item">
                         <i class="fa-solid fa-user-group"></i>
                         <div class="homepage-left-overview-item-amount">
-                            <h4><?= $tongLuotDK ?></h4>
+                            <h5><?= $tongLuotDK ?></h5>
                             <span>Lượt đăng ký</span>
                         </div>
                     </div>
@@ -141,7 +143,7 @@ require_once "auth.php";
                     <div class="left-side-overview-item">
                         <i class="fa-regular fa-circle-check"></i>
                         <div class="homepage-left-overview-item-amount">
-                            <h4>15</h4>
+                            <h5>15</h5>
                             <span>Sinh viên đã tham gia</span>
                         </div>
                     </div>

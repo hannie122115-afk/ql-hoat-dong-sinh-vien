@@ -683,12 +683,18 @@ document.addEventListener("click", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        alert("Xóa hoạt động thành công!");
+        // alert("Xóa hoạt động thành công!");
         loadPage("pages/act-management.php");
       } else {
         alert(data.message);
       }
     });
+});
+
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-cancel-delete-act");
+  if (!btnCancel) return;
+  document.getElementById("delete-act-modal").classList.remove("show");
 });
 
 // =================renderCustomQuestions - edit-management-act============
