@@ -23,6 +23,10 @@ document.addEventListener("click", (e) => {
     showCta(1);
   } else if (e.target.closest(".register-btn")) {
     showCta(2);
+  } else if (e.target.closest(".list-register-btn")) {
+    showCta(3);
+  } else if (e.target.closest(".take-attendance-btn")) {
+    showCta(4);
   }
 });
 
