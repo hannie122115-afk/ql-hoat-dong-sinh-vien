@@ -620,12 +620,12 @@ document.addEventListener("keydown", function (e) {
 });
 
 // =================chuyenSangEditActManagement - act-management============
-let currentActId = null;
+let currentActManageId = null;
 document.addEventListener("click", (e) => {
   const rowAct = e.target.closest(".row-act-management");
   if (!rowAct) return;
-  currentActId = rowAct.dataset.id;
-  loadPage(`pages/edit-management-act.php?id=${currentActId}`);
+  currentActManageId = rowAct.dataset.id;
+  loadPage(`pages/edit-management-act.php?id=${currentActManageId}`);
 });
 
 // =================dropdownStatus - act-management============
@@ -823,7 +823,7 @@ document.addEventListener("click", (e) => {
 
   // vì có file ảnh nên dùng form data mới gửi đc dữ liệu
   const formData = new FormData();
-  formData.append("actId", currentActId);
+  formData.append("actId", currentActManageId);
   formData.append("activityData", JSON.stringify(activityData));
   const avtFile = document.getElementById("act-img-avt").files[0];
   if (avtFile) {
@@ -834,7 +834,7 @@ document.addEventListener("click", (e) => {
     formData.append("actImgCover", coverFile);
   }
 
-  fetch(`pages/edit-management-act.php?id=${currentActId}`, {
+  fetch(`pages/edit-management-act.php?id=${currentActManageId}`, {
     method: "POST",
     body: formData,
   })

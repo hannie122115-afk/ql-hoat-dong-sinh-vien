@@ -119,11 +119,11 @@ empty($keyword) ? $stmt3->execute() : $stmt3->execute([$search]);
             <?php $count = 0;
             while($row = $stmt2->fetch(PDO::FETCH_ASSOC)){ 
                 $count++; ?>
-            <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>">  
+            <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>" data-id="<?= $row['MaHoatDong'] ?>">  
                 <div class="img-card-item">
                     <img src="<?= $row['AnhAvt'] ?>" alt="">
                 </div>
-                <h1><?= $row['MaHoatDong'] ?></h1>
+                <!-- <h1></h1> -->
                 <div class="title-card-item">
                     <div class="date-card-item">Để ngày z-index cao
                         <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
@@ -161,7 +161,7 @@ empty($keyword) ? $stmt3->execute() : $stmt3->execute([$search]);
             <?php $count = 0;
             while($row = $stmt3->fetch(PDO::FETCH_ASSOC)){ 
                 $count++;?>
-            <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>">  
+            <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>" data-id="<?= $row['MaHoatDong'] ?>">  
                 <div class="img-card-item">
                     <img src="<?= $row['AnhAvt'] ?>" alt="">
                 </div>

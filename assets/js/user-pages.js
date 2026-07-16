@@ -29,7 +29,7 @@ document.addEventListener("click", (e) => {
 // ================registerBtn - act-detail============
 
 document.addEventListener("click", (e) => {
-  const btn = e.target.closest("#register-act-btn");
+  const btn = e.target.closest(".register-act-btn");
   if (!btn) {
     return;
   }
@@ -51,6 +51,8 @@ document.addEventListener("click", (e) => {
     }
   });
 
+  if (!isValid) return;
+
   const formData = new FormData(form);
   fetch(`pages/act-detail.php?id=${currentActId}`, {
     method: "POST",
@@ -65,4 +67,3 @@ document.addEventListener("click", (e) => {
       }
     });
 });
-

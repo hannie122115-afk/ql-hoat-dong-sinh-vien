@@ -1,22 +1,23 @@
  <?php 
-// if(session_status() === PHP_SESSION_NONE){
-//     session_start();
-// }
-// require_once "../../config/db.php";
-// require_once "../auth.php";
+if(session_status() === PHP_SESSION_NONE){
+    session_start();
+}
+require_once "../../config/db.php";
+require_once "../auth.php";
 
-// $sql1 = "SELECT 
-//             hd.*,
-//             COUNT(dk.MSSV) AS total
-//         FROM HoatDong hd
-//         LEFT JOIN DangKy dk
-//             ON hd.MaHoatDong = dk.MaHoatDong";
-// if(!empty($keyword)){
-//     $sql1 .= "AND hd.TenHoatDong LIKE ?";
-// }
-// $sql1 .= "GROUP BY hd.MaHoatDong";
-// $stmt1 = $conn->prepare($sql1);
-// empty($keyword) ? $stmt1->execute() : $stmt1->execute([$search]);
+$sql1 = "SELECT 
+            hd.*,
+            COUNT(dk.MSSV) AS total
+        FROM HoatDong hd
+        LEFT JOIN DangKy dk
+            ON hd.MaHoatDong = dk.MaHoatDong
+        WHERE dk.DaDiemDanh = 0 ";
+if(!empty($keyword)){
+    $sql1 .= "AND hd.TenHoatDong LIKE ?";
+}
+$sql1 .= "GROUP BY hd.MaHoatDong";
+$stmt1 = $conn->prepare($sql1);
+empty($keyword) ? $stmt1->execute() : $stmt1->execute([$search]);
 
 ?> 
 
@@ -27,116 +28,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="../assets/css/user-pages.css">
+
 </head>
 <body>
     <h1>ĐÂY LÀ TRANG HOẠT ĐỘNG ĐẪ ĐĂNG KÝ</h1>
 
-    <div class="registered-act-container">
-        <div class="registered-act-header">
-            <div class="registered-act-title">
-                <h2>Quản lý hoạt động</h2>
-                <span>Danh sách các hoạt động do CLB tạo và quản lý</span>
-            </div>
-            <div class="registered-search-act">
-                <div class="registered-btn-search-act">
-                        <input type="text" name="activity" class="search-input" data-type="activity" id="activity" placeholder="Tìm kiếm hoạt động...">
-                        <button type="button" id="btn-search-act">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                </div>
-                <div class="suggest-box"></div>
-            </div>
-            <div class="status-act-dropdown">
-                <span>Trạng thái</span>
-                <div class="status-dropdown">
-                    <div class="">Sắp diễn ra</div>
-                    <div class="">Đang diễn ra</div>
-                    <div class="">Đã kết thúc</div>
-                </div>
-            </div>
+    <div class="container">
+        <div class="title-container">
+            <h2>Tạo hoạt động mới</h2>
+            <span>Điền đầy đủ thông tin để tạo hoạt động cho sinh viên đăng ký tham gia.</span>
         </div>
-
-        <table class="registered-act-table">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Tên hoạt động</th>
-                    <th>Thời gian diễn ra</th>
-                    <th>Địa điểm</th>
-                    <th>Số lượng đăng ký</th>
-                    <th>Trạng thái</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $stt = 1; 
-                while ($act1 = $stmt->fetch(PDO::FETCH_ASSOC)):?>
-                <tr>
-                    <td><?= $stt++ ?></td>
-                    <td>
-                        <div class="registered-act-info">
-                            <img src="<?= $act1['AnhBia'] ?>" alt="">
-                            <h4><?= $act1['TenHoatDong'] ?></h4>
+        <div class="card-container">
+            <?php $count = 0;
+            while($row = $stmt1->fetch(PDO::FETCH_ASSOC)){ 
+                $count++;?>
+            <div class="card-item" data-id="<?= $row['MaHoatDong'] ?>">  
+                <div class="img-card-item">
+                    <img src="<?= $row['AnhAvt'] ?>" alt="">
+                </div>
+                <div class="title-card-item">
+                    <div class="date-card-item">
+                        <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
+                        $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
+                        <h3><?= $dateStart->format('d'); ?></h3>
+                        <span>tháng <?= $dateStart->format('m'); ?></span>
+                    </div>
+                    <h4><?= $row['TenHoatDong'] ?></h4>
+                    <div class="info-card-item">
+                        <div class="info-card-item-inside">
+                            <i class="fa-regular fa-clock"></i>
+                            <span><?= $dateStart->format('H:i'); ?> - <?= $dateEnd->format('H:i'); ?></span>
                         </div>
-                    </td>
-                    <td>
-                        <div class="registered-act-time">
-                            <?php 
-                                $dateStart = new DateTime($act1['ThoiGianBatDau']); 
-                                $dateEnd = new DateTime($act1['ThoiGianKetThuc']);
-                            ?>
-                            <span><?= $dateStart->format('d/m/Y') ?></span>
-                            <span><?= $dateStart->format('H:i') ?> - <?= $dateEnd->format('H:i') ?></span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="registered-act-locate">
+                        <div class="info-card-item-inside">
                             <i class="fa-solid fa-location-dot"></i>
-                            <span><?= $act1['DiaDiem'] ?></span>
+                            <span><?= $row['DiaDiem'] ?></span>
                         </div>
-                    </td>
-                    <td>
-                        <div class="registered-act-amount">
+                        <div class="info-card-item-inside">
                             <i class="fa-solid fa-user-group"></i>
-                            <span><?= $act['total'] ?>/<?= $act['SoLuongToiDa']?></span>
+                            <span><?= $row['total'] ?>/<?= $row['SoLuongToiDa']?> đã đăng ký</span>
                         </div>
-                    </td>
-                    <td>
-                        <div class="registered-act-status">
-                            <?php 
-                                $currentDate = new DateTime();
-                                if($dateStart > $currentDate):
-                            ?>
-                                <span class="status upcoming">
-                                    Sắp diễn ra
-                                </span>
-                        </div>
-                            <?php
-                                elseif($dateEnd <= $currentDate):
-                            ?>
-                                <span class="status running">
-                                    Đã kết thúc
-                                </span>
-                            <?php
-                                else:
-                            ?>
-                                <span class="status finished">
-                                    Đang diễn ra
-                                </span>
-                            <?php endif ?>
-                    </td>
-                    <td>
-                        <button class="edit-registered-btn">
-                            Sửa
-                        </button>
-                        <button class="delete-registered-btn">
-                            Xóa
-                        </button>
-                    </td>
-                </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                    </div>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
     </div>
 </body>
 </html>

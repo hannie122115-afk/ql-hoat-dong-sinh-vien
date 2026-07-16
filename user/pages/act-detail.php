@@ -5,6 +5,9 @@ if(session_status() === PHP_SESSION_NONE){
 require_once "../../config/db.php";
 require_once "../auth.php";
 
+// var_dump($_SERVER['REQUEST_METHOD']);
+// exit;
+
 $actId = $_GET['id'] ?? '';
 
 $sql1 = "SELECT 
@@ -19,9 +22,16 @@ $stmt1 = $conn->prepare($sql1);
 $stmt1->execute([$actId]);
 $act = $stmt1->fetch(PDO::FETCH_ASSOC);
 
+// echo "<pre>";
+// var_dump($actId);
+// var_dump($act);
+// echo "</pre>";
+// exit;
+
 $dateStart = new DateTime($act['ThoiGianBatDau']);
 $dateEnd = new DateTime($act['ThoiGianKetThuc']);
 $dateCreate = new DateTime($act['NgayTao']);
+$dateNow = new DateTime();
 
 $sql2 = "SELECT * 
         FROM ToChuc
@@ -36,6 +46,9 @@ $sql3 = "SELECT *
 $stmt3 = $conn->prepare($sql3);
 $stmt3->execute([$act['MaMucCongDiem']]);
 $bonus = $stmt3->fetch(PDO::FETCH_ASSOC);
+
+// var_dump($bonus);
+// exit;
 
 $sql4 = "SELECT * 
         FROM DonVi
@@ -56,6 +69,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $answers = $_POST['answers'] ?? [];
     try{
+        $conn->beginTransaction();
+
         $sql6 = "INSERT INTO DangKy (MSSV, MaHoatDong) VALUES (?, ?)";
         $stmt6 = $conn->prepare($sql6);
         $stmt6->execute([$user['MSSV'], $actId]);
@@ -69,7 +84,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $answer
             ]);
         }
-
+        $conn->commit();
+        $_SESSION['success_register_act_message'] = 'Đăng ký hoạt động thành công!';
         echo json_encode([
             "success" => true, 
             "message" => "Đăng ký hoạt động thành công",
@@ -131,6 +147,10 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
                     <button class="registered-btn">
                         <span>Đã đăng ký</span>
                     </button>
+                <?php elseif($dateNow->format('Y-m-d H:i:s') >= $dateEnd->format('Y-m-d H:i:s') ): ?>
+                    <button class=" register-btn">
+                        <span>Đã kết thúc</span>
+                    </button>
                 <?php else: ?>
                     <button class="act-detail-btn register-btn">
                         <i class="fa-solid fa-pen"></i>
@@ -138,11 +158,13 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
                     </button>
                 <?php endif; ?>
             </div>
-            <?php if($isRegistered): ?>
-                <div class="success-register-message">
-                    Đăng ký tham gia hoạt động thành công!
+            
+            <?php if(isset($_SESSION['success_register_act_message'])){ ?>
+                <div class="success_register_act_message">
+                    <?= $_SESSION['success_register_act_message']; ?>
                 </div>
-            <?php endif; ?>
+            <?php unset($_SESSION['success_register_act_message']); } ?>
+            
         </div>
 
         <div class="act-detail-describe act-detail-block active" id="act-detail-1" >
@@ -176,7 +198,7 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
                     </div>
                     <?php } }?>
                     <div id="register-act-btn">
-                        <button class="register-act-btn" data-id="<?= $act['MaHoatDong'] ?>">Đăng ký</button>
+                        <button type="button" class="register-act-btn" data-id="<?= $act['MaHoatDong'] ?>">Đăng ký</button>
                     </div>
                 </form>
                 
