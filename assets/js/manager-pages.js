@@ -625,6 +625,38 @@ document.addEventListener("click", (e) => {
   loadPage(`pages/edit-management-act.php?id=${currentActId}`);
 });
 
+// =================deleteModal - act-management============
+let deleteActId = null;
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".delete-management-act-btn");
+  if (!btn) return;
+  deleteActId = btn.dataset.id;
+  document.getElementById("delete-act-message").textContent =
+    `Bạn có chắc chắn muốn xóa hoạt động "${btn.dataset.name}"?`;
+  document.getElementById("delete-act-modal").classList.add("show");
+});
+
+// =================deleteAct - act-management============
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btn-confirm-delete-act");
+  if (!btn) return;
+  fetch("delete.php", {
+    method: "POST",
+    body: new URLSearchParams({
+      id: deleteActId,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        alert("Xóa hoạt động thành công!");
+        loadPage("pages/act-management.php");
+      } else {
+        alert(data.message);
+      }
+    });
+});
+
 // =================renderCustomQuestions - edit-management-act============
 function renderCustomQuestions() {
   const container = document.querySelector(".custom-ques-container");
@@ -729,6 +761,11 @@ document.addEventListener("click", (e) => {
   activityData.step1.actMaxSlot = document.getElementById("act-max-slot").value;
   activityData.step1.actPoint = document.getElementById("act-point").value;
   activityData.step1.actBonus = document.getElementById("bonus").value;
+  document.getElementById("bonusId").value = document.querySelector(
+    "[data-type='bonus']",
+  ).dataset.id;
+  activityData.step1.actBonusId = document.getElementById("bonusId").value;
+
   activityData.step1.actContent = document.getElementById("act-content").value;
 
   const bonusIdInput = document.getElementById("bonusId");

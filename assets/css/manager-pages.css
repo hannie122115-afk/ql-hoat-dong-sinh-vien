@@ -22,3 +22,12 @@
   opacity: 1;
   font-weight: bold;
 }
+
+/* =============DELETE-MODEL - ACT-MANAGEMENT ====== */
+.modal {
+  display: none;
+}
+
+.modal.show {
+  display: flex;
+}

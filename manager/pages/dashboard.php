@@ -124,7 +124,7 @@ empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['M
                 $count++; ?>
             <div class="card-item <?= $count > 4 ? 'hidden-card-item' : '' ?>">  
                 <div class="img-card-item">
-                    <img src="<?= $row['HinhAnh'] ?>" alt="">
+                    <img src="<?= $row['AnhAvt'] ?>" alt="">
                 </div>
                 <div class="title-card-item">
                     <div class="date-card-item">Để ngày z-index cao

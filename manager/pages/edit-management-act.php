@@ -21,6 +21,9 @@ $sql = "SELECT *
 $stmt = $conn->prepare($sql);
 $stmt->execute([$actManagementId]);
 $actInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// var_dump($actManagementId);
+// var_dump($actInfo);
+// exit;
 
 $sql7 = "SELECT LoaiCauHoi
         FROM CauHoiDangKy
@@ -42,7 +45,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     ob_clean(); 
     header('Content-Type: application/json; charset=utf-8');
     try{
-            
+         $conn->beginTransaction();
         // mở gói actData
 
         if(!isset($_POST["activityData"])){
@@ -197,12 +200,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     break;
             }
         }
+        $conn->commit();
+        $_SESSION['success_update_act_message'] = 'Cập nhật hoạt động thành công!';
         echo json_encode([
             "success" => true, 
             "message" => "Sửa hoạt động thành công",
             "actCode" => $actManagementId]);
         exit;
     }catch(Exception $e){
+        $conn->rollBack();
         echo json_encode([
             "success" => false,
             "message" => $e->getMessage()
@@ -318,7 +324,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                 <div class="suggest-box"></div>
                                 <div class="error-message"></div>
                             </div>
-                            <input type="hidden" name="bonus" id="bonusId">
+                            <input type="hidden" name="bonus" id="bonusId" value="<?= $actInfo['MaMucCongDiem'] ?>">
 
                             <div class="act-info-item">
                                 <h4>Điểm rèn luyện</h4>

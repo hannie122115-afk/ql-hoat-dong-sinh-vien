@@ -37,6 +37,8 @@ empty($keyword) ? $stmt1->execute([$org['MaToChuc']]) : $stmt1->execute([$org['M
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="../assets/css/manager-pages.css">
+
 </head>
 <body>
     <h1>ĐÂY LÀ TRANG QUẢN LÝ HOẠT ĐỘNG</h1>
@@ -137,14 +139,25 @@ empty($keyword) ? $stmt1->execute([$org['MaToChuc']]) : $stmt1->execute([$org['M
                         <button class="edit-management-act-btn row-act-management" data-id="<?= $act1['MaHoatDong'] ?>">
                             Sửa
                         </button>
-                        <button class="delete-management-act-btn">
+                        <button class="delete-management-act-btn"  data-id="<?= $act1['MaHoatDong'] ?>">
                             Xóa
                         </button>
+                        
                     </td>
                 </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
+        <div id="delete-act-modal" class="modal">
+            <div class="modal-content">
+                <h3>Xác nhận xóa</h3>
+                <p id="delete-act-message"></p>
+                <div class="model-btn">
+                    <button id="btn-cancel-delete-act">Hủy</button>
+                    <button id="btn-confirm-delete-act">Xóa</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
