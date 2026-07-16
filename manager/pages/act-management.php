@@ -13,6 +13,7 @@ require_once "../auth.php";
 
 $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
 $search = "%$keyword%";
+$status = $_GET['status'] ?? '';
 
 $sql1 = "SELECT 
             hd.*,
@@ -21,12 +22,25 @@ $sql1 = "SELECT
         LEFT JOIN DangKy dk
             ON hd.MaHoatDong = dk.MaHoatDong
         WHERE hd.MaToChuc = ? ";
+$params = [$org['MaToChuc']];
 if(!empty($keyword)){
     $sql1 .= "AND hd.TenHoatDong LIKE ? ";
+    $params[] = $search;
+}
+if($status == "upcoming"){
+    $sql1 .= "AND hd.ThoiGianBatDau > NOW() ";
+}
+elseif($status == "running"){
+    $sql1 .= "AND hd.ThoiGianBatDau <= NOW()
+              AND hd.ThoiGianKetThuc > NOW() ";
+}
+elseif($status == "finished"){
+    $sql1 .= "AND hd.ThoiGianKetThuc <= NOW() ";
 }
 $sql1 .= "GROUP BY hd.MaHoatDong";
 $stmt1 = $conn->prepare($sql1);
-empty($keyword) ? $stmt1->execute([$org['MaToChuc']]) : $stmt1->execute([$org['MaToChuc'], $search]);
+$stmt1->execute($params);
+
 
 ?>
 
@@ -50,7 +64,7 @@ empty($keyword) ? $stmt1->execute([$org['MaToChuc']]) : $stmt1->execute([$org['M
             </div>
             <div class="management-search-act">
                 <div class="management-btn-search-act">
-                        <input type="text" name="activity" class="search-input" data-type="activity" id="act-management" placeholder="Tìm kiếm hoạt động...">
+                        <input type="text" name="activity" class="search-input" data-type="activity" id="act-management" placeholder="Tìm kiếm hoạt động..." value="<?= htmlspecialchars($keyword) ?>">
                         <button type="button" id="btn-search-act-management">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
@@ -59,10 +73,25 @@ empty($keyword) ? $stmt1->execute([$org['MaToChuc']]) : $stmt1->execute([$org['M
             </div>
             <div class="status-act-dropdown">
                 <span>Trạng thái</span>
-                <div class="status-dropdown">
-                    <div class="">Sắp diễn ra</div>
-                    <div class="">Đang diễn ra</div>
-                    <div class="">Đã kết thúc</div>
+                <div class="status-dropdown-selected">
+                    <span id="selected-status">
+                        <?=
+                        match($status){
+                            'upcoming' => 'Sắp diễn ra',
+                            'running' => 'Đang diễn ra',
+                            'finished' => 'Đã kết thúc',
+                            default => 'Trạng thái'
+                        }
+                        ?>
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+
+                <div class="status-dropdown-menu">
+                    <div class="status-option" data-status="">Tất cả</div>
+                    <div class="status-option" data-status="upcoming">Sắp diễn ra</div>
+                    <div class="status-option" data-status="running">Đang diễn ra</div>
+                    <div class="status-option" data-status="finished">Đã kết thúc</div>
                 </div>
             </div>
         </div>

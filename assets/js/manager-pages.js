@@ -592,13 +592,16 @@ document.addEventListener("click", (e) => {
 function searchActManagement() {
   const inputAct = document.getElementById("act-management");
   let keyword = inputAct.value.trim();
-  let url = `pages/act-management.php?keyword=${encodeURIComponent(keyword)}`;
-  const content = document.querySelector(".right-container");
-  fetch(url)
-    .then((res) => res.text())
-    .then((data) => {
-      content.innerHTML = data;
-    });
+  // let url = `pages/act-management.php?keyword=${encodeURIComponent(keyword)}`;
+  // const content = document.querySelector(".right-container");
+  // fetch(url)
+  //   .then((res) => res.text())
+  //   .then((data) => {
+  //     content.innerHTML = data;
+  //   });
+  loadPage(
+    `pages/act-management.php?keyword=${encodeURIComponent(keyword)}&status=${currentStatus}`,
+  );
 }
 document.addEventListener("click", function (e) {
   const btn = e.target.closest("#btn-search-act-management");
@@ -624,6 +627,37 @@ document.addEventListener("click", (e) => {
   currentActId = rowAct.dataset.id;
   loadPage(`pages/edit-management-act.php?id=${currentActId}`);
 });
+
+// =================dropdownStatus - act-management============
+let currentStatus = "";
+document.addEventListener("click", (e) => {
+  const dropdown = document.querySelector(".status-act-dropdown");
+  if (!dropdown) return;
+
+  // click vào ô
+  if (e.target.closest(".status-dropdown-selected")) {
+    dropdown.querySelector(".status-dropdown-menu").classList.toggle("show");
+    return;
+  }
+
+  // click chọn option
+  const option = e.target.closest(".status-option");
+  if (option) {
+    document.getElementById("selected-status").textContent = option.textContent;
+    dropdown.querySelector(".status-dropdown-menu").classList.remove("show");
+
+    currentStatus = option.dataset.status;
+    searchActManagement();
+    return;
+  }
+});
+
+// function filterStatus() {
+//   const keyword = document.getElementById("act-management").value.trim();
+//   loadPage(
+//     `pages/act-management.php?keyword=${encodeURIComponent(keyword)}&status=${currentStatus}`,
+//   );
+// }
 
 // =================deleteModal - act-management============
 let deleteActId = null;
