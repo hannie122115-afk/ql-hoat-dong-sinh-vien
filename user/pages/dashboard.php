@@ -68,8 +68,6 @@ empty($keyword) ? $stmt3->execute() : $stmt3->execute([$search]);
 
 </head>
 <body>
-    <h1>ĐÂY LÀ TRANG CHỦ</h1>
-
     <h1>Xin chào, <?= $user['HoTen'] ?>!</h1>
     <div class="container">
         <div class="title-container">

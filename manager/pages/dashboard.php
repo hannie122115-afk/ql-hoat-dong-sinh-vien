@@ -69,8 +69,6 @@ empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['M
     <link rel="stylesheet" href="../assets/css/manager-pages.css">
 </head>
 <body>
-    <h1>ĐÂY LÀ TRANG CHỦ</h1>
-
     <h1>Xin chào, <?= $org['TenToChuc'] ?>!</h1>
     <div class="container">
         <div class="title-container">
