@@ -159,7 +159,7 @@ header {
   color: var(--primary-color);
 }
 
-.suggest-box {
+/* .suggest-box {
   position: absolute;
   top: 100%;
   left: 0;
@@ -171,7 +171,7 @@ header {
   margin-top: 0.5rem;
   display: none;
   z-index: 1000;
-}
+} */
 
 /* Cụm tính năng / Profile bên phải Header */
 .homepage-header-left:last-of-type,
@@ -398,6 +398,7 @@ header {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-dark);
+  text-wrap: auto;
 }
 
 .left-side .homepage-left-org .header-org-name span {
@@ -690,6 +691,7 @@ header {
   color: var(--text-dark);
   line-height: 1.4;
   margin-bottom: 0.75rem;
+  margin-left: 5rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -757,7 +759,7 @@ header {
 }
 
 .right-container .card-item.hidden-card-item {
-  display: none !important;
+  display: none;
 }
 
 /* ==========================================================================
@@ -1582,6 +1584,12 @@ header {
   display: block;
 }
 
+/*  */
+.status-student-dropdown {
+  position: relative;
+}
+
+/*  */
 .right-container .status-option {
   padding: 0.55rem 1rem;
   font-size: 0.88rem;

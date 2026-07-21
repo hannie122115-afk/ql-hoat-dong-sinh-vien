@@ -80,7 +80,7 @@ $stmt1->execute($params);
                             'upcoming' => 'Sắp diễn ra',
                             'running' => 'Đang diễn ra',
                             'finished' => 'Đã kết thúc',
-                            default => 'Trạng thái'
+                            default => 'Tất cả'
                         }
                         ?>
                     </span>

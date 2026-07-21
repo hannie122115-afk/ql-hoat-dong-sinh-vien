@@ -293,6 +293,15 @@ header {
   color: #ffffff;
 }
 
+.navbar-item:last-child:hover {
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.navbar-item:last-child:hover i {
+  color: #ef4444;
+}
+
 /* --------------------------------------------------------------------------
    B. KHUNG BÊN PHẢI (RIGHT CONTAINER - CONTENT AREA)
    -------------------------------------------------------------------------- */
@@ -405,9 +414,9 @@ header {
 }
 
 /* Trạng thái ẩn card thứ 5 trở đi theo PHP */
-.right-container .hidden-card-item {
-  display: none !important; /* JS sẽ gỡ class này hoặc xử lý nút xem tất cả */
-}
+/* .right-container .hidden-card-item {
+  display: none !important; 
+} */
 
 /* Thiết kế Card hoạt động */
 .right-container .card-item {

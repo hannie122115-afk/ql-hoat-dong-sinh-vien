@@ -80,6 +80,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_P
                             LIMIT 8";
             $params = [$search];
             break;
+        case "student":
+            $sql = "SELECT MSSV as id
+                    , CONCAT(MSSV, ' - ', HoTen) as name
+                    FROM SinhVien
+                    WHERE HoTen LIKE ?
+                        OR MSSV LIKE ?
+                    LIMIT 8";
+            $params = [$search, $search];
+            break;
         default:
             echo json_encode([]);
             exit;

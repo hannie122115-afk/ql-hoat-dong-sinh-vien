@@ -8,14 +8,14 @@ document.addEventListener("click", (e) => {
 });
 
 // =================showBTN - act-detail============
-let currentCta = 1;
+let currentCtaUser = 1;
 
 function showCta(cta) {
   document.querySelectorAll(".act-detail-block").forEach((block) => {
     block.classList.remove("active");
   });
   document.getElementById(`act-detail-${cta}`).classList.add("active");
-  currentCta = cta;
+  currentCtaUser = cta;
 }
 
 document.addEventListener("click", (e) => {
