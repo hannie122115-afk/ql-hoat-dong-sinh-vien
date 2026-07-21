@@ -823,6 +823,8 @@ function showCta(cta) {
 document.addEventListener("click", (e) => {
   if (e.target.closest(".detail-btn")) {
     showCta(1);
+  } else if (e.target.closest(".list-register-btn")) {
+    showCta(2);
   } else if (e.target.closest(".take-attendance-btn")) {
     showCta(3);
   }
@@ -891,7 +893,7 @@ document.addEventListener("click", async function (e) {
   const formId = btn.dataset.formid;
   // gui yeu cau den Apps Script
   const response = await fetch(
-    "https://script.google.com/macros/s/AKfycbzbOetGORdZ61CfJjzjoIK3x4_hBuozcOCAM94xIVGwm-osxEupEuwQaoq27NZT3hSmOQ/exec",
+    "https://script.google.com/macros/s/AKfycbyKjOsqGZHpH5Lz3UhEnG40mWLU3dc_aODOissZGAb18ZzcSp4bL-neO30CUN5mTlW5MA/exec",
     {
       method: "POST",
       body: new URLSearchParams({
@@ -900,11 +902,36 @@ document.addEventListener("click", async function (e) {
       }),
     },
   );
-  // Nhan ket qua sau khi chay ham closeForm
+  // Nhan ket qua sau khi chay ham closeForm ở Apps Script
   const result = await response.json();
   if (result.message) {
     btn.textContent = "Đã đóng form";
     btn.classList.add("closed");
     btn.disabled = true;
+  }
+});
+
+// =================getListResponseForm - act-detail============
+document.addEventListener("click", async function (e) {
+  const btn = e.target.closest("#btn-attendance");
+  if (!btn) return;
+
+  const res = await fetch("pages/attendance.php", {
+    method: "POST",
+    body: new URLSearchParams({
+      actId: btn.dataset.actId,
+    }),
+  });
+
+  const result = await res.json();
+  console.log(result);
+
+  if (result.success) {
+    console.log("Đang load lại");
+    const html = await fetch(
+      `pages/student-list.php?id=${btn.dataset.actId}`,
+    ).then((r) => r.text());
+
+    document.getElementById("student-list-body").innerHTML = html;
   }
 });

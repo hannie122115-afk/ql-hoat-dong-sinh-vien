@@ -149,7 +149,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         }
 
         // Goi Apps script
-        $url = "https://script.google.com/macros/s/AKfycbzbOetGORdZ61CfJjzjoIK3x4_hBuozcOCAM94xIVGwm-osxEupEuwQaoq27NZT3hSmOQ/exec?id="
+        $url = "https://script.google.com/macros/s/AKfycbyKjOsqGZHpH5Lz3UhEnG40mWLU3dc_aODOissZGAb18ZzcSp4bL-neO30CUN5mTlW5MA/exec?id="
                 . urlencode($actCode)
                 . "&name="
                 . urlencode($actName);
@@ -357,14 +357,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         <div class="auto-ques-container">
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Mã số sinh viên" data-id="MSSV">
+                                    <input type="checkbox" name="auto-ques" value="Mã số sinh viên" data-id="MSSV" checked>
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Mã số sinh viên
                             </div>
                             <div class="auto-ques-item">
                                 <label class="auto-ques-checkbox">
-                                    <input type="checkbox" name="auto-ques" value="Họ tên" data-id="HoTen">
+                                    <input type="checkbox" name="auto-ques" value="Họ tên" data-id="HoTen" >
                                     <span class="auto-ques-checkmark"></span>
                                 </label>
                                 Họ tên

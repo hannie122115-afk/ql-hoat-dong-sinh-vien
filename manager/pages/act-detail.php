@@ -189,9 +189,14 @@ $bonus = $stmt2->fetch(PDO::FETCH_ASSOC);
             <div class="qr-code">
                 <img src="<?= $act['LinkQr'] ?>" alt="Mã qr">
             </div>
-            <button class="btn-close-form" data-formid="<?= $act['MaForm'] ?>">
-                Đóng form
-            </button>
+            <div class="attendance-container">
+                <button class="btn-close-form" data-formid="<?= $act['MaForm'] ?>">
+                    Đóng form
+                </button>
+                <button id="btn-attendance" data-act-id="<?= $actId ?>">
+                    Điểm danh
+                </button>
+            </div>
         </div>
 
         <div class="act-detail-info">
