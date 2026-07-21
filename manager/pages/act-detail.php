@@ -132,60 +132,66 @@ $bonus = $stmt2->fetch(PDO::FETCH_ASSOC);
         <!-- Danh sach sv -->
         <div class="act-detail-list act-detail-block" id="act-detail-2">
             <h1>DANH SÁCH SINH VIÊN</h1>
-        <div class="student-list-header">
-            <div class="management-search-act">
-                <div class="student-btn-search-act">
-                    <input type="text" name="student" class="search-input" data-type="student" id="act-student" placeholder="Tìm kiếm sinh viên..." value="<?= htmlspecialchars($keyword) ?>">
-                    <button type="button" id="btn-search-act-student">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
+            <div class="student-list-header">
+                <div class="management-search-act">
+                    <div class="student-btn-search-act">
+                        <input type="text" name="student" class="search-input" data-type="student" id="act-student" placeholder="Tìm kiếm sinh viên..." value="<?= htmlspecialchars($keyword) ?>">
+                        <button type="button" id="btn-search-act-student">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                    <div class="suggest-box"></div>
                 </div>
-                <div class="suggest-box"></div>
-            </div>
-            <div class="status-student-dropdown">
-                <span>Trạng thái</span>
-                <div class="status-dropdown-selected">
-                    <span id="selected-status">
-                        <?=
-                        match($status){
-                            'registering' => 'Đã đăng ký',
-                            'checked' => 'Đã điểm danh',
-                            default => 'Tất cả'
-                        }
-                        ?>
-                    </span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
+                <div class="status-student-dropdown">
+                    <span>Trạng thái</span>
+                    <div class="status-dropdown-selected">
+                        <span id="selected-status">
+                            <?=
+                            match($status){
+                                'registering' => 'Đã đăng ký',
+                                'checked' => 'Đã điểm danh',
+                                default => 'Tất cả'
+                            }
+                            ?>
+                        </span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
 
-                <div class="status-dropdown-menu">
-                    <div class="status-option" data-status="">Tất cả</div>
-                    <div class="status-option" data-status="registering">Đã đăng ký</div>
-                    <div class="status-option" data-status="checked">Đã điểm danh</div>
+                    <div class="status-dropdown-menu">
+                        <div class="status-option" data-status="">Tất cả</div>
+                        <div class="status-option" data-status="registering">Đã đăng ký</div>
+                        <div class="status-option" data-status="checked">Đã điểm danh</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <table class="student-act-table">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Mã số sinh viên</th>
-                    <th>Họ tên</th>
-                    <th>Ngành</th>
-                    <th>Khóa</th>
-                    <th>Đơn vị</th>
-                    <th>Trạng thái</th>
-                    <th>Thời gian đăng ký</th>
-                </tr>
-            </thead>
-            <tbody id="student-list-body">
-               <?php include "student-list.php" ?>
-            </tbody>
-        </table>
+            <table class="student-act-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã số sinh viên</th>
+                        <th>Họ tên</th>
+                        <th>Ngành</th>
+                        <th>Khóa</th>
+                        <th>Đơn vị</th>
+                        <th>Trạng thái</th>
+                        <th>Thời gian đăng ký</th>
+                    </tr>
+                </thead>
+                <tbody id="student-list-body">
+                <?php include "student-list.php" ?>
+                </tbody>
+            </table>
         </div>
 
         <!-- Diem danh -->
         <div class="act-detail-take-attendance act-detail-block" id="act-detail-3">
-            <h1>ĐIỂM DANH</h1>
+            <h2>DIEM DANH</h2>
+            <div class="qr-code">
+                <img src="<?= $act['LinkQr'] ?>" alt="Mã qr">
+            </div>
+            <button class="btn-close-form" data-formid="<?= $act['MaForm'] ?>">
+                Đóng form
+            </button>
         </div>
 
         <div class="act-detail-info">

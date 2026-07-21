@@ -229,7 +229,7 @@ function initDateTime() {
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, "0");
-  const dd = String(today.getDate()).padStart(2, "0");
+  const dd = String(today.getDate() + 1).padStart(2, "0");
   const hh = String(today.getHours()).padStart(2, "0");
   const mi = String(today.getMinutes()).padStart(2, "0");
 
@@ -337,33 +337,6 @@ document.addEventListener("click", function (e) {
         cqContent: valueInputCustom,
         status: "new",
       });
-
-      // let buttonId;
-      // const existingId = btnSave.dataset.id || null;
-
-      // if (existingId) {
-      //   buttonId = existingId;
-      //   const questionIndex = activityData.step2.customQuestions.findIndex(
-      //     (item) => item.cqId == existingId,
-      //   );
-      //   if (questionIndex !== -1) {
-      //     activityData.step2.customQuestions[questionIndex].cqContent =
-      //       valueInputCustom;
-      //     if (
-      //       activityData.step2.customQuestions[questionIndex].status === "old"
-      //     ) {
-      //       activityData.step2.customQuestions[questionIndex].status = "update";
-      //     }
-      //   }
-      // } else {
-      //   buttonId = Date.now();
-
-      //   activityData.step2.customQuestions.push({
-      //     cqId: buttonId,
-      //     cqContent: valueInputCustom,
-      //     status: "new",
-      //   });
-      // }
     }
     inputCustom.readOnly = true;
     inputCustom.classList.add("is-saved");
@@ -498,17 +471,6 @@ function renderPreview() {
   document.getElementById("preview-act-describe").textContent =
     activityData.step1.actContent;
 
-  // lưu tạm thời ảnh
-  // const avtFile = document.getElementById("act-img-avt").files[0];
-  // document.getElementById("preview-act-img-avt").src =
-  //   URL.createObjectURL(avtFile);
-  // activityData.step1.actImgAvt = avtFile ? URL.createObjectURL(avtFile) : "";
-  // const coverFile = document.getElementById("act-img-cover").files[0];
-  // document.getElementById("preview-act-img-cover").src =
-  //   URL.createObjectURL(coverFile);
-  // activityData.step1.actImgCover = coverFile
-  //   ? URL.createObjectURL(coverFile)
-  //   : "";
   document.getElementById("preview-act-img-avt").src =
     activityData.step1.actImgAvt || "";
   document.getElementById("preview-act-img-cover").src =
@@ -861,8 +823,6 @@ function showCta(cta) {
 document.addEventListener("click", (e) => {
   if (e.target.closest(".detail-btn")) {
     showCta(1);
-  } else if (e.target.closest(".list-register-btn")) {
-    showCta(2);
   } else if (e.target.closest(".take-attendance-btn")) {
     showCta(3);
   }
@@ -921,5 +881,30 @@ document.addEventListener("click", (e) => {
     currentStatus = option.dataset.status;
     searchActStudent();
     return;
+  }
+});
+
+// =================closeForm - act-detail============
+document.addEventListener("click", async function (e) {
+  const btn = e.target.closest(".btn-close-form");
+  if (!btn) return;
+  const formId = btn.dataset.formid;
+  // gui yeu cau den Apps Script
+  const response = await fetch(
+    "https://script.google.com/macros/s/AKfycbzbOetGORdZ61CfJjzjoIK3x4_hBuozcOCAM94xIVGwm-osxEupEuwQaoq27NZT3hSmOQ/exec",
+    {
+      method: "POST",
+      body: new URLSearchParams({
+        action: "closeForm",
+        formId: formId,
+      }),
+    },
+  );
+  // Nhan ket qua sau khi chay ham closeForm
+  const result = await response.json();
+  if (result.message) {
+    btn.textContent = "Đã đóng form";
+    btn.classList.add("closed");
+    btn.disabled = true;
   }
 });

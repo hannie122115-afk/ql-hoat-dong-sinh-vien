@@ -13,6 +13,7 @@ require_once "../../config/db.php";
 require_once "../auth.php";
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $conn->beginTransaction();
     try{
             
         // mở gói actData
@@ -57,6 +58,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             }
         }
 
+        if (empty($pathAvt)) {
+            $pathAvt = $org["AnhDaiDien"] ?? ""; 
+        }
+
         $pathCover = "";
         if (isset($_FILES["actImgCover"]) && $_FILES["actImgCover"]["error"] === UPLOAD_ERR_OK) {
 
@@ -67,8 +72,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             }
         }
 
-        $actImgAvt = $_FILES["actImgAvt"];
-        $actImgCover = $_FILES["actImgCover"];
+        if (empty($pathCover)) {
+            $pathCover = $org["AnhDaiDien"] ?? ""; 
+        }
+
+        $actImgAvt = $_FILES["actImgAvt"] ?? $org["AnhDaiDien"];
+        $actImgCover = $_FILES["actImgCover"] ?? $org["AnhDaiDien"];
 
         $sql1 = "INSERT INTO HoatDong(
                     MaHoatDong
@@ -138,6 +147,34 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $stmt = $conn->prepare($sql6);
             $stmt->execute([$CqCode, $lastCqId]);
         }
+
+        // Goi Apps script
+        $url = "https://script.google.com/macros/s/AKfycbzbOetGORdZ61CfJjzjoIK3x4_hBuozcOCAM94xIVGwm-osxEupEuwQaoq27NZT3hSmOQ/exec?id="
+                . urlencode($actCode)
+                . "&name="
+                . urlencode($actName);
+
+        $result = file_get_contents($url);
+        if($result === false){
+            throw new Exception("Không gọi được Apps Script.");
+        }
+        $response = json_decode($result, true);
+        if(!$response){
+            throw new Exception("Apps Script không trả JSON.");
+        }
+
+        // Luu link form va Qr
+        $sql7 = "UPDATE HoatDong
+                SET MaForm = ?, LinkForm = ?, LinkQr = ?
+                WHERE MaHoatDong = ?";
+        $stmt3 = $conn->prepare($sql7);
+        $stmt3->execute([
+            trim($response['formId']),
+            trim($response['formUrl']),
+            trim($response['qrUrl']),
+            $actCode
+        ]);
+        $conn->commit();
 
         echo json_encode([
             "success" => true, 
@@ -291,7 +328,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item-input">
                                 <input type="file" name="act-img-avt" id="act-img-avt" class="act-img-input validate-input" data-required="true">
                             </div>
-                            <div class="error-message"></div>
                         </div>
                         <div class="act-info-item act-content-item">
                             <h4>Hình ảnh hoạt động</h4>
@@ -299,7 +335,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item-input">
                                 <input type="file" name="act-img-cover" id="act-img-cover" class="act-img-input validate-input" data-required="true">
                             </div>
-                            <div class="error-message"></div>
                         </div>
                     </div>
                 </div>
