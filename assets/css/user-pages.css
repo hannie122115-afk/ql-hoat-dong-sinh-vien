@@ -311,6 +311,7 @@ header {
   padding: 2rem;
   min-width: 0; /* Ngăn chặn hiện tượng Grid/Table bên trong làm vỡ layout */
   background-color: var(--bg-main);
+  margin-top: -5rem;
 }
 
 /* ==========================================================================

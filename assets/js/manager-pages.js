@@ -85,6 +85,8 @@ const activityData = {
     actBonus: "",
     actBonusId: "",
     actPoint: "",
+    actSemester: "",
+    actYear: "",
     actContent: "",
     actImgAvt: "",
     actImgCover: "",
@@ -135,12 +137,11 @@ document.addEventListener("click", function (e) {
       activityData.step1.actBonusId = document.getElementById("bonusId").value;
 
       activityData.step1.actPoint = document.querySelector("#act-point").value;
+      activityData.step1.actSemester =
+        document.querySelector("#act-semester").value;
+      activityData.step1.actYear = document.querySelector("#act-year").value;
       activityData.step1.actContent =
         document.querySelector("#act-content").value;
-      // activityData.step1.actImgAvt =
-      //   document.querySelector("#act-img-avt").value;
-      // activityData.step1.actImgCover =
-      //   document.querySelector("#act-img-cover").value;
 
       const avtFile = document.getElementById("act-img-avt").files[0];
       const coverFile = document.getElementById("act-img-cover").files[0];
@@ -422,20 +423,6 @@ document.addEventListener("click", function (e) {
         activityData.step2.customQuestions[questionIndex].status = "delete";
       }
     }
-
-    // const question = activityData.step2.customQuestions.find(
-    //   (item) => item.cqId == questionId,
-    // );
-    // if (question) {
-    //   if (question.status === "new") {
-    //     activityData.step2.customQuestions =
-    //       activityData.step2.customQuestions.filter(
-    //         (item) => item.cqId == questionId,
-    //       );
-    //   } else {
-    //     question.status = "delete";
-    //   }
-    // }
 
     const customItem = btnDel.parentElement;
     customItem.remove();

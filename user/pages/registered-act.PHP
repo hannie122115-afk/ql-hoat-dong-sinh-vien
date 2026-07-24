@@ -36,8 +36,7 @@ empty($keyword) ? $stmt1->execute() : $stmt1->execute([$search]);
 
     <div class="container">
         <div class="title-container">
-            <h2>Tạo hoạt động mới</h2>
-            <span>Điền đầy đủ thông tin để tạo hoạt động cho sinh viên đăng ký tham gia.</span>
+            <h2>Hoạt động đã đăng ký</h2>
         </div>
         <div class="card-container">
             <?php $count = 0;

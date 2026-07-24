@@ -41,6 +41,13 @@ $stmt2 = $conn->prepare($sql2);
 $stmt2->execute([$act['MaMucCongDiem']]);
 $bonus = $stmt2->fetch(PDO::FETCH_ASSOC);
 
+$sql3 = "SELECT * 
+        FROM HocKy
+        WHERE MaHocKy = ?";
+$stmt3 = $conn->prepare($sql3);
+$stmt3->execute([$act['MaHocKy']]);
+$semester = $stmt3->fetch(PDO::FETCH_ASSOC);
+
 // $sql3 = "SELECT *
 //         FROM DangKy dk, SinhVien sv, Nganh n, DonVi dv
 //         WHERE dk.MSSV = sv.MSSV
@@ -260,6 +267,15 @@ $bonus = $stmt2->fetch(PDO::FETCH_ASSOC);
                 </div>
                 <div class="act-detail-info-left">
                     <?= $bonus['TenMucCongDiem'] ?> 
+                </div>
+            </div>
+            <div class="act-detail-info-item">
+                <div class="act-detail-info-right">
+                    <i class="fa-solid fa-star"></i>
+                    <span>Học kì </span>
+                </div>
+                <div class="act-detail-info-left">
+                    Học kỳ <?= $semester['HocKy'] ?> năm <?= $semester['NamHoc'] ?>  
                 </div>
             </div>
             <div class="act-detail-info-item">
