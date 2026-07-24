@@ -115,7 +115,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     ,ThoiGianKetThuc = ?
                     ,MaMucCongDiem = ?
                     ,DiemRenLuyen = ?
-                    ,NoiDungHD = ?
+                    ,NoiDungHoatDong = ?
                     ,AnhAvt = ?
                     ,AnhBia = ?
                 WHERE MaHoatDong = ?";
@@ -347,7 +347,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         <div class="act-info-item act-content-item">
                             <h4>Nội dung chi tiết</h4>
                             <div class="act-info-item-input">
-                                <textarea name="act-content" id="act-content" placeholder="Nhập nội dung chi tiết của hoạt động" class="validate-input" > <?= $actInfo['NoiDungHD'] ?></textarea>
+                                <textarea name="act-content" id="act-content" placeholder="Nhập nội dung chi tiết của hoạt động" class="validate-input" > <?= $actInfo['NoiDungHoatDong'] ?></textarea>
                             </div>
                             <div class="error-message"></div>
                         </div>
@@ -378,6 +378,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                 </div>
                 <div class="btn-block">
+                    <div class="btn-step-return">Hủy</div>
                     <div class="btn-step-next">Tiếp theo</div>
                 </div>
             </div>

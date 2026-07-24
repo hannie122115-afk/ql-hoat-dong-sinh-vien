@@ -124,7 +124,7 @@ $bonus = $stmt2->fetch(PDO::FETCH_ASSOC);
 
         <div class="act-detail-describe act-detail-block active" id="act-detail-1" >
             <h3>Chi tiết hoạt động</h3>
-            <p><?= $act['NoiDungHD'] ?></p>
+            <p><?= $act['NoiDungHoatDong'] ?></p>
             <h3>Đối tượng tham gia</h3>
             <p><?= $act['DoiTuongThamGia'] ?></p>
         </div>
@@ -186,16 +186,31 @@ $bonus = $stmt2->fetch(PDO::FETCH_ASSOC);
         <!-- Diem danh -->
         <div class="act-detail-take-attendance act-detail-block" id="act-detail-3">
             <h2>DIEM DANH</h2>
-            <div class="qr-code">
+            <div class="qr-code" id="qr-code">
                 <img src="<?= $act['LinkQr'] ?>" alt="Mã qr">
             </div>
             <div class="attendance-container">
-                <button class="btn-close-form" data-formid="<?= $act['MaForm'] ?>">
-                    Đóng form
-                </button>
-                <button id="btn-attendance" data-act-id="<?= $actId ?>">
-                    Điểm danh
-                </button>
+                <?php if($dateStart <= $dateNow && $dateNow <= $dateEnd){ ?>
+                    <button class="btn-open-form" data-formid="<?= $act['MaForm'] ?>" data-actid="<?= $act['MaHoatDong'] ?>">
+                        Mở form
+                    </button>
+                    <button class="btn-close-form" data-formid="<?= $act['MaForm'] ?>" data-actid="<?= $act['MaHoatDong'] ?>" >
+                        Đóng form
+                    </button>
+                    <button id="btn-attendance" data-act-id="<?= $actId ?>">
+                        Điểm danh
+                    </button>
+                <?php } else{ ?>
+                    <button class="btn-open-form" data-formid="<?= $act['MaForm'] ?>" data-actid="<?= $act['MaHoatDong'] ?>" disabled>
+                        Mở form
+                    </button>
+                    <button class="btn-close-form" data-formid="<?= $act['MaForm'] ?>" data-actid="<?= $act['MaHoatDong'] ?>" disabled>
+                        Đóng form
+                    </button>
+                    <button id="btn-attendance" data-act-id="<?= $actId ?>" disabled>
+                        Điểm danh
+                    </button>
+                <?php }?>
             </div>
         </div>
 

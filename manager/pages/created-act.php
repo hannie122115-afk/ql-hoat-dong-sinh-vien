@@ -90,7 +90,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     ,ThoiGianKetThuc
                     ,MaMucCongDiem
                     ,DiemRenLuyen
-                    ,NoiDungHD
+                    ,NoiDungHoatDong
                     ,AnhAvt
                     ,AnhBia )
                 VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -149,7 +149,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         }
 
         // Goi Apps script
-        $url = "https://script.google.com/macros/s/AKfycbyKjOsqGZHpH5Lz3UhEnG40mWLU3dc_aODOissZGAb18ZzcSp4bL-neO30CUN5mTlW5MA/exec?id="
+        $url = "https://script.google.com/macros/s/AKfycbxHv349rhmHOCJnHZgfFzgrBQ1HU6KSGIyMbPT_KRsgydfSJuDWBkfXL7q2p_04zfOGNg/exec?id="
                 . urlencode($actCode)
                 . "&name="
                 . urlencode($actName);

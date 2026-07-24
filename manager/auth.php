@@ -21,6 +21,12 @@ $stmt4 = $conn->prepare("SELECT COUNT(MaHoatDong)
 $stmt4->execute([$org['MaToChuc']]);
 $tongSoHD = $stmt4->fetchColumn();
 
-
+$stmt5 = $conn->prepare("SELECT COUNT(dk.MSSV) 
+                        FROM DangKy dk
+                        JOIN HoatDong hd ON dk.MaHoatDong = hd.MaHoatDong
+                        WHERE hd.MaToChuc = ?
+                        AND DaDiemDanh = 1");
+$stmt5->execute([$org['MaToChuc']]);
+$tongluotTG = $stmt5->fetchColumn();
 
 ?>

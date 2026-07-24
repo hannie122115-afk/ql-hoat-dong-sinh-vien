@@ -169,7 +169,7 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
 
         <div class="act-detail-describe act-detail-block active" id="act-detail-1" >
             <h3>Chi tiết hoạt động</h3>
-            <p><?= $act['NoiDungHD'] ?></p>
+            <p><?= $act['NoiDungHoatDong'] ?></p>
             <h3>Đối tượng tham gia</h3>
             <p><?= $act['DoiTuongThamGia'] ?></p>
         </div>

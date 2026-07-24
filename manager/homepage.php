@@ -145,7 +145,7 @@ require_once "auth.php";
                     <div class="left-side-overview-item">
                         <i class="fa-regular fa-circle-check"></i>
                         <div class="homepage-left-overview-item-amount">
-                            <h5>15</h5>
+                            <h5><?= $tongluotTG ?></h5>
                             <span>Sinh viên đã tham gia</span>
                         </div>
                     </div>

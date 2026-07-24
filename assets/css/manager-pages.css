@@ -1845,3 +1845,14 @@ header {
     padding: 0.5rem;
   }
 }
+
+/*  */
+#qr-code {
+  transition: 0.3s;
+}
+
+#qr-code:not(.active) {
+  filter: grayscale(100%) blur(4px);
+  opacity: 0.35;
+  pointer-events: none;
+}

@@ -629,7 +629,7 @@ document.addEventListener("click", function (e) {
 document.addEventListener("click", (e) => {
   const btn = e.target.closest("#btn-confirm-delete-act");
   if (!btn) return;
-  fetch("delete.php", {
+  fetch("../includes/delete-act.php", {
     method: "POST",
     body: new URLSearchParams({
       id: deleteActId,
@@ -650,6 +650,13 @@ document.addEventListener("click", (e) => {
   const btnCancel = e.target.closest("#btn-cancel-delete-act");
   if (!btnCancel) return;
   document.getElementById("delete-act-modal").classList.remove("show");
+});
+
+// =================cancelBtn - edit-management-act============
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".btn-step-return");
+  if (!btn) return;
+  loadPage("pages/act-management.php");
 });
 
 // =================renderCustomQuestions - edit-management-act============
@@ -889,11 +896,12 @@ document.addEventListener("click", (e) => {
 // =================closeForm - act-detail============
 document.addEventListener("click", async function (e) {
   const btn = e.target.closest(".btn-close-form");
+  const qrImg = document.getElementById("qr-code");
   if (!btn) return;
   const formId = btn.dataset.formid;
   // gui yeu cau den Apps Script
   const response = await fetch(
-    "https://script.google.com/macros/s/AKfycbyKjOsqGZHpH5Lz3UhEnG40mWLU3dc_aODOissZGAb18ZzcSp4bL-neO30CUN5mTlW5MA/exec",
+    "https://script.google.com/macros/s/AKfycbxHv349rhmHOCJnHZgfFzgrBQ1HU6KSGIyMbPT_KRsgydfSJuDWBkfXL7q2p_04zfOGNg/exec",
     {
       method: "POST",
       body: new URLSearchParams({
@@ -905,9 +913,45 @@ document.addEventListener("click", async function (e) {
   // Nhan ket qua sau khi chay ham closeForm ở Apps Script
   const result = await response.json();
   if (result.message) {
-    btn.textContent = "Đã đóng form";
-    btn.classList.add("closed");
-    btn.disabled = true;
+    await fetch("../includes/update-form-status.php", {
+      method: "POST",
+      body: new URLSearchParams({
+        actTd: btn.dataset.actId,
+        status: 0,
+      }),
+    });
+    qrImg.classList.remove("active");
+  }
+});
+
+// =================openForm - act-detail============
+document.addEventListener("click", async function (e) {
+  const btn = e.target.closest(".btn-open-form");
+  const qrImg = document.getElementById("qr-code");
+  if (!btn) return;
+  const formId = btn.dataset.formid;
+  // gui yeu cau den Apps Script
+  const response = await fetch(
+    "https://script.google.com/macros/s/AKfycbxHv349rhmHOCJnHZgfFzgrBQ1HU6KSGIyMbPT_KRsgydfSJuDWBkfXL7q2p_04zfOGNg/exec",
+    {
+      method: "POST",
+      body: new URLSearchParams({
+        action: "openForm",
+        formId: formId,
+      }),
+    },
+  );
+  // Nhan ket qua sau khi chay ham openForm ở Apps Script
+  const result = await response.json();
+  if (result.message) {
+    await fetch("../includes/update-form-status.php", {
+      method: "POST",
+      body: new URLSearchParams({
+        actTd: btn.dataset.actId,
+        status: 1,
+      }),
+    });
+    qrImg.classList.add("active");
   }
 });
 
