@@ -159,6 +159,7 @@ require_once "auth.php";
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../assets/js/suggest.js"></script>
     <script src="../assets/js/navbar.js"></script>
     <script src="../assets/js/manager-pages.js"></script>

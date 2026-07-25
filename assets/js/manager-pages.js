@@ -1029,3 +1029,184 @@ function initCalendar() {
 
   calendar.render();
 }
+
+// =================dropdown - statistic============
+
+let filterStatistic = {
+  semester: "",
+  year: "",
+};
+
+document.addEventListener("click", (e) => {
+  const selected = e.target.closest(".statistic-dropdown-selected");
+  if (selected) {
+    const dropdown = selected.closest(".statistic-dropdown-block");
+    dropdown.querySelector(".statistic-dropdown-menu").classList.toggle("show");
+    return;
+  }
+
+  const item = e.target.closest(".statistic-dropdown-item");
+  if (item) {
+    const dropdown = item.closest(".statistic-dropdown-block");
+    const type = dropdown.dataset.type;
+    dropdown.querySelector(".selected-text").textContent = item.textContent;
+    dropdown.querySelector(".statistic-dropdown-menu").classList.remove("show");
+    filterStatistic[type] = item.dataset.value;
+    loadStatistic();
+  }
+});
+
+// =================updateChart - statistic============
+
+function loadStatistic() {
+  const placeholder = document.getElementById("chart-placeholder");
+
+  // Kiểm tra nếu chưa chọn đủ cả Học Kỳ và Năm Học
+  if (!filterStatistic.semester || !filterStatistic.year) {
+    if (placeholder) {
+      placeholder.textContent =
+        "Vui lòng chọn học kỳ và năm học để xem biểu đồ thống kê";
+      placeholder.style.display = "flex"; // Hiện thông báo
+    }
+    if (activityChart) {
+      activityChart.destroy(); // Xóa chart cũ
+      activityChart = null;
+    }
+    return; // Dừng không cần fetch
+  }
+  fetch("pages/statistic-data.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(filterStatistic),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.chart && data.chart.length > 0) {
+        if (placeholder) {
+          placeholder.style.display = "none";
+        }
+        updateChart(data.chart);
+      } else {
+        console.warn(
+          "Không tìm thấy dữ liệu phù hợp với Học kỳ & Năm học đã chọn!",
+        );
+        // Nếu không có dữ liệu, xóa chart cũ đi cho đỡ bị treo
+        if (activityChart) {
+          activityChart.destroy();
+        }
+      }
+    })
+    .catch((err) => console.error("Lỗi:", err));
+}
+
+let activityChart = null;
+function updateChart(chartData) {
+  const labels = chartData.map((item) => item.TenHoatDong);
+  const dataDangKy = chartData.map((item) => item.DangKy);
+  const dataThamGia = chartData.map((item) => item.ThamGia);
+
+  if (activityChart) {
+    activityChart.destroy();
+  }
+
+  const ctx = document.getElementById("activityChart").getContext("2d");
+
+  activityChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Lượt đăng ký",
+          data: dataDangKy,
+          backgroundColor: "#2563eb",
+          borderRadius: 4,
+          barPercentage: 0.8,
+          categoryPercentage: 0.6,
+        },
+        {
+          label: "Điểm danh",
+          data: dataThamGia,
+          backgroundColor: "#16a34a",
+          borderRadius: 4,
+          barPercentage: 0.8,
+          categoryPercentage: 0.6,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "top",
+          align: "center",
+          labels: {
+            usePointStyle: true,
+            boxWidth: 8,
+            font: { size: 13 },
+          },
+        },
+        tooltip: {
+          mode: "index",
+          intersect: false,
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+          ticks: {
+            autoSkip: false,
+
+            // Ép chữ nằm ngang
+            maxRotation: 0,
+            minRotation: 0,
+            font: { size: 11 },
+
+            // Cắt ngắn tên nếu dài quá 12 ký tự/dòng
+            callback: function (value) {
+              const label = this.getLabelForValue(value);
+              if (!label) return "";
+
+              // Nếu chuỗi dài quá 12 ký tự, tự động ngắt thành mảng các dòng
+              const maxLength = 12;
+              if (label.length > maxLength) {
+                const words = label.split(" ");
+                const lines = [];
+                let currentLine = "";
+
+                words.forEach((word) => {
+                  if ((currentLine + " " + word).trim().length > maxLength) {
+                    if (currentLine) lines.push(currentLine.trim());
+                    currentLine = word;
+                  } else {
+                    currentLine += " " + word;
+                  }
+                });
+                if (currentLine) lines.push(currentLine.trim());
+                return lines;
+              }
+              return label;
+            },
+          },
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            borderDash: [5, 5],
+          },
+          ticks: {
+            precision: 0,
+          },
+        },
+      },
+    },
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+    loadStatistic();
+  });
+}
