@@ -86,6 +86,7 @@ const activityData = {
     actBonusId: "",
     actPoint: "",
     actSemester: "",
+    actSemesterName: "",
     actYear: "",
     actContent: "",
     actImgAvt: "",
@@ -137,9 +138,12 @@ document.addEventListener("click", function (e) {
       activityData.step1.actBonusId = document.getElementById("bonusId").value;
 
       activityData.step1.actPoint = document.querySelector("#act-point").value;
-      activityData.step1.actSemester =
-        document.querySelector("#act-semester").value;
-      activityData.step1.actYear = document.querySelector("#act-year").value;
+
+      const option = document.querySelector("#act-year option:checked");
+      activityData.step1.actSemester = option.dataset.semester;
+      activityData.step1.actYear = option.value;
+      activityData.step1.actSemesterName = option.dataset.semestername;
+
       activityData.step1.actContent =
         document.querySelector("#act-content").value;
 
@@ -208,6 +212,21 @@ document.addEventListener(
           errMessage.textContent = "";
         }
       }
+
+      if (input.classList.contains("act-year")) {
+        // const select = document.querySelector("#act-year");
+        const option = input.options[input.selectedIndex];
+        const semesterEnd = option.dataset.end;
+        const actStart = document
+          .getElementById("act-start")
+          .value.split("T")[0];
+        if (actStart > semesterEnd) {
+          errMessage.textContent = `Không thể cộng điểm cho hoạt động này vào học kỳ trước.`;
+        } else {
+          errMessage.textContent = "";
+        }
+      }
+
       // ràng buộc định dạng file tải lên là ảnh
       if (input.classList.contains("act-img-input")) {
         const file = input.files[0];
@@ -455,6 +474,8 @@ function renderPreview() {
     activityData.step1.actPoint;
   document.getElementById("preview-act-bonus").textContent =
     activityData.step1.actBonus;
+  document.getElementById("preview-act-semester").textContent =
+    `${activityData.step1.actSemesterName} (${activityData.step1.actYear})`;
   document.getElementById("preview-act-describe").textContent =
     activityData.step1.actContent;
 

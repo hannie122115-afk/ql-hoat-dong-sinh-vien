@@ -12,6 +12,17 @@ if(!isset($_SESSION['user_id'])){
 require_once "../../config/db.php";
 require_once "../auth.php";
 
+
+$stmt4 = $conn->prepare("
+    SELECT MaHocKy,
+           NamHoc,
+           HocKy,
+           ThoiGianKetThuc
+    FROM HocKy
+    ORDER BY NamHoc DESC, HocKy
+");
+$stmt4->execute();
+
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $conn->beginTransaction();
     try{
@@ -37,7 +48,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $actBonus = $step1['actBonusId'] ?? '';
         $actPoint = $step1['actPoint'] ?? '';
         $actSemester = $step1['actSemester'] ?? '';
-        $actYear = $step1['actYear'] ?? '';
 
         $actContent = $step1['actContent'] ?? '';
 
@@ -80,8 +90,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $actImgAvt = $_FILES["actImgAvt"] ?? $org["AnhDaiDien"];
         $actImgCover = $_FILES["actImgCover"] ?? $org["AnhDaiDien"];
 
-        $semesterId = "HK".$actSemester.$actYear;
-
         $sql1 = "INSERT INTO HoatDong(
                     MaHoatDong
                     ,MaToChuc
@@ -99,7 +107,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     ,AnhBia )
                 VALUES (? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt1 = $conn->prepare($sql1);
-        $stmt1->execute(["a", $org['MaToChuc'], $semesterId, $actName, $actLocate, $actObject, $actMaxSlot, $actStart, $actEnd, $actBonus, $actPoint, $actContent, $pathAvt, $pathCover]);
+        $stmt1->execute(["a", $org['MaToChuc'], $actSemester, $actName, $actLocate, $actObject, $actMaxSlot, $actStart, $actEnd, $actBonus, $actPoint, $actContent, $pathAvt, $pathCover]);
         $lastActId = $conn->lastInsertId();
         $actCode = "HD".str_pad($lastActId, 4, "0", STR_PAD_LEFT);
 
@@ -267,7 +275,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Thời gian bắt đầu</h4>
                                 <div class="act-info-item-input">
-                                    <input type="datetime-local" name="act-start" id="act-start" class="validate-input">
+                                    <input type="datetime-local" name="act-start" id="act-start" class="validate-input act-start">
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Thời gian bắt đầu diễn ra hoạt động.</span>
@@ -285,7 +293,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Thời gian kết thúc</h4>
                                 <div class="act-info-item-input">
-                                    <input type="datetime-local" name="act-end" id="act-end" class="validate-input">
+                                    <input type="datetime-local" name="act-end" id="act-end" class="validate-input act-end">
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Thời gian kết thúc hoạt động.</span>
@@ -309,21 +317,32 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                 <div class="error-message"></div>
                                 <span>Nhập điểm rèn luyện sinh viên nhận được khi tham gia.</span>
                             </div>
-                            <div class="act-info-item">
+                            <!-- <div class="act-info-item">
                                 <h4>Học Kỳ</h4>
                                 <div class="act-info-item-input">
                                     <input type="text" name="act-semester" id="act-semester" inputmode="numeric" placeholder="Nhập tên học kỳ" class="validate-input act-semester" oninput="this.value = this.value.replace(/[^123]/g, '')" maxlength='1'>
                                 </div>
                                 <div class="error-message"></div>
-                                <span>Nhận học kỳ cộng điểm rèn luyện. Ví dụ: Học kì 1 nhập 1</span>
-                            </div>
+                                <span>Nhập học kỳ cộng điểm rèn luyện. Ví dụ: Học kì 1 nhập 1</span>
+                            </div> -->
                             <div class="act-info-item">
-                                <h4>Năm học</h4>
+                                <h4>Học kỳ</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-year" id="act-year" inputmode="numeric" placeholder="Nhập năm học của học kỳ đã chọn" class="validate-input act-semester" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '')" maxlength='4'>
+                                    <select name="act-year" id="act-year" class="validate-input act-year">
+                                        <option value="">-- Chọn năm học --</option>
+                                        <?php while($row = $stmt4->fetch(PDO::FETCH_ASSOC)){ ?>
+                                            <option 
+                                            value="<?= $row['NamHoc'] ?>"
+                                            data-semester="<?= $row['MaHocKy'] ?>"
+                                            data-semestername="<?= $row['HocKy'] ?>"
+                                            data-end="<?= $row['ThoiGianKetThuc'] ?>">
+                                                <?= $row['HocKy'] ?> (<?= $row['NamHoc'] ?>)
+                                            </option>
+                                        <?php }?>
+                                    </select>
                                 </div>
                                 <div class="error-message"></div>
-                                <span>Nhập năm học của học kỳ đã chọn.</span>
+                                <span>Chọn năm học của học kỳ.</span>
                             </div>
                         </div>
                     </div>
@@ -538,6 +557,17 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                     <h4>Mục cộng điểm</h4>
                                 </div>
                                 <div class="preview-info-right" id="preview-act-bonus">
+                                    
+                                </div>
+                            </div>
+                            <div class="preview-info-item">
+                                <div class="preview-info-left">
+                                    <span>
+                                        <i class="fa-solid fa-font-awesome"></i>
+                                    </span>
+                                    <h4>Học kỳ</h4>
+                                </div>
+                                <div class="preview-info-right" id="preview-act-semester">
                                     
                                 </div>
                             </div>
