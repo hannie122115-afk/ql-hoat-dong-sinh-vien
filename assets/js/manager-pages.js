@@ -966,3 +966,45 @@ document.addEventListener("click", async function (e) {
     document.getElementById("student-list-body").innerHTML = html;
   }
 });
+
+// =================my-calender============
+
+function initCalendar() {
+  const calendarEl = document.getElementById("calendar");
+
+  if (!calendarEl) return;
+
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: "dayGridWeek",
+    locale: "vi",
+    height: "auto",
+    contentHeight: 550,
+    displayEventTime: false,
+    events: "pages/calendar-data.php",
+    eventClick(info) {
+      loadPage(`pages/act-detail.php?id=${info.event.id}`);
+    },
+    eventContent(info) {
+      const start = info.event.start.toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      const end = info.event.end.toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      return {
+        html: `
+            <div class="event-box">
+                <div class="event-title">${info.event.title}</div>
+                <div class="event-time">${start} - ${end}</div>
+            </div>
+        `,
+      };
+    },
+  });
+
+  calendar.render();
+}

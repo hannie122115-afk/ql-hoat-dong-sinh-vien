@@ -28,6 +28,9 @@ require_once "auth.php";
     <link rel="stylesheet" href="../assets/css/search.css">
     <link rel="stylesheet" href="../assets/css/user-pages.css">
      <!-- <link rel="stylesheet" href="../assets/css/homepage.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
+
 
 
 </head>
@@ -96,7 +99,7 @@ require_once "auth.php";
                         <span>Trang chủ</span>
                     </div>
                     
-                    <div class="navbar-item" data-page="my-calculate">
+                    <div class="navbar-item" data-page="my-calendar">
                         <i class="fa-solid fa-calendar-day"></i>
                         <span>Lịch của tôi</span>
                     </div>

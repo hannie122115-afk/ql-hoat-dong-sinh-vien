@@ -65,6 +65,13 @@ $stmt5->execute([$actId]);
 $questions = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 $index = 0;
 
+$sql9 = "SELECT * 
+        FROM HocKy
+        WHERE MaHocKy = ?";
+$stmt9 = $conn->prepare($sql9);
+$stmt9->execute([$act['MaHocKy']]);
+$semester = $stmt9->fetch(PDO::FETCH_ASSOC);
+
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $answers = $_POST['answers'] ?? [];
@@ -164,7 +171,12 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
                     <?= $_SESSION['success_register_act_message']; ?>
                 </div>
             <?php unset($_SESSION['success_register_act_message']); } ?>
-            
+
+            <?php if($isRegistered['DaDiemDanh'] == 1): ?>
+                <div class="added-point">
+                    Đã cộng điểm
+                </div>
+            <?php endif; ?>
         </div>
 
         <div class="act-detail-describe act-detail-block active" id="act-detail-1" >
@@ -253,6 +265,15 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
                 </div>
                 <div class="act-detail-info-left">
                     <?= $bonus['TenMucCongDiem'] ?> 
+                </div>
+            </div>
+            <div class="act-detail-info-item">
+                <div class="act-detail-info-right">
+                    <i class="fa-solid fa-star"></i>
+                    <span>Học kì </span>
+                </div>
+                <div class="act-detail-info-left">
+                    Học kỳ <?= $semester['HocKy'] ?> năm <?= $semester['NamHoc'] ?>  
                 </div>
             </div>
             <div class="act-detail-info-item">
