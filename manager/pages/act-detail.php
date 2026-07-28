@@ -131,7 +131,7 @@ $semester = $stmt3->fetch(PDO::FETCH_ASSOC);
 
         <div class="act-detail-describe act-detail-block active" id="act-detail-1" >
             <h3>Chi tiết hoạt động</h3>
-            <p><?= $act['NoiDungHoatDong'] ?></p>
+            <div class="act-detail-describe-title"><?= $act['NoiDungHoatDong'] ?></div>
             <h3>Đối tượng tham gia</h3>
             <p><?= $act['DoiTuongThamGia'] ?></p>
         </div>

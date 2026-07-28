@@ -172,7 +172,7 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
                 </div>
             <?php unset($_SESSION['success_register_act_message']); } ?>
 
-            <?php if($isRegistered['DaDiemDanh'] == 1): ?>
+            <?php if($isRegistered && $isRegistered['DaDiemDanh'] == 1): ?>
                 <div class="added-point">
                     Đã cộng điểm
                 </div>
@@ -181,7 +181,7 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
 
         <div class="act-detail-describe act-detail-block active" id="act-detail-1" >
             <h3>Chi tiết hoạt động</h3>
-            <p><?= $act['NoiDungHoatDong'] ?></p>
+            <div class="act-detail-describe-title"><?= $act['NoiDungHoatDong'] ?></div>
             <h3>Đối tượng tham gia</h3>
             <p><?= $act['DoiTuongThamGia'] ?></p>
         </div>

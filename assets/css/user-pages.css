@@ -585,3 +585,9 @@ header {
     grid-template-columns: 1fr; /* 1 cột duy nhất trên màn hình điện thoại dọc */
   }
 }
+
+/* ================================ */
+
+.act-detail-describe-title {
+  white-space: pre-line;
+}

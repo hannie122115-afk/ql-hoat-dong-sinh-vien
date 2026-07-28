@@ -284,7 +284,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Số lượng tối đa</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" name="act-max-slot" id="act-max-slot" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '')" maxlength='5' placeholder="Nhập số lượng tối đa (để trống nếu không giới hạn)" class="validate-input">
+                                    <input type="text" name="act-max-slot" id="act-max-slot" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '')" maxlength='5' placeholder="Nhập số lượng tối đa" class="validate-input">
                                 </div>
                                 <div class="error-message"></div>
                                 <span>Số lượng sinh viên tối đa có thể đăng ký tham gia.</span>
