@@ -115,8 +115,10 @@ document.addEventListener("input", function (e) {
           div.dataset.id = item.id;
           if (input.dataset.type === "bonus") {
             div.dataset.maxPoint = item.maxPoint;
+            div.textContent = item.id + ". " + item.name;
+          } else {
+            div.textContent = item.name;
           }
-          div.textContent = item.name;
           suggestBox.append(div);
         });
       });

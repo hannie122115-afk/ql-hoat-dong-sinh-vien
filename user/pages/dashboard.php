@@ -42,19 +42,6 @@ $sql2 .= "GROUP BY hd.MaHoatDong";
 $stmt2 = $conn->prepare($sql2);
 empty($keyword) ? $stmt2->execute() : $stmt2->execute([$search]);
 
-$sql3 = "SELECT 
-            hd.*,
-            COUNT(dk.MSSV) AS total
-        FROM HoatDong hd
-        LEFT JOIN DangKy dk
-            ON hd.MaHoatDong = dk.MaHoatDong
-        WHERE hd.ThoiGianKetThuc < NOW() ";
-if(!empty($keyword)){
-    $sql3 .= "AND hd.TenHoatDong LIKE ?";
-}
-$sql3 .= "GROUP BY hd.MaHoatDong";
-$stmt3 = $conn->prepare($sql3);
-empty($keyword) ? $stmt3->execute() : $stmt3->execute([$search]);
 
 ?>
 <!DOCTYPE html>
@@ -124,47 +111,6 @@ empty($keyword) ? $stmt3->execute() : $stmt3->execute([$search]);
                     <img src="<?= $row['AnhAvt'] ?>" alt="">
                 </div>
                 <!-- <h1></h1> -->
-                <div class="title-card-item">
-                    <div class="date-card-item">Để ngày z-index cao
-                        <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
-                        $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
-                        <h3><?= $dateStart->format('d'); ?></h3>
-                        <span>tháng <?= $dateStart->format('m'); ?></span>
-                    </div>
-                    <h4><?= $row['TenHoatDong'] ?></h4>
-                    <div class="info-card-item">
-                        <div class="info-card-item-inside">
-                            <i class="fa-regular fa-clock"></i>
-                            <span><?= $dateStart->format('H:i'); ?> - <?= $dateEnd->format('H:i'); ?></span>
-                        </div>
-                        <div class="info-card-item-inside">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <span><?= $row['DiaDiem'] ?></span>
-                        </div>
-                        <div class="info-card-item-inside">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span><?= $row['total'] ?>/<?= $row['SoLuongToiDa']?> đã đăng ký</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php } ?>
-        </div>
-        <div class="see-all-card-btn">Xem tất cả</div>
-    </div>
-    <div class="container">
-        <div class="title-container">
-            <i class="fa-regular fa-calendar"></i>
-            <h3>Đã kết thúc</h3>
-        </div>
-        <div class="card-container">
-            <?php $count = 0;
-            while($row = $stmt3->fetch(PDO::FETCH_ASSOC)){ 
-                $count++;?>
-            <div class="card-item <?= $count > 6 ? 'hidden-card-item' : '' ?>" data-id="<?= $row['MaHoatDong'] ?>">  
-                <div class="img-card-item">
-                    <img src="<?= $row['AnhAvt'] ?>" alt="">
-                </div>
                 <div class="title-card-item">
                     <div class="date-card-item">Để ngày z-index cao
                         <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 

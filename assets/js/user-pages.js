@@ -1,3 +1,10 @@
+// =================chuyenSangMyCalendar - dashboard============
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#my-calendar-btn");
+  if (!btn) return;
+  loadPage(`pages/my-calendar.php`);
+});
+
 // =================chuyenSangActDetail - dashboard============
 let currentActId = null;
 document.addEventListener("click", (e) => {

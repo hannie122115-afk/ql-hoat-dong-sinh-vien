@@ -60,7 +60,7 @@ require_once "auth.php";
 
             <div class="homepage-header-left">
                 <div class="btn-add-act">
-                    <button title="Lịch của tôi">
+                    <button title="Lịch của tôi" id="my-calendar-btn">
                         <i class="fa-solid fa-calendar-day"></i>
                     </button>
                 </div>

@@ -39,38 +39,45 @@ empty($keyword) ? $stmt1->execute() : $stmt1->execute([$search]);
             <h2>Hoạt động đã đăng ký</h2>
         </div>
         <div class="card-container">
-            <?php $count = 0;
-            while($row = $stmt1->fetch(PDO::FETCH_ASSOC)){ 
-                $count++;?>
-            <div class="card-item" data-id="<?= $row['MaHoatDong'] ?>">  
-                <div class="img-card-item">
-                    <img src="<?= $row['AnhAvt'] ?>" alt="">
-                </div>
-                <div class="title-card-item">
-                    <div class="date-card-item">
-                        <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
-                        $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
-                        <h3><?= $dateStart->format('d'); ?></h3>
-                        <span>tháng <?= $dateStart->format('m'); ?></span>
+            <?php if ($stmt1->rowCount() > 0): ?>
+                <?php $count = 0;
+                while($row = $stmt1->fetch(PDO::FETCH_ASSOC)){ 
+                    $count++;?>
+                <div class="card-item" data-id="<?= $row['MaHoatDong'] ?>">  
+                    <div class="img-card-item">
+                        <img src="<?= $row['AnhAvt'] ?>" alt="">
                     </div>
-                    <h4><?= $row['TenHoatDong'] ?></h4>
-                    <div class="info-card-item">
-                        <div class="info-card-item-inside">
-                            <i class="fa-regular fa-clock"></i>
-                            <span><?= $dateStart->format('H:i'); ?> - <?= $dateEnd->format('H:i'); ?></span>
+                    <div class="title-card-item">
+                        <div class="date-card-item">
+                            <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
+                            $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
+                            <h3><?= $dateStart->format('d'); ?></h3>
+                            <span>tháng <?= $dateStart->format('m'); ?></span>
                         </div>
-                        <div class="info-card-item-inside">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <span><?= $row['DiaDiem'] ?></span>
-                        </div>
-                        <div class="info-card-item-inside">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span><?= $row['total'] ?>/<?= $row['SoLuongToiDa']?> đã đăng ký</span>
+                        <h4><?= $row['TenHoatDong'] ?></h4>
+                        <div class="info-card-item">
+                            <div class="info-card-item-inside">
+                                <i class="fa-regular fa-clock"></i>
+                                <span><?= $dateStart->format('H:i'); ?> - <?= $dateEnd->format('H:i'); ?></span>
+                            </div>
+                            <div class="info-card-item-inside">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span><?= $row['DiaDiem'] ?></span>
+                            </div>
+                            <div class="info-card-item-inside">
+                                <i class="fa-solid fa-user-group"></i>
+                                <span><?= $row['total'] ?>/<?= $row['SoLuongToiDa']?> đã đăng ký</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <?php } ?>
+            <?php else: ?>
+                <div class="empty-state">
+                    <i class="fa-solid fa-calendar-xmark"></i>
+                    <p><?= !empty($keyword) ? 'Không tìm thấy hoạt động phù hợp.' : 'Bạn chưa tham gia hoạt động nào.' ?></p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </body>

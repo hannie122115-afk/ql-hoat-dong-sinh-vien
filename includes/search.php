@@ -56,18 +56,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_P
         case "activity":
             if((int)$user_role === 1){
                 $sql = "SELECT MaHoatDong as id
-                                , TenHoatDong as name
-                                FROM HoatDong 
-                                WHERE MaToChuc = ?
-                                    AND TenHoatDong LIKE ?
-                                LIMIT 8";
+                        , TenHoatDong as name
+                        FROM HoatDong 
+                        WHERE MaToChuc = ?
+                            AND TenHoatDong LIKE ?
+                        LIMIT 8";
                 $params = [$org_id, $search];
             } else{
                 $sql = "SELECT MaHoatDong as id
-                                , TenHoatDong as name
-                                FROM HoatDong 
-                                WHERE TenHoatDong LIKE ?
-                                LIMIT 8";
+                        , TenHoatDong as name
+                        FROM HoatDong hd
+                        WHERE TenHoatDong LIKE ?
+                        LIMIT 8";
                 $params = [$search];
             }
             break;
