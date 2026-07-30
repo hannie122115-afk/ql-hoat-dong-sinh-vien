@@ -2,7 +2,10 @@ const content = document.querySelector(".right-container");
 
 function loadPage(url) {
   const separator = url.includes("?") ? "&" : "?";
-  fetch(url + separator + "t=" + Date.now())
+  const finalUrl = url.includes("t=")
+    ? url
+    : `${url}${separator}t=${Date.now()}`;
+  fetch(finalUrl)
     .then((res) => res.text())
     .then((data) => {
       content.innerHTML = data;
@@ -19,10 +22,19 @@ function loadPage(url) {
       if (url.includes("calendar.php")) {
         initCalendar();
       }
-    });
+    })
+    .catch((err) => console.error("Lỗi load trang:", err));
 }
 
-loadPage("pages/dashboard.php");
+document.addEventListener("DOMContentLoaded", () => {
+  const pageToLoad = sessionStorage.getItem("reloadAndLoadPage");
+  if (pageToLoad) {
+    sessionStorage.removeItem("reloadAndLoadPage");
+    loadPage(pageToLoad);
+  } else {
+    loadPage("pages/dashboard.php");
+  }
+});
 
 const navbarItem = document.querySelectorAll(".navbar-item");
 navbarItem.forEach((item) => {

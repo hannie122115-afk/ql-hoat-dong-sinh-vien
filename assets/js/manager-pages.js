@@ -1232,3 +1232,83 @@ function updateChart(chartData) {
     loadStatistic();
   });
 }
+
+// =================saveInfoOrg - profile============
+document.addEventListener("submit", (e) => {
+  if (e.target.id !== "orgProfileForm") return;
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  fetch("pages/profile.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        alert("Cập nhật thông tin thành công!");
+        sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
+        location.reload();
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(console.error);
+});
+
+// =================previewAvt - profile============
+
+document.addEventListener("change", (e) => {
+  if (e.target.id === "org-avt-input") {
+    const file = e.target.files[0];
+    if (file) {
+      document.getElementById("org-avt-img").src = URL.createObjectURL(file);
+    }
+  }
+});
+
+// =================changePassword - profile============
+
+document.addEventListener("submit", (e) => {
+  if (e.target.id !== "changePasswordForm") return;
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  formData.append("action", "change_password");
+
+  fetch("pages/profile.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        alert("🎉 " + data.message);
+        e.target.reset();
+      } else {
+        alert("⚠️ " + data.message);
+      }
+    })
+    .catch(console.error);
+});
+
+// =================hiddenPassword - profile============
+
+document.addEventListener("click", function (e) {
+  const icon = e.target.closest(".toggle-password-icon");
+  if (!icon) return;
+
+  const passwordInput = icon.previousElementSibling;
+
+  if (passwordInput) {
+    passwordInput.classList.toggle("hidden-password");
+    const isPassword = passwordInput.type === "password";
+    if (icon.classList.contains("fa-eye")) {
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    }
+  }
+});

@@ -214,7 +214,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <link rel="stylesheet" href="../assets/css/manager-pages.css">
 </head>
 <body>
-    <h1>ĐÂY LÀ TRANG TẠO HOẠT ĐỘNG</h1>
 
     <div class="created-act-container">
         <div class="created-act-title">
@@ -237,7 +236,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         <form action="" method="post">
                 <!-- STEP 1 -->
             <div class="step-block active" id="step1">
-                <h1>ĐÂY LÀ BƯỚC 1</h1>
                 <div class="act-info-container">
                     <div class="step1-block act-info-block">
                         <div class="act-title-block">

@@ -163,6 +163,8 @@ require_once "auth.php";
     <script src="../assets/js/suggest.js"></script>
     <script src="../assets/js/navbar.js"></script>
     <script src="../assets/js/manager-pages.js"></script>
+    <!-- <script src="../assets/js/password.js"></script> -->
+
     
 </body>
 

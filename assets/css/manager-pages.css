@@ -2032,3 +2032,28 @@ header {
 .act-dropdown-menu::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
+.hidden-password {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
+.password-block {
+  position: relative;
+}
+
+.password-block input {
+  padding-right: 2rem;
+}
+
+.toggle-password-icon {
+  position: absolute;
+  right: 1rem;
+  color: var(--text-muted) !important;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.toggle-password-icon:hover {
+  color: var(--text-dark) !important;
+}
