@@ -14,11 +14,15 @@ require_once "../auth.php";
 $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
 $search = "%$keyword%";
 $status = $_GET['status'] ?? '';
+$semester = $_GET['semester'] ?? '';
+$year = $_GET['year'] ?? '';
 
 $sql1 = "SELECT 
             hd.*,
             COUNT(dk.MSSV) AS total
         FROM HoatDong hd
+        INNER JOIN HocKy hk 
+            ON hd.MaHocKy = hk.MaHocKy
         LEFT JOIN DangKy dk
             ON hd.MaHoatDong = dk.MaHoatDong
         WHERE hd.MaToChuc = ? ";
@@ -27,6 +31,7 @@ if(!empty($keyword)){
     $sql1 .= "AND hd.TenHoatDong LIKE ? ";
     $params[] = $search;
 }
+
 if($status == "upcoming"){
     $sql1 .= "AND hd.ThoiGianBatDau > NOW() ";
 }
@@ -37,9 +42,25 @@ elseif($status == "running"){
 elseif($status == "finished"){
     $sql1 .= "AND hd.ThoiGianKetThuc <= NOW() ";
 }
+
+if(!empty($semester)){
+    $sql1 .= " AND hk.HocKy = ? ";
+    $params[] = $semester;
+}
+
+if(!empty($year)){
+    $sql1 .= " AND hk.NamHoc = ? ";
+    $params[] = $year;
+}
+
 $sql1 .= "GROUP BY hd.MaHoatDong";
 $stmt1 = $conn->prepare($sql1);
 $stmt1->execute($params);
+
+$sql3 = "SELECT DISTINCT NamHoc
+        FROM HocKy";
+$stmt3 = $conn->prepare($sql3);
+$stmt3->execute();
 
 
 ?>
@@ -71,10 +92,10 @@ $stmt1->execute($params);
                 </div>
                 <div class="suggest-box"></div>
             </div>
-            <div class="status-act-dropdown">
+            <div class="act-custom-dropdown" data-type="status">
                 <span>Trạng thái</span>
-                <div class="status-dropdown-selected">
-                    <span id="selected-status">
+                <div class="act-dropdown-selected">
+                    <span class="act-selected-text">
                         <?=
                         match($status){
                             'upcoming' => 'Sắp diễn ra',
@@ -87,11 +108,40 @@ $stmt1->execute($params);
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
 
-                <div class="status-dropdown-menu">
-                    <div class="status-option" data-status="">Tất cả</div>
-                    <div class="status-option" data-status="upcoming">Sắp diễn ra</div>
-                    <div class="status-option" data-status="running">Đang diễn ra</div>
-                    <div class="status-option" data-status="finished">Đã kết thúc</div>
+                <div class="act-dropdown-menu">
+                    <div class="act-dropdown-option" data-value="">Tất cả</div>
+                    <div class="act-dropdown-option" data-value="upcoming">Sắp diễn ra</div>
+                    <div class="act-dropdown-option" data-value="running">Đang diễn ra</div>
+                    <div class="act-dropdown-option" data-value="finished">Đã kết thúc</div>
+                </div>
+            </div>
+            <div class="act-custom-dropdown" data-type="semester">
+                <span>Học kì</span>
+                <div class="act-dropdown-selected">
+                    <span class="act-selected-text">
+                        <?= !empty($semester) ? "HK" . htmlspecialchars($semester) : "--Tất cả học kỳ--" ?>
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="act-dropdown-menu">
+                    <div class="act-dropdown-option" data-value="">Tất cả học kỳ</div>
+                    <div class="act-dropdown-option" data-value="1">HK1</div>
+                    <div class="act-dropdown-option" data-value="2">HK2</div>
+                    <div class="act-dropdown-option" data-value="3">HK3</div>
+                </div>
+            </div>
+            <div class="act-custom-dropdown" data-type="year">
+                <span>Năm học</span>
+                <div class="act-dropdown-selected">
+                    <span class="act-selected-text">
+                        <?= !empty($year) ? htmlspecialchars($year) : "--Tất cả năm học--" ?>
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="act-dropdown-menu">
+                    <?php while($row = $stmt3->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <div class="act-dropdown-option" data-value="<?= $row['NamHoc'] ?>"><?= $row['NamHoc'] ?></div>
+                    <?php } ?>
                 </div>
             </div>
         </div>

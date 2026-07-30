@@ -558,14 +558,23 @@ document.addEventListener("click", (e) => {
 });
 
 // ===============searchAct - activity-Management===================
-
+let currentFilters = {
+  status: "",
+  semester: "",
+  year: "",
+};
 function searchActManagement() {
   const inputAct = document.getElementById("act-management");
-  let keyword = inputAct.value.trim();
-  loadPage(
-    `pages/act-management.php?keyword=${encodeURIComponent(keyword)}&status=${currentStatus}`,
-  );
+  let keyword = inputAct ? inputAct.value.trim() : "";
+  let queryUrl =
+    `pages/act-management.php?keyword=${encodeURIComponent(keyword)}` +
+    `&status=${encodeURIComponent(currentFilters.status)}` +
+    `&semester=${encodeURIComponent(currentFilters.semester)}` +
+    `&year=${encodeURIComponent(currentFilters.year)}`;
+
+  loadPage(queryUrl);
 }
+
 document.addEventListener("click", function (e) {
   const btn = e.target.closest("#btn-search-act-management");
   if (!btn) return;
@@ -594,33 +603,47 @@ document.addEventListener("click", (e) => {
 // =================dropdownStatus - act-management============
 let currentStatus = "";
 document.addEventListener("click", (e) => {
-  const dropdown = document.querySelector(".status-act-dropdown");
-  if (!dropdown) return;
+  const dropdown = e.target.closest(".act-custom-dropdown");
+  if (!dropdown) {
+    document
+      .querySelectorAll(".act-dropdown-menu")
+      .forEach((menu) => menu.classList.remove("show"));
+    return;
+  }
 
   // click vào ô
-  if (e.target.closest(".status-dropdown-selected")) {
-    dropdown.querySelector(".status-dropdown-menu").classList.toggle("show");
+  if (e.target.closest(".act-dropdown-selected")) {
+    const currentMenu = dropdown.querySelector(".act-dropdown-menu");
+
+    document.querySelectorAll(".act-dropdown-menu").forEach((m) => {
+      if (m !== currentMenu) m.classList.remove("show");
+    });
+
+    if (currentMenu) {
+      currentMenu.classList.toggle("show");
+    }
     return;
   }
 
   // click chọn option
-  const option = e.target.closest(".status-option");
+  const option = e.target.closest(".act-dropdown-option");
   if (option) {
-    document.getElementById("selected-status").textContent = option.textContent;
-    dropdown.querySelector(".status-dropdown-menu").classList.remove("show");
+    const selectedText = dropdown.querySelector(".act-selected-text");
+    if (selectedText) {
+      selectedText.textContent = option.textContent;
+    }
 
-    currentStatus = option.dataset.status;
+    dropdown.querySelector(".act-dropdown-menu").classList.remove("show");
+
+    const filterType = dropdown.dataset.type;
+    const filterValue = option.dataset.value ?? option.dataset.status ?? "";
+    if (filterType) {
+      currentFilters[filterType] = filterValue;
+    }
     searchActManagement();
     return;
   }
 });
-
-// function filterStatus() {
-//   const keyword = document.getElementById("act-management").value.trim();
-//   loadPage(
-//     `pages/act-management.php?keyword=${encodeURIComponent(keyword)}&status=${currentStatus}`,
-//   );
-// }
 
 // =================deleteModal - act-management============
 let deleteActId = null;
@@ -877,7 +900,7 @@ document.addEventListener("keydown", function (e) {
   }
 });
 
-// =================dropdownStatus - act-detail============
+// =================dropdownStatusStudent - act-detail============
 // let currentStatus = "";
 document.addEventListener("click", (e) => {
   const dropdown = document.querySelector(".status-student-dropdown");
@@ -1089,9 +1112,8 @@ function loadStatistic() {
         }
         updateChart(data.chart);
       } else {
-        console.warn(
-          "Không tìm thấy dữ liệu phù hợp với Học kỳ & Năm học đã chọn!",
-        );
+        placeholder.textContent =
+          "Không tìm thấy dữ liệu phù hợp với Học kỳ & Năm học đã chọn!";
         // Nếu không có dữ liệu, xóa chart cũ đi cho đỡ bị treo
         if (activityChart) {
           activityChart.destroy();
