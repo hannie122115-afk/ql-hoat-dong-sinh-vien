@@ -44,7 +44,9 @@ document.addEventListener("input", function (e) {
     return;
   }
 
-  const parent = input.closest(".register-block, .act-info-item");
+  const parent = input.closest(
+    ".register-block, .act-info-item, .org-info-item-input, .user-info-item-input",
+  );
   if (parent) {
     const hiddenInput = parent.querySelector("input[type='hidden']");
     if (hiddenInput) hiddenInput.value = "";
@@ -71,6 +73,14 @@ document.addEventListener("input", function (e) {
     if (controller) controller.abort();
     controller = new AbortController();
 
+    if (
+      input.dataset.type === "class" &&
+      input.dataset.value === "profile" &&
+      !unitId
+    ) {
+      unitId = document.getElementById("userUnitId")?.value || null;
+    }
+
     if (input.dataset.type === "class" && !unitId) {
       suggestBox.innerHTML =
         "<div class='report-before-search'>Vui lòng chọn đơn vị trước</div>";
@@ -86,8 +96,15 @@ document.addEventListener("input", function (e) {
     }
 
     let linkSearchPHP = "";
-
-    if (input.dataset.type === "unit" || input.dataset.type === "class") {
+    if (
+      (input.dataset.type === "unit" && input.dataset.value === "profile") ||
+      (input.dataset.type === "class" && input.dataset.value === "profile")
+    ) {
+      linkSearchPHP = "../includes/search.php";
+    } else if (
+      input.dataset.type === "unit" ||
+      input.dataset.type === "class"
+    ) {
       linkSearchPHP = "includes/search.php";
     } else {
       linkSearchPHP = "../includes/search.php";

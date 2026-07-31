@@ -231,7 +231,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <input type="text" class="search-input" data-type="class" name="class" value="<?= htmlspecialchars($class ?? '') ?>" id="" placeholder="Gõ tên ngành để tìm kiếm và chọn">
                             
                         </div>
-                        <div class="suggest-box"></div>
+                        <div class="suggest-box suggest-box-profile"></div>
                         <?php if(!empty($error['class'])): ?>
                             <small style="color:red">
                                 <?= $error['class'] ?>
@@ -272,7 +272,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                 <input type="radio" name="gender" id="" value="female"> Nữ
                             </div>
                         </div>
-                        
                     </div>
                     
                     <div class="register-block">

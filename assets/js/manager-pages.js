@@ -1235,7 +1235,7 @@ function updateChart(chartData) {
 
 // =================saveInfoOrg - profile============
 document.addEventListener("submit", (e) => {
-  if (e.target.id !== "orgProfileForm") return;
+  if (e.target.id !== "profileForm") return;
   e.preventDefault();
   const formData = new FormData(e.target);
 
@@ -1259,10 +1259,10 @@ document.addEventListener("submit", (e) => {
 // =================previewAvt - profile============
 
 document.addEventListener("change", (e) => {
-  if (e.target.id === "org-avt-input") {
+  if (e.target.id === "profile-avt-input") {
     const file = e.target.files[0];
     if (file) {
-      document.getElementById("org-avt-img").src = URL.createObjectURL(file);
+      document.getElementById("profile-avt-img").src = URL.createObjectURL(file);
     }
   }
 });

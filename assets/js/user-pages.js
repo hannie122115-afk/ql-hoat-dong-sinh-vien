@@ -74,3 +74,45 @@ document.addEventListener("click", (e) => {
       }
     });
 });
+
+// ================dropdown - profile============
+let profileFilters = {
+  semester: "",
+  year: "",
+};
+function searchProfilePoint() {
+  let queryUrl =
+    `pages/profile.php?semester=${encodeURIComponent(profileFilters.semester)}` +
+    `&year=${encodeURIComponent(profileFilters.year)}`;
+
+  loadPage(queryUrl);
+}
+document.addEventListener("click", function (e) {
+  const dropdown = e.target.closest(".profile-custom-dropdown");
+  if (!dropdown) {
+    document.querySelectorAll(".profile-dropdown-menu").forEach((menu) => {
+      menu.classList.remove("show");
+    });
+    return;
+  }
+
+  if (e.target.closest(".profile-dropdown-selected")) {
+    const currentMenu = dropdown.querySelector(".profile-dropdown-menu");
+    document.querySelectorAll(".profile-dropdown-menu").forEach((menu) => {
+      if (menu !== currentMenu) {
+        menu.classList.remove("show");
+      }
+    });
+    currentMenu.classList.toggle("show");
+    return;
+  }
+  const option = e.target.closest(".profile-dropdown-option");
+  if (option) {
+    dropdown.querySelector(".profile-selected-text").textContent =
+      option.textContent;
+    dropdown.querySelector(".profile-dropdown-menu").classList.remove("show");
+    const type = dropdown.dataset.type;
+    profileFilters[type] = option.dataset.value;
+    searchProfilePoint();
+  }
+});

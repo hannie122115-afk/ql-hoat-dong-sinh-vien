@@ -67,6 +67,7 @@ try{
     $sqlCheck = "SELECT COUNT(*) FROM DangKy WHERE MSSV = ? AND MaHoatDong = ?";
     $stmtCheck = $conn->prepare($sqlCheck);
 
+
     $conn->beginTransaction();
 
     foreach (array_keys($uniqueMssvList) as $mssv) {

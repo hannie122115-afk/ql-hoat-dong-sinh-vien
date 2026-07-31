@@ -153,16 +153,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             <span>Quản lý thông tin tổ chức của bạn.</span>
         </div>
         <div class="profile-org-block">
-            <form action="" method="post" id="orgProfileForm">
+            <form action="" method="post" id="profileForm">
                 <div class="profile-org-item">
                     <h3>Ảnh đại diện</h3>
                     <div class="profile-org-avt">
-                        <img id="org-avt-img" src="<?=  $org['AnhDaiDien'] ?>" alt="Ảnh đại diện tổ chức">
+                        <img id="profile-avt-img" src="<?=  $org['AnhDaiDien'] ?>" alt="Ảnh đại diện tổ chức">
                     </div>
                     <div>
                         <i class="fa-solid fa-rotate"></i>
                         Thay đổi ảnh 
-                        <input type="file" name="orgAvt" id="org-avt-input">
+                        <input type="file" name="orgAvt" id="profile-avt-input">
                     </div>
                 </div>
 
@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                         <div class="org-info-item ">
                             <h4>Đơn vị quản lý</h4>
                             <div class="org-info-item-input">
-                                <input type="text" class="search-input" data-type="unit" value="<?= htmlspecialchars($unit['TenDonVi']) ?>" id="unit">
+                                <input type="text" class="search-input" data-type="unit" data-value="profile" value="<?= htmlspecialchars($unit['TenDonVi']) ?>" id="unit">
                                 <input type="hidden" value="<?= htmlspecialchars($unit['MaDonVi']) ?>" id="unitId" name="unitId">
                             </div>
                             <div class="suggest-box"></div>
@@ -258,20 +258,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                     <div class="org-info-account-item">
                         <div class="org-info-account-title">
                             <i class="fa-solid fa-user"></i>
-                            <h4>Tên đăng nhập</h4>
+                            <h4>Email đăng nhập</h4>
                         </div>
                         <div class="org-info-account-value">
-                            
+                            <?= $account['Email'] ?>
                         </div>
                     </div>
 
                     <div class="org-info-account-item">
                         <div class="org-info-account-title">
                             <i class="fa-solid fa-calendar-day"></i>
-                            <h4>Ngày lập</h4>
+                            <h4>Vai trò</h4>
                         </div>
                         <div class="org-info-account-value">
-
+                            Người quản trị
                         </div>
                     </div>
 

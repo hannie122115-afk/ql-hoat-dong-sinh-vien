@@ -39,26 +39,6 @@ $sql3 .= " ORDER BY dk.ThoiGianDangKy DESC";
 
 $stmt3 = $conn->prepare($sql3);
 $stmt3->execute($params);
-$sql3 = "SELECT *
-        FROM DangKy dk, SinhVien sv, Nganh n, DonVi dv
-        WHERE dk.MSSV = sv.MSSV
-        AND sv.MaNganh = n.MaNganh
-        AND sv.MaDonVi = dv.MaDonVi
-        AND dk.MaHoatDong = ?";
-$params = [$actId];
-if(!empty($keyword)){
-    $sql3 .= " AND (sv.MSSV LIKE ? OR sv.HoTen LIKE ?)";
-    $params[] = $search;
-    $params[] = $search;
-}
-if($status == "registering"){
-    $sql3 .= " AND dk.DaDiemDanh = 0";
-} elseif($status == "checked"){
-    $sql3 .= " AND dk.DaDiemDanh = 1";
-}
-
-$stmt3 = $conn->prepare($sql3);
-$stmt3->execute($params);
 ?>
 
 <?php $stt = 1; 
