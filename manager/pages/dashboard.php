@@ -125,7 +125,7 @@ empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['M
                     <img src="<?= $row['AnhAvt'] ?>" alt="">
                 </div>
                 <div class="title-card-item">
-                    <div class="date-card-item">Để ngày z-index cao
+                    <div class="date-card-item">
                         <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
                         $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
                         <h3><?= $dateStart->format('d'); ?></h3>
@@ -166,7 +166,7 @@ empty($keyword) ? $stmt3->execute([$org['MaToChuc']]) : $stmt3->execute([$org['M
                     <img src="<?= $row['AnhAvt'] ?>" alt="">
                 </div>
                 <div class="title-card-item">
-                    <div class="date-card-item">Để ngày z-index cao
+                    <div class="date-card-item">
                         <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
                         $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
                         <h3><?= $dateStart->format('d'); ?></h3>

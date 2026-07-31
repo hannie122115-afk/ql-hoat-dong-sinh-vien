@@ -85,12 +85,12 @@ $stmt3->execute();
             </div>
             <div class="management-search-act">
                 <div class="management-btn-search-act">
-                        <input type="text" name="activity" class="search-input" data-type="activity" id="act-management" placeholder="Tìm kiếm hoạt động..." value="<?= htmlspecialchars($keyword) ?>">
+                        <input type="text" name="activity" class="search-input management-search-input" data-type="activity" id="act-management" placeholder="Tìm kiếm hoạt động..." value="<?= htmlspecialchars($keyword) ?>">
                         <button type="button" id="btn-search-act-management">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                 </div>
-                <div class="suggest-box"></div>
+                <div class="suggest-box management-suggest-box"></div>
             </div>
             <div class="act-custom-dropdown" data-type="status">
                 <span>Trạng thái</span>
@@ -119,7 +119,7 @@ $stmt3->execute();
                 <span>Học kì</span>
                 <div class="act-dropdown-selected">
                     <span class="act-selected-text">
-                        <?= !empty($semester) ? "HK" . htmlspecialchars($semester) : "--Tất cả học kỳ--" ?>
+                        <?= !empty($semester) ? "HK" . htmlspecialchars($semester) : "Tất cả học kỳ" ?>
                     </span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
@@ -134,7 +134,7 @@ $stmt3->execute();
                 <span>Năm học</span>
                 <div class="act-dropdown-selected">
                     <span class="act-selected-text">
-                        <?= !empty($year) ? htmlspecialchars($year) : "--Tất cả năm học--" ?>
+                        <?= !empty($year) ? htmlspecialchars($year) : "Tất cả năm học" ?>
                     </span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>

@@ -63,7 +63,7 @@ $stmt3->execute();
                 <div class="statistic-dropdown-block" data-type="semester">
                     <span>Học kì</span>
                     <div class="statistic-dropdown-selected">
-                        <span class="selected-text" >--Chọn học kỳ--</span>
+                        <span class="selected-text" > Chọn học kỳ </span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </div>
                     <div class="statistic-dropdown-menu">
@@ -75,7 +75,7 @@ $stmt3->execute();
                 <div class="statistic-dropdown-block" data-type="year">
                     <span>Năm học</span>
                     <div class="statistic-dropdown-selected">
-                        <span class="selected-text" >--Chọn năm học--</span>
+                        <span class="selected-text" > Chọn năm học </span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </div>
                     <div class="statistic-dropdown-menu">

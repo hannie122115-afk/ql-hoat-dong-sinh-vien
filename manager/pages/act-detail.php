@@ -81,7 +81,6 @@ $semester = $stmt3->fetch(PDO::FETCH_ASSOC);
 
 </head>
 <body>
-    <h1>ĐÂY LÀ TRANG CHI TIẾT HOẠT ĐỘNG</h1>
 
     <?php if(isset($_SESSION['success_update_act_message'])){ ?>
         <div class="success_update_act_message">
@@ -147,7 +146,7 @@ $semester = $stmt3->fetch(PDO::FETCH_ASSOC);
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
-                    <div class="suggest-box"></div>
+                    <div class="suggest-box student-suggest-box"></div>
                 </div>
                 <div class="status-student-dropdown">
                     <span>Trạng thái</span>
@@ -192,7 +191,7 @@ $semester = $stmt3->fetch(PDO::FETCH_ASSOC);
 
         <!-- Diem danh -->
         <div class="act-detail-take-attendance act-detail-block" id="act-detail-3">
-            <h2>DIEM DANH</h2>
+            <h2>Quét mã QR điểm danh</h2>
             <div class="qr-code" id="qr-code">
                 <img src="<?= $act['LinkQr'] ?>" alt="Mã qr">
             </div>
@@ -266,7 +265,7 @@ $semester = $stmt3->fetch(PDO::FETCH_ASSOC);
                     <span>Mục cộng điểm</span>
                 </div>
                 <div class="act-detail-info-left">
-                    <?= $bonus['TenMucCongDiem'] ?> 
+                    <?= $bonus['MaMucCongDiem'] ?> 
                 </div>
             </div>
             <div class="act-detail-info-item">

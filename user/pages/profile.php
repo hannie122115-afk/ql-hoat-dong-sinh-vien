@@ -44,6 +44,7 @@ if (!empty($semester) && !empty($year)) {
             WHERE c.MSSV = ?
                 AND hk.HocKy = ?
                 AND hk.NamHoc = ?
+                AND m.MaMucCongDiem <> '00'
             GROUP BY
                 m.MaMucCongDiem,
                 m.TenMucCongDiem,

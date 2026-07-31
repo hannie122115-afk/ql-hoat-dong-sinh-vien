@@ -1,47 +1,68 @@
-.suggest-box {
-  height: auto;
-  width: 20.5rem;
-  z-index: 999;
-  border-radius: 0.6rem;
-  background-color: #fff;
-  margin-top: 0.5rem;
-  position: absolute;
+/* ==========================================================================
+   GENERIC SUGGEST BOX (Hộp gợi ý dùng chung)
+   ========================================================================== */
 
+.suggest-box {
+  position: absolute;
+  top: calc(100% + 4px); /* Tự động nằm sát ngay dưới ô Input */
+  left: 0;
+  right: 0;
+  width: 100%; /* Tự động phủ kín 100% chiều rộng của ô Input cha */
   max-height: 15rem;
   overflow-y: auto;
   overflow-x: hidden;
+  background-color: #ffffff;
+  border-radius: 0.6rem;
+  z-index: 999;
+  box-sizing: border-box;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
-/* thanh cuộn tìm kiếm : độ rộng + thanh trượt + đổi màu khi di chuột */
+/* Chỉ hiện viền & đổ bóng khi bên trong có dữ liệu gợi ý (không bị rỗng) */
+.suggest-box:not(:empty) {
+  border: 1px solid var(--border-color, #c7c9d4);
+  box-shadow: 0 0.4rem 0.6rem -0.1rem rgba(0, 0, 0, 0.1);
+  padding: 0.4rem 0;
+}
+
+/* Thanh cuộn gợi ý (Scrollbar Custom) */
 .suggest-box::-webkit-scrollbar {
-  width: 0.6rem;
+  width: 0.45rem; /* Thu nhỏ chút cho tinh tế */
 }
 
 .suggest-box::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1; /* Màu xám nhạt */
-  border-radius: 0.4rem; /* Bo tròn cục cuộn */
+  background-color: #cbd5e1;
+  border-radius: 0.4rem;
 }
 
 .suggest-box::-webkit-scrollbar-thumb:hover {
   background-color: #94a3b8;
 }
 
-.suggest-box:not(:empty) {
-  border: 1px solid #c7c9d4;
-  border-top: none;
-  box-shadow: 0 0.4rem 0.6rem -0.1rem rgba(0, 0, 0, 0.1);
-  padding: 0.8rem 0;
-}
-
+/* Thẻ con hiển thị từng dòng gợi ý */
 .suggest-item {
   display: block;
-  height: auto;
-  max-width: 20rem;
-  padding: 0.5rem;
+  width: 100%; /* Giúp item mở rộng tràn hết chiều rộng thẻ cha */
+  max-width: 100%; /* Bỏ giới hạn cố định 20rem cũ */
+  padding: 0.6rem 0.85rem;
+  font-size: 0.85rem;
+  color: var(--text-dark, #1e293b);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  /* Xử lý chữ dài không vỡ giao diện */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .suggest-item:hover {
-  cursor: pointer;
-  background-color: #f8fafe;
-  border: 0rem 1rem 1rem 0rem;
+  background-color: var(--primary-light, #f8fafe);
+  color: var(--primary-color, #2563eb);
 }
+

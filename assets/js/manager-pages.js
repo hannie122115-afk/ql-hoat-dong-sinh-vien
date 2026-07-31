@@ -1002,7 +1002,7 @@ document.addEventListener("click", async function (e) {
   console.log(result);
 
   if (result.success) {
-    console.log("Đang load lại");
+    alert("Điểm danh thành công!");
     const html = await fetch(
       `pages/student-list.php?id=${btn.dataset.actId}`,
     ).then((r) => r.text());
@@ -1010,48 +1010,6 @@ document.addEventListener("click", async function (e) {
     document.getElementById("student-list-body").innerHTML = html;
   }
 });
-
-// =================my-calender============
-
-function initCalendar() {
-  const calendarEl = document.getElementById("calendar");
-
-  if (!calendarEl) return;
-
-  const calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: "dayGridWeek",
-    locale: "vi",
-    height: "auto",
-    contentHeight: 550,
-    displayEventTime: false,
-    events: "pages/calendar-data.php",
-    eventClick(info) {
-      loadPage(`pages/act-detail.php?id=${info.event.id}`);
-    },
-    eventContent(info) {
-      const start = info.event.start.toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      const end = info.event.end.toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      return {
-        html: `
-            <div class="event-box">
-                <div class="event-title">${info.event.title}</div>
-                <div class="event-time">${start} - ${end}</div>
-            </div>
-        `,
-      };
-    },
-  });
-
-  calendar.render();
-}
 
 // =================dropdown - statistic============
 
@@ -1144,17 +1102,21 @@ function updateChart(chartData) {
           label: "Lượt đăng ký",
           data: dataDangKy,
           backgroundColor: "#2563eb",
-          borderRadius: 4,
-          barPercentage: 0.8,
-          categoryPercentage: 0.6,
+          hoverBackgroundColor: "#1d4ed8",
+          borderRadius: 6,
+          borderSkipped: false,
+          barPercentage: 0.6,
+          categoryPercentage: 0.5,
         },
         {
           label: "Điểm danh",
           data: dataThamGia,
-          backgroundColor: "#16a34a",
-          borderRadius: 4,
-          barPercentage: 0.8,
-          categoryPercentage: 0.6,
+          backgroundColor: "#10b981",
+          hoverBackgroundColor: "#059669",
+          borderRadius: 6,
+          borderSkipped: false,
+          barPercentage: 0.6,
+          categoryPercentage: 0.5,
         },
       ],
     },
@@ -1164,37 +1126,38 @@ function updateChart(chartData) {
       plugins: {
         legend: {
           position: "top",
-          align: "center",
+          align: "end",
           labels: {
             usePointStyle: true,
             boxWidth: 8,
-            font: { size: 13 },
+            boxHeight: 8,
+            font: { size: 12, weight: "500" },
+            padding: 15,
           },
         },
         tooltip: {
+          backgroundColor: "#1e293b",
+          titleFont: { size: 13 },
+          bodyFont: { size: 12 },
+          padding: 10,
+          cornerRadius: 8,
           mode: "index",
           intersect: false,
         },
       },
       scales: {
         x: {
-          grid: {
-            display: false,
-          },
+          grid: { display: false },
           ticks: {
             autoSkip: false,
-
-            // Ép chữ nằm ngang
             maxRotation: 0,
             minRotation: 0,
+            color: "#64748b",
             font: { size: 11 },
-
-            // Cắt ngắn tên nếu dài quá 12 ký tự/dòng
             callback: function (value) {
               const label = this.getLabelForValue(value);
               if (!label) return "";
 
-              // Nếu chuỗi dài quá 12 ký tự, tự động ngắt thành mảng các dòng
               const maxLength = 12;
               if (label.length > maxLength) {
                 const words = label.split(" ");
@@ -1219,9 +1182,11 @@ function updateChart(chartData) {
         y: {
           beginAtZero: true,
           grid: {
-            borderDash: [5, 5],
+            color: "#f1f5f9",
+            borderDash: [4, 4],
           },
           ticks: {
+            color: "#64748b",
             precision: 0,
           },
         },
@@ -1262,7 +1227,8 @@ document.addEventListener("change", (e) => {
   if (e.target.id === "profile-avt-input") {
     const file = e.target.files[0];
     if (file) {
-      document.getElementById("profile-avt-img").src = URL.createObjectURL(file);
+      document.getElementById("profile-avt-img").src =
+        URL.createObjectURL(file);
     }
   }
 });

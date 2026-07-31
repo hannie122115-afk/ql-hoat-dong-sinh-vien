@@ -91,6 +91,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $answer
             ]);
         }
+
+        $sql10 = "INSERT INTO ChiTietDiemRenLuyen(MSSV, MaMucCongDiem, MaHoatDong, MaHocKy)
+                VALUES (?, ?, ?, ?)";
+        $stmt10 = $conn -> prepare($sql10);
+        $stmt10->execute([$user['MSSV'], $bonus['MaMucCongDiem'], $actId, $semester['MaHocKy']]);
+        
         $conn->commit();
         $_SESSION['success_register_act_message'] = 'Đăng ký hoạt động thành công!';
         echo json_encode([

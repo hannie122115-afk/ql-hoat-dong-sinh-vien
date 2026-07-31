@@ -302,7 +302,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                 <div class="act-info-item-input">
                                     <input type="text" class="search-input validate-input" data-type="bonus" value="" id="bonus" placeholder="Gõ mục cộng điểm rèn luyện để tìm kiếm và chọn">
                                 </div>
-                                <div class="suggest-box"></div>
+                                <div class="suggest-box bonus-suggest-box"></div>
                                 <div class="error-message"></div>
                             </div>
                             <input type="hidden" name="bonus" id="bonusId">
@@ -381,7 +381,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             </div>
             <!-- STEP 2 -->
             <div class="step-block" id="step2">
-                <h1>ĐÂY LÀ BƯỚC 2</h1>
+                <!-- <h1>ĐÂY LÀ BƯỚC 2</h1> -->
                 <div class="act-question-container">
                     <div class="step2-block auto-ques-block" >
                         <div class="act-title-block">
@@ -468,13 +468,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     
                 </div>
                 <div class="btn-block">
-                    <div class="btn-step-next">Tiếp theo</div>
                     <div class="btn-step-previous">Trở lại</div>
+                    <div class="btn-step-next">Tiếp theo</div>
+                    
                 </div>
             </div>
             <!-- STEP 3 -->
             <div class="step-block" id="step3">
-                <h1>ĐÂY LÀ BƯỚC 3</h1>
+                <!-- <h1>ĐÂY LÀ BƯỚC 3</h1> -->
                 <div class="preview-container-step3">
                     <div class="preview-block-step3">
                         <div class="act-title-block">

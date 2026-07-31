@@ -19,12 +19,13 @@ try{
 
     $actId = $_POST['actId'] ?? '';
 
-    $sql = "SELECT MaForm
+    $sql = "SELECT *
         FROM HoatDong
         WHERE MaHoatDong = ?";
     $stmt = $conn->prepare($sql);
     $stmt->execute([$actId]);
     $actData = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
     if(!$actData){
         throw new Exception("Không tìm thấy hoạt động.");
@@ -67,6 +68,13 @@ try{
     $sqlCheck = "SELECT COUNT(*) FROM DangKy WHERE MSSV = ? AND MaHoatDong = ?";
     $stmtCheck = $conn->prepare($sqlCheck);
 
+    $sql1 = "UPDATE ChiTietDiemRenLuyen
+            SET DiemNhanDuoc = ?
+            WHERE MSSV = ?
+            AND MaHoatDong = ?
+            AND MaMucCongDiem = ?
+            AND MaHocKy = ?";
+    $stmt1 = $conn->prepare($sql1);
 
     $conn->beginTransaction();
 
@@ -76,6 +84,7 @@ try{
 
         if ($isRegistered) {
             $stmtUpdate->execute([$mssv, $actId]);
+            $stmt1 -> execute([$actData['DiemRenLuyen'] ,$mssv, $actId, $actData['MaMucCongDiem'], $actData['MaHocKy']]);
             $checkedCount++;
         } else {
             $notRegistered[] = $mssv;

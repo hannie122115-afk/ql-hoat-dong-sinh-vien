@@ -50,12 +50,12 @@ require_once "auth.php";
 
             <div class="homepage-search-act">
                 <div class="homepage-btn-search-act">
-                        <input type="text" name="activity" class="search-input" data-type="activity" id="activity" >
+                        <input type="text" name="activity" class="search-input homepage-search-input" data-type="activity" id="activity" >
                         <button type="button" id="btn-search-act">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                 </div>
-                <div class="suggest-box"></div>
+                <div class="suggest-box homepage-suggest-box"></div>
             </div>
 
             <div class="homepage-header-left">

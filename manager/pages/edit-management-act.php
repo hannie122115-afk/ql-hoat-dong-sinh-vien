@@ -21,9 +21,7 @@ $sql = "SELECT *
 $stmt = $conn->prepare($sql);
 $stmt->execute([$actManagementId]);
 $actInfo = $stmt->fetch(PDO::FETCH_ASSOC);
-// var_dump($actManagementId);
-// var_dump($actInfo);
-// exit;
+
 
 $sql7 = "SELECT LoaiCauHoi
         FROM CauHoiDangKy
@@ -40,6 +38,16 @@ $sql8 = "SELECT MaCauHoi, TenHienThi
 $stmt8 = $conn->prepare($sql8);
 $stmt8->execute([$actManagementId]);
 $customQuestions = $stmt8->fetchAll(PDO::FETCH_ASSOC);
+
+$stmt15 = $conn->prepare("
+    SELECT MaHocKy,
+           NamHoc,
+           HocKy,
+           ThoiGianKetThuc
+    FROM HocKy
+    ORDER BY NamHoc DESC, HocKy
+");
+$stmt15->execute();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     ob_clean(); 
@@ -65,7 +73,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $actEnd = $step1['actEnd'] ?? '';
 
         $actBonus = $step1['actBonusId'] ?? '';
-
+        $actSemester = $step1['actSemester'] ?? '';
         $actPoint = $step1['actPoint'] ?? '';
         $actContent = $step1['actContent'] ?? '';
 
@@ -115,12 +123,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     ,ThoiGianKetThuc = ?
                     ,MaMucCongDiem = ?
                     ,DiemRenLuyen = ?
+                    ,MaHocKy = ?
                     ,NoiDungHoatDong = ?
                     ,AnhAvt = ?
                     ,AnhBia = ?
                 WHERE MaHoatDong = ?";
         $stmt1 = $conn->prepare($sql1);
-        $stmt1->execute([$actName, $actLocate, $actObject, $actMaxSlot, $actStart, $actEnd, $actBonus, $actPoint, $actContent, $pathAvt, $pathCover, $actManagementId]);
+        $stmt1->execute([$actName, $actLocate, $actObject, $actMaxSlot, $actStart, $actEnd, $actBonus, $actPoint, $actSemester, $actContent, $pathAvt, $pathCover, $actManagementId]);
 
         $step2 = $actData['step2'];
         $autoQuestions = $step2['autoQuestions'];
@@ -234,8 +243,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     <div class="created-act-container">
         <div class="created-act-title">
-            <h2>Tạo hoạt động mới</h2>
-            <span>Điền đầy đủ thông tin để tạo hoạt động cho sinh viên đăng ký tham gia.</span>
+            <h2>Chỉnh sửa hoạt động</h2>
         </div>
 
         <div class="step-line">
@@ -253,7 +261,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         <form action="" method="post">
                 <!-- STEP 1 -->
             <div class="step-block active" id="step1">
-                <h1>ĐÂY LÀ BƯỚC 1</h1>
+                <!-- <h1>ĐÂY LÀ BƯỚC 1</h1> -->
                 <div class="act-info-container">
                     <div class="step1-block act-info-block">
                         <div class="act-title-block">
@@ -334,6 +342,27 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                 <div class="error-message"></div>
                                 <span>Nhập điểm rèn luyện sinh viên nhận được khi tham gia.</span>
                             </div>
+                            <div class="act-info-item">
+                                <h4>Học kỳ</h4>
+                                <div class="act-info-item-input">
+                                    <select name="act-year" id="act-year" class="validate-input act-year">
+                                        <option value=""> Chọn năm học </option>
+                                        <?php while($row = $stmt15->fetch(PDO::FETCH_ASSOC)){ 
+                                            $isSelected = ($row['MaHocKy'] == $actInfo['MaHocKy']) ? 'selected' : '';
+                                            ?>
+                                            <option 
+                                            value="<?= $row['NamHoc'] ?>"
+                                            data-semester="<?= $row['MaHocKy'] ?>"
+                                            data-semestername="<?= $row['HocKy'] ?>"
+                                            data-end="<?= $row['ThoiGianKetThuc'] ?>" <?= $isSelected ?> >>
+                                                <?= $row['HocKy'] ?> (<?= $row['NamHoc'] ?>)
+                                            </option>
+                                        <?php }?>
+                                    </select>
+                                </div>
+                                <div class="error-message"></div>
+                                <span>Chọn năm học của học kỳ.</span>
+                            </div>
                         </div>
                     </div>
                     <div class="step1-block act-content-block">
@@ -384,7 +413,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             </div>
             <!-- STEP 2 -->
             <div class="step-block" id="step2">
-                <h1>ĐÂY LÀ BƯỚC 2</h1>
+                <!-- <h1>ĐÂY LÀ BƯỚC 2</h1> -->
                 <div class="act-question-container">
                     <div class="step2-block auto-ques-block" >
                         <div class="act-title-block">
@@ -471,13 +500,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     
                 </div>
                 <div class="btn-block">
-                    <div class="btn-step-next">Tiếp theo</div>
                     <div class="btn-step-previous">Trở lại</div>
+                    <div class="btn-step-next">Tiếp theo</div>
+                    
                 </div>
             </div>
             <!-- STEP 3 -->
             <div class="step-block" id="step3">
-                <h1>ĐÂY LÀ BƯỚC 3</h1>
+                <!-- <h1>ĐÂY LÀ BƯỚC 3</h1> -->
                 <div class="preview-container-step3">
                     <div class="preview-block-step3">
                         <div class="act-title-block">
@@ -558,6 +588,17 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                     <h4>Mục cộng điểm</h4>
                                 </div>
                                 <div class="preview-info-right" id="preview-act-bonus">
+                                    
+                                </div>
+                            </div>
+                            <div class="preview-info-item">
+                                <div class="preview-info-left">
+                                    <span>
+                                        <i class="fa-solid fa-font-awesome"></i>
+                                    </span>
+                                    <h4>Học kỳ</h4>
+                                </div>
+                                <div class="preview-info-right" id="preview-act-semester">
                                     
                                 </div>
                             </div>

@@ -146,7 +146,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     <title>Document</title>
 </head>
 <body>
-    <h1>ĐÂY LÀ TRANG HỒ SƠ</h1>
     <div class="profile-org-container">
         <div class="profile-org-title">
             <h2>Hồ sơ</h2>
@@ -194,7 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                                 <input type="text" class="search-input" data-type="unit" data-value="profile" value="<?= htmlspecialchars($unit['TenDonVi']) ?>" id="unit">
                                 <input type="hidden" value="<?= htmlspecialchars($unit['MaDonVi']) ?>" id="unitId" name="unitId">
                             </div>
-                            <div class="suggest-box"></div>
+                            <div class="suggest-box org-unit-suggest-box"></div>
                         </div>
 
                         <div class="org-info-item">
@@ -218,70 +217,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                 </div>
             </form>
 
-            <div class="profile-org-item">
-                <h3>Đổi mật khẩu</h3>
-                <form action="" id="changePasswordForm">>
-                    <div class="org-password">
-                        <div class="org-password-item password-block">
-                            <h4>Mật khẩu hiện tại</h4>
-                            <div class="org-password-item-input">
-                                <input type="text" name="currentPassword" class="hidden-password">
-                                <i class="fa-solid fa-eye toggle-password-icon"></i>
+            <div class="profile-bottom-wrapper">
+                <div class="profile-org-item">
+                    <h3>Đổi mật khẩu</h3>
+                    <form action="" id="changePasswordForm">
+                        <div class="org-password">
+                            <div class="org-password-item password-block">
+                                <h4>Mật khẩu hiện tại</h4>
+                                <div class="org-password-item-input">
+                                    <input type="text" name="currentPassword" class="hidden-password">
+                                    <i class="fa-solid fa-eye toggle-password-icon"></i>
+                                </div>
+                            </div>
+
+                            <div class="org-password-item password-block">
+                                <h4>Mật khẩu mới</h4>
+                                <div class="org-password-item-input">
+                                    <input type="text" name="newPassword" class="hidden-password">
+                                    <i class="fa-solid fa-eye toggle-password-icon"></i>
+                                </div>
+                            </div>
+
+                            <div class="org-password-item password-block">
+                                <h4>Xác nhận mật khẩu mới</h4>
+                                <div class="org-password-item-input">
+                                    <input type="text" name="confirmPassword" class="hidden-password">
+                                    <i class="fa-solid fa-eye toggle-password-icon"></i>
+                                </div>
+                            </div>
+                            <button type="submit" >
+                                <i class="fa-solid fa-key"></i> Đổi mật khẩu
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="profile-org-item">
+                    <h3>Thông tin tài khoản</h3>
+                    <div class="org-info-account">
+                        <div class="org-info-account-item">
+                            <div class="org-info-account-title">
+                                <i class="fa-solid fa-user"></i>
+                                <h4>Email đăng nhập</h4>
+                            </div>
+                            <div class="org-info-account-value">
+                                <?= $account['Email'] ?>
                             </div>
                         </div>
 
-                        <div class="org-password-item password-block">
-                            <h4>Mật khẩu mới</h4>
-                            <div class="org-password-item-input">
-                                <input type="text" name="newPassword" class="hidden-password">
-                                <i class="fa-solid fa-eye toggle-password-icon"></i>
+                        <div class="org-info-account-item">
+                            <div class="org-info-account-title">
+                                <i class="fa-solid fa-calendar-day"></i>
+                                <h4>Vai trò</h4>
+                            </div>
+                            <div class="org-info-account-value">
+                                Người quản trị
                             </div>
                         </div>
 
-                        <div class="org-password-item password-block">
-                            <h4>Xác nhận mật khẩu mới</h4>
-                            <div class="org-password-item-input">
-                                <input type="text" name="confirmPassword" class="hidden-password">
-                                <i class="fa-solid fa-eye toggle-password-icon"></i>
+                        <div class="org-info-account-item">
+                            <div class="org-info-account-title">
+                                <i class="fa-solid fa-circle-dot"></i>
+                                <h4>Trạng thái</h4>
                             </div>
-                        </div>
-                        <button type="submit" >
-                            <i class="fa-solid fa-key"></i> Đổi mật khẩu
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="profile-org-item">
-                <h3>Thông tin tài khoản</h3>
-                <div class="org-info-account">
-                    <div class="org-info-account-item">
-                        <div class="org-info-account-title">
-                            <i class="fa-solid fa-user"></i>
-                            <h4>Email đăng nhập</h4>
-                        </div>
-                        <div class="org-info-account-value">
-                            <?= $account['Email'] ?>
-                        </div>
-                    </div>
-
-                    <div class="org-info-account-item">
-                        <div class="org-info-account-title">
-                            <i class="fa-solid fa-calendar-day"></i>
-                            <h4>Vai trò</h4>
-                        </div>
-                        <div class="org-info-account-value">
-                            Người quản trị
-                        </div>
-                    </div>
-
-                    <div class="org-info-account-item">
-                        <div class="org-info-account-title">
-                            <i class="fa-solid fa-circle-dot"></i>
-                            <h4>Trạng thái</h4>
-                        </div>
-                        <div class="org-info-account-value org-info-account-value-status">
-                            Đang hoạt động
+                            <div class="org-info-account-value org-info-account-value-status">
+                                Đang hoạt động
+                            </div>
                         </div>
                     </div>
                 </div>
