@@ -270,7 +270,7 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
                     <span>Mục cộng điểm</span>
                 </div>
                 <div class="act-detail-info-left">
-                    <?= $bonus['TenMucCongDiem'] ?> 
+                    <?= $bonus['MaMucCongDiem'] ?> 
                 </div>
             </div>
             <div class="act-detail-info-item">

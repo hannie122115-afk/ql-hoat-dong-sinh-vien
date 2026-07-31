@@ -1,18 +1,18 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 /* --- Hệ màu sắc hiện đại và tinh tế (Variables) --- */
 :root {
-  --primary-color: #3b82f6; /* Xanh hiện đại chủ đạo */
-  --primary-hover: #2563eb; /* Xanh đậm khi hover */
-  --text-dark: #1e293b; /* Chữ chính (Slate 800) */
-  --text-muted: #64748b; /* Chữ phụ, mô tả (Slate 500) */
-  --bg-body: #f8fafc; /* Nền trang (Slate 50) */
-  --bg-card: #ffffff; /* Nền form trắng tinh */
-  --border-color: #cbd5e1; /* Đường viền mặc định (Slate 300) */
-  --border-focus: #3b82f6; /* Đường viền khi click vào input */
-  --error-color: #ef4444; /* Màu thông báo lỗi */
-  --success-bg: #f0fdf4; /* Nền thông báo thành công */
-  --success-text: #166534; /* Chữ thông báo thành công */
+  --primary-color: #3b82f6;       /* Xanh hiện đại chủ đạo */
+  --primary-hover: #2563eb;       /* Xanh đậm khi hover */
+  --text-dark: #1e293b;           /* Chữ chính (Slate 800) */
+  --text-muted: #64748b;          /* Chữ phụ, mô tả (Slate 500) */
+  --bg-body: #f8fafc;             /* Nền trang (Slate 50) */
+  --bg-card: #ffffff;             /* Nền form trắng tinh */
+  --border-color: #cbd5e1;        /* Đường viền mặc định (Slate 300) */
+  --border-focus: #3b82f6;        /* Đường viền khi click vào input */
+  --error-color: #ef4444;         /* Màu thông báo lỗi */
+  --success-bg: #f0fdf4;          /* Nền thông báo thành công */
+  --success-text: #166534;        /* Chữ thông báo thành công */
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -45,8 +45,7 @@ i {
   color: var(--primary-color);
 }
 
-input,
-select {
+input, select {
   border: none;
   outline: none;
   font-size: 0.95rem;
@@ -71,20 +70,14 @@ body {
   padding: 0 20px;
 }
 
-/* ===================== REGISTER HEADER (CẬP NHẬT ĐỒNG BỘ) ============= */
-
-header {
-  width: 100%;
-  background-color: transparent;
-}
+/* ===================== REGISTER HEADER ============= */
 
 .register-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 0;
+  padding: 1.5rem 0;
   border-bottom: 1px solid #e2e8f0;
-  width: 100%;
 }
 
 .register-header-left {
@@ -96,46 +89,32 @@ header {
 .register-header-logo {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-weight: 800;
-  font-size: 1.4rem;
-  color: var(--primary-color);
-  letter-spacing: -0.02em;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--text-dark);
 }
 
 .register-header-logo i {
-  font-size: 1.8rem;
-  color: var(--primary-color);
-}
-
-.register-header-logo h2 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--primary-color);
+  font-size: 1.6rem;
 }
 
 .register-header-tiltle {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  border-left: 2px solid #cbd5e1;
-  padding-left: 1.25rem;
+  border-left: 2px solid #e2e8f0;
+  padding-left: 1.5rem;
 }
 
 .register-header-right {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
 }
 
 .register-header-right b a {
   font-weight: 600;
   margin-left: 0.3rem;
-  color: var(--primary-color);
-}
-
-.register-header-right b a:hover {
-  color: var(--primary-hover);
-  text-decoration: underline;
 }
 
 /* ===================== REGISTER CONTAINER ============= */
@@ -184,7 +163,7 @@ header {
   background: #ffffff;
   padding: 1rem 1.2rem;
   border-radius: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   border: 1px solid #f1f5f9;
 }
 
@@ -221,9 +200,7 @@ header {
   background-color: var(--bg-card);
   border-radius: 1.25rem;
   padding: 2.5rem;
-  box-shadow:
-    0 10px 25px -5px rgba(0, 0, 0, 0.05),
-    0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 46rem;
   border: 1px solid #f1f5f9;
@@ -391,7 +368,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  padding: 0;
+  padding: 0; 
 }
 
 .login-block {
@@ -479,7 +456,7 @@ header {
 }
 
 /* Tinh chỉnh các dòng báo lỗi PHP nhỏ dạng thẻ small */
-form small[style*="color: red"],
+form small[style*="color: red"], 
 form small[style*="color:red"] {
   color: var(--error-color) !important;
   font-weight: 500;
@@ -494,7 +471,7 @@ form small[style*="color:red"] {
     gap: 3rem;
     padding: 2rem 0;
   }
-
+  
   .register-describe {
     max-width: 100%;
     text-align: center;
@@ -503,9 +480,8 @@ form small[style*="color:red"] {
   .register-describe-item {
     text-align: left;
   }
-
-  .register-form,
-  .login-form {
+  
+  .register-form, .login-form {
     max-width: 100%;
   }
 }
@@ -513,7 +489,7 @@ form small[style*="color:red"] {
 @media (max-width: 576px) {
   .register-header {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
     text-align: center;
   }
   .register-header-tiltle {

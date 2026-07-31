@@ -112,7 +112,7 @@ empty($keyword) ? $stmt2->execute() : $stmt2->execute([$search]);
                 </div>
                 <!-- <h1></h1> -->
                 <div class="title-card-item">
-                    <div class="date-card-item">Để ngày z-index cao
+                    <div class="date-card-item">
                         <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
                         $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
                         <h3><?= $dateStart->format('d'); ?></h3>

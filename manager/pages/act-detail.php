@@ -265,7 +265,7 @@ $semester = $stmt3->fetch(PDO::FETCH_ASSOC);
                     <span>Mục cộng điểm</span>
                 </div>
                 <div class="act-detail-info-left">
-                    <?= $bonus['MaMucCongDiem'] ?> 
+                    <?= $act['MaMucCongDiem'] ?> 
                 </div>
             </div>
             <div class="act-detail-info-item">
