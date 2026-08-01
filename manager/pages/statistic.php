@@ -51,7 +51,7 @@ $stmt3->execute();
     
 </head>
 <body>
-    <h1> ĐÂY LÀ TRANG THỐNG KÊ</h1>
+    <!-- <h1> ĐÂY LÀ TRANG THỐNG KÊ</h1> -->
 
     <div class="statistic-container">
         <div class="statistic-header">

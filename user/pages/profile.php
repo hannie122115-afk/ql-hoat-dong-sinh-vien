@@ -298,14 +298,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                             <input type="text" name="userYear" id="" value="<?= htmlspecialchars($user['Khoa']) ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
                     </div>
-                    <div class="profile-user-info-item">
+                    <label class="profile-user-info-item">
                         <h4>Ảnh đại diện</h4>
                         <div>
                             <i class="fa-solid fa-rotate"></i>
                             Thay đổi ảnh 
                             <input type="file" name="userAvt" id="profile-avt-input">
                         </div>
-                    </div>
+                    </label>
                     <button type="submit">
                         <i class="fa-solid fa-check"></i>
                         Lưu 
@@ -348,7 +348,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                     <span>Học kì</span>
                     <div class="profile-dropdown-selected">
                         <span class="profile-selected-text">
-                            <?= !empty($semester) ? "HK" . htmlspecialchars($semester) : "--Chọn học kỳ--" ?>
+                            <?= !empty($semester) ? "HK" . htmlspecialchars($semester) : " Chọn học kỳ " ?>
                         </span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </div>
@@ -363,7 +363,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                     <span>Năm học</span>
                     <div class="profile-dropdown-selected">
                         <span class="profile-selected-text">
-                            <?= !empty($year) ? htmlspecialchars($year) : "--Chọn năm học--" ?>
+                            <?= !empty($year) ? htmlspecialchars($year) : " Chọn năm học " ?>
                         </span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </div>

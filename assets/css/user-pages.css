@@ -997,3 +997,802 @@ header {
     top: 0;
   }
 }
+
+/* ==========================================================================
+   MY CALENDAR PAGE STYLING (Lịch Hoạt Động Của Tôi)
+   ========================================================================== */
+
+/* 1. KHUNG CHỨA TOÀN BỘ TRANG LỊCH */
+.right-container .calendar-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.85rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Tiêu đề "Lịch hoạt động của tôi" */
+.right-container .calendar-container h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-dark, #1e293b);
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.right-container .calendar-container h2::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 1.2rem;
+  background-color: var(--primary-color, #2563eb);
+  border-radius: 2px;
+}
+
+/* 2. CUSTOM NÚT VÀ THANH HOÀN TÁC CỦA FULLCALENDAR */
+.right-container #calendar {
+  font-family: inherit;
+}
+
+/* Toolbar phía trên (Tiêu đề tháng + Nút Next/Prev/Today) */
+.right-container .fc .fc-toolbar {
+  margin-bottom: 1.25rem !important;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.right-container .fc .fc-toolbar-title {
+  font-size: 1.15rem !important;
+  font-weight: 700;
+  color: var(--text-dark, #1e293b);
+  text-transform: capitalize;
+}
+
+/* Tùy chỉnh các nút bấm bấm Prev, Next, Today */
+.right-container .fc .fc-button-primary {
+  background-color: #ffffff !important;
+  border: 1px solid var(--border-color, #cbd5e1) !important;
+  color: var(--text-dark, #334155) !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  padding: 0.45rem 0.85rem !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+  text-transform: capitalize !important;
+}
+
+.right-container .fc .fc-button-primary:hover {
+  background-color: var(--primary-light, #eff6ff) !important;
+  color: var(--primary-color, #2563eb) !important;
+  border-color: #bfdbfe !important;
+}
+
+.right-container .fc .fc-button-primary:disabled {
+  opacity: 0.6;
+}
+
+.right-container .fc .fc-button-primary:focus {
+  box-shadow: none !important;
+}
+
+/* 3. TÙY CHỈNH BẢNG VÀ CÁC THỦ TỤC NGÀY THÁNG */
+.right-container .fc table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+/* Tiêu đề Thứ (T2, T3, T4...) */
+.right-container .fc .fc-col-header-cell {
+  background-color: #f8fafc;
+  padding: 0.65rem 0 !important;
+  border: 1px solid var(--border-color, #e2e8f0) !important;
+}
+
+.right-container .fc .fc-col-header-cell-cushion {
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: var(--text-muted, #64748b) !important;
+  text-transform: uppercase;
+  text-decoration: none !important;
+}
+
+/* Thẻ ô Ngày */
+.right-container .fc .fc-daygrid-day {
+  border: 1px solid var(--border-color, #e2e8f0) !important;
+  transition: background-color 0.2s ease;
+}
+
+.right-container .fc .fc-daygrid-day-number {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark, #334155);
+  padding: 0.4rem 0.6rem !important;
+  text-decoration: none !important;
+}
+
+/* Bôi nổi bật Ngày Hiện Tại (Today) */
+.right-container .fc .fc-day-today {
+  background-color: #f0fdf4 !important; /* Xanh lá nhạt nhẹ */
+}
+
+.right-container .fc .fc-day-today .fc-daygrid-day-number {
+  color: #166534 !important;
+  font-weight: 800;
+  background-color: #dcfce7;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px;
+}
+
+/* 4. ĐỊNH DẠNG HOẠT ĐỘNG (.event-box trong đoạn JS của bạn) */
+/* Reset thẻ bọc mặc định của FullCalendar */
+.right-container .fc-daygrid-event {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 2px 4px !important;
+}
+
+/* Khối Event do bạn tạo trong eventContent() */
+.right-container .event-box {
+  background-color: #eff6ff; /* Nền xanh lam nhạt */
+  border-left: 3px solid var(--primary-color, #2563eb); /* Vạch xanh đậm điểm nhấn */
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.right-container .event-box:hover {
+  background-color: #dbeafe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.15);
+}
+
+/* Tiêu đề hoạt động trong lịch */
+.right-container .event-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e40af; /* Màu chữ xanh đậm */
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Tối đa 2 dòng */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+/* Thời gian trong lịch */
+.right-container .event-time {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #3b82f6;
+}
+
+/* Responsive cho màn hình hẹp */
+@media (max-width: 640px) {
+  .right-container .calendar-container {
+    padding: 1rem;
+  }
+
+  .right-container .event-box {
+    padding: 0.25rem 0.35rem;
+  }
+
+  .right-container .event-title {
+    font-size: 0.75rem;
+  }
+}
+
+.right-container .empty-state {
+  grid-column: 1 / -1; /* Kéo dài hết chiều rộng khung grid */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 0.65rem;
+  border: 1px dashed var(--border-color, #cbd5e1);
+}
+
+.right-container .empty-state i {
+  font-size: 2.8rem;
+  color: #94a3b8;
+  margin-bottom: 0.85rem;
+}
+
+.right-container .empty-state p {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-muted, #64748b);
+  margin: 0;
+}
+
+/* ==========================================================================
+   USER PROFILE & TRAINING POINTS PAGE (Hồ Sơ & Điểm Rèn Luyện)
+   ========================================================================== */
+
+/* 1. KHUNG CONTAINER CHÍNH */
+.right-container .profile-user-container {
+  width: 100%;
+  max-width: 100%;
+
+  /* Bọc thành 1 khung riêng biệt đồng bộ với các trang khác */
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.85rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Phân tách các phần bên trong */
+}
+
+/* Tiêu đề trang */
+.right-container .profile-user-title {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.85rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.right-container .profile-user-title h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-dark, #1e293b);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.right-container .profile-user-title h2::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 1.2rem;
+  background-color: var(--primary-color, #2563eb);
+  border-radius: 2px;
+}
+
+.right-container .profile-user-title span {
+  font-size: 0.88rem;
+  color: var(--text-muted, #64748b);
+}
+
+/* 2. KHỐI THÔNG TIN CÁ NHÂN & ĐỔI MẬT KHẨU (LAYOUT 3 CỘT) */
+.right-container .profile-user-block,
+.right-container .profile-user-table-container {
+  background-color: #f8fafc; /* Màu nền phụ xám nhạt nhẹ để phân biệt khối */
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+.right-container .profile-user-block {
+  display: grid;
+  grid-template-columns: 280px 1fr 1fr; /* Cột 1: Thẻ cá nhân, Cột 2: Form thông tin, Cột 3: Đổi mật khẩu */
+  gap: 1.25rem;
+  align-items: start;
+}
+
+/* Các thẻ Box con */
+.right-container .profile-user-item {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.85rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.right-container .profile-user-item h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-dark, #1e293b);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-light, #eff6ff);
+}
+
+/* --- CỘT 1: THẺ CÁ NHÂN (AVATAR & NGHỀ NGHIỆP) --- */
+.right-container .profile-user-item:nth-child(1) {
+  align-items: center;
+  text-align: center;
+}
+
+.right-container .profile-user-avt {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--primary-light, #eff6ff);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 0.85rem;
+}
+
+.right-container .profile-user-avt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.right-container .profile-user-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-dark, #1e293b);
+  margin-bottom: 0.2rem;
+}
+
+.right-container .profile-user-role {
+  display: inline-block;
+  background-color: var(--primary-light, #eff6ff);
+  color: var(--primary-color, #2563eb);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.right-container .profile-user-default {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  border-top: 1px dashed var(--border-color, #e2e8f0);
+  padding-top: 1rem;
+  text-align: left;
+}
+
+.right-container .profile-user-item-default {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.83rem;
+  color: var(--text-muted, #475569);
+}
+
+.right-container .profile-user-item-default i {
+  color: var(--primary-color, #2563eb);
+  width: 16px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* --- CỘT 2: FORM THÔNG TIN CÁ NHÂN --- */
+.right-container #profileForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem 1rem;
+}
+
+.right-container .profile-user-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  position: relative;
+}
+
+/* Trường chọn Ảnh đại diện chiếm trọn chiều rộng */
+.right-container .profile-user-info-item:nth-child(8) {
+  grid-column: 1 / -1;
+}
+
+.right-container .profile-user-info-item h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  text-transform: uppercase;
+}
+
+.right-container .user-info-item-input input[type="text"],
+.right-container .user-info-item-input input[type="tel"],
+.right-container .user-info-item-input input[type="date"] {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.right-container .user-info-item-input input:focus {
+  border-color: var(--primary-color, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Chọn Giới tính Radio */
+.right-container .profile-user-gender {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  height: 36px;
+}
+
+.right-container .profile-input-gender {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Tải ảnh đại diện */
+.right-container .profile-user-info-item div input[type="file"] {
+  display: none;
+}
+
+.right-container .profile-user-info-item div:has(input[type="file"]) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  background-color: #f8fafc;
+  border: 1px dashed var(--border-color, #cbd5e1);
+  border-radius: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-dark, #334155);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.right-container .profile-user-info-item div:has(input[type="file"]):hover {
+  background-color: var(--primary-light, #eff6ff);
+  border-color: #bfdbfe;
+  color: var(--primary-color, #2563eb);
+}
+
+/* Nút Submit Form Thông Tin */
+.right-container #profileForm button[type="submit"] {
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background-color: var(--primary-color, #2563eb);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.right-container #profileForm button[type="submit"]:hover {
+  background-color: var(--primary-hover, #1d4ed8);
+}
+
+/* --- CỘT 3: FORM ĐỔI MẬT KHẨU --- */
+.right-container #changePasswordForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.right-container .profile-user-password {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.right-container .profile-user-password h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.right-container .user-password-item-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.right-container .user-password-item-input input {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 0.85rem; /* Padding phải rộng (2.5rem) để chữ không đè lên Icon */
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-dark, #1e293b);
+  outline: none;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+/* Khi có class .hidden-password (từ JS hoặc mặc định): Ép kiểu hiển thị thành dạng Mật khẩu (Dấu chấm) */
+.right-container .user-password-item-input input.hidden-password {
+  -webkit-text-security: disc !important; /* Dành cho Chrome, Safari */
+}
+
+.right-container .user-password-item-input input:not(.hidden-password) {
+  -webkit-text-security: none !important;
+}
+
+.right-container .user-password-item-input input:focus {
+  border-color: var(--primary-color, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.right-container .toggle-password-icon {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+  user-select: none;
+  z-index: 5;
+}
+
+.right-container .toggle-password-icon:hover {
+  color: var(--primary-color, #2563eb);
+  background-color: var(--primary-light, #eff6ff);
+}
+
+.right-container #changePasswordForm button[type="submit"] {
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.25rem;
+  background-color: var(--text-dark, #1e293b);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.right-container #changePasswordForm button[type="submit"]:hover {
+  background-color: #0f172a;
+  transform: translateY(-1px);
+}
+
+/* 3. KHỐI BẢNG ĐIỂM RÈN LUYỆN */
+.right-container .profile-user-table-container {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.85rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Dropdown chọn Học Kỳ & Năm Học */
+.right-container .profile-user-dropdown {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.right-container .profile-custom-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  position: relative;
+}
+
+.right-container .profile-custom-dropdown > span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dark, #1e293b);
+  white-space: nowrap;
+}
+
+.right-container .profile-dropdown-selected {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #cbd5e1);
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark, #1e293b);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 160px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.right-container .profile-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 55px;
+  right: 0;
+  z-index: 20;
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 4px;
+  display: none;
+  overflow: hidden;
+}
+
+.right-container .profile-dropdown-selected:hover {
+  border-color: var(--primary-color, #2563eb);
+  background-color: #f8fafc;
+}
+
+.right-container .profile-dropdown-selected i {
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
+  transition: transform 0.2s ease;
+}
+
+/* Xoay mũi tên khi menu đang mở (khi có class .show) */
+.right-container
+  .profile-custom-dropdown:has(.profile-dropdown-menu.show)
+  .profile-dropdown-selected
+  i {
+  transform: rotate(180deg);
+  color: var(--primary-color, #2563eb);
+}
+
+.right-container .profile-custom-dropdown.active .profile-dropdown-menu {
+  display: block;
+}
+
+/* 🎯 Kích hoạt hiển thị Menu khi JS thêm class .show */
+.right-container .profile-dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  display: block;
+}
+
+.right-container .profile-dropdown-option {
+  padding: 0.55rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-dark, #334155);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+}
+
+.right-container .profile-dropdown-option:hover {
+  background-color: var(--primary-light, #eff6ff);
+  color: var(--primary-color, #2563eb);
+  font-weight: 600;
+  padding-left: 1.1rem;
+}
+
+.right-container .profile-dropdown-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.right-container .profile-dropdown-menu::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* Bảng dữ liệu Điểm Rèn Luyện */
+.right-container .profile-user-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.65rem;
+  overflow: hidden;
+}
+
+.right-container .profile-user-table th {
+  background-color: #f8fafc;
+  color: var(--text-dark, #1e293b);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.right-container .profile-user-table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  color: var(--text-dark, #334155);
+  border-bottom: 1px solid var(--border-color, #f1f5f9);
+}
+
+.right-container .profile-user-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Dòng chưa chọn thông tin / Trống */
+.right-container .profile-user-table-empty td {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted, #64748b);
+  font-style: italic;
+}
+
+/* Mã tiêu chí (Badge nhẹ) */
+.right-container .profile-user-table-id span {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.35rem;
+}
+
+/* Điểm Đạt Được (Bôi xanh nổi bật) */
+.right-container .profile-user-table-get-point span {
+  font-weight: 700;
+  color: #059669; /* Green */
+}
+
+/* Dòng Tổng cộng */
+.right-container .profile-user-table-total {
+  background-color: #f8fafc;
+  font-weight: 800;
+}
+
+.right-container .profile-user-table-total td {
+  border-top: 2px solid var(--border-color, #cbd5e1);
+  color: var(--text-dark, #1e293b);
+  font-size: 0.95rem;
+}
+
+.right-container .profile-user-table-total td:last-child {
+  color: var(--primary-color, #2563eb);
+}
+
+/* 4. RESPONSIVE DESIGN */
+@media (max-width: 1200px) {
+  .right-container .profile-user-block {
+    grid-template-columns: 1fr; /* Trở về 1 cột trên màn hình nhỏ */
+  }
+
+  .right-container #profileForm {
+    grid-template-columns: 1fr;
+  }
+}

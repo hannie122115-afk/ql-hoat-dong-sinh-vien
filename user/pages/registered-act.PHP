@@ -32,7 +32,7 @@ empty($keyword) ? $stmt1->execute() : $stmt1->execute([$search]);
 
 </head>
 <body>
-    <h1>ĐÂY LÀ TRANG HOẠT ĐỘNG ĐẪ ĐĂNG KÝ</h1>
+    <!-- <h1>ĐÂY LÀ TRANG HOẠT ĐỘNG ĐẪ ĐĂNG KÝ</h1> -->
 
     <div class="container">
         <div class="title-container">
