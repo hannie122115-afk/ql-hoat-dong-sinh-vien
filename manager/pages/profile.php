@@ -33,13 +33,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['ac
         exit;
     }
 
-    if ($newPassword !== $confirmPassword) {
-        echo json_encode(['success' => false, 'message' => 'Mật khẩu mới và xác nhận mật khẩu không khớp!']);
+    if (strlen($newPassword) < 6) {
+        echo json_encode(['success' => false, 'message' => 'Mật khẩu phải từ 6 ký tự trở lên!']);
+        exit;
+    } elseif (!preg_match('/[A-Z]/', $newPassword)) {
+        echo json_encode(['success' => false, 'message' => 'Mật khẩu phải có ít nhất 1 chữ in hoa!']);
+        exit;
+    } elseif (!preg_match('/[a-z]/', $newPassword)) {
+        echo json_encode(['success' => false, 'message' => 'Mật khẩu phải có ít nhất 1 chữ thường!']);
+        exit;
+    } elseif (!preg_match('/[0-9]/', $newPassword)) {
+        echo json_encode(['success' => false, 'message' => 'Mật khẩu phải có ít nhất 1 số!']);
         exit;
     }
 
-    if (strlen($newPassword) < 6) {
-        echo json_encode(['success' => false, 'message' => 'Mật khẩu mới phải có ít nhất 6 ký tự!']);
+    if ($newPassword !== $confirmPassword) {
+        echo json_encode(['success' => false, 'message' => 'Mật khẩu mới và xác nhận mật khẩu không khớp!']);
         exit;
     }
 
@@ -236,6 +245,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                                     <input type="text" name="newPassword" class="hidden-password">
                                     <i class="fa-solid fa-eye toggle-password-icon"></i>
                                 </div>
+                                <!-- <span>Mật khẩu phải có ít nhất 6 ký tự, ít nhất 1 ký tự in hoa, 1 ký tự thường và 1 số.</span> -->
                             </div>
 
                             <div class="org-password-item password-block">

@@ -76,7 +76,7 @@ require_once "../config/db.php";
                     </div>
                 </div>
                 <div class="navbar">
-                    <div class="navbar-item" data-page="dashboard">
+                    <div class="navbar-item" data-page="dashboard" id="dashboard">
                         <i class="fa-solid fa-house"></i>
                         <span>Trang chủ</span>
                     </div>

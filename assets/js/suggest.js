@@ -98,7 +98,8 @@ document.addEventListener("input", function (e) {
     let linkSearchPHP = "";
     if (
       (input.dataset.type === "unit" && input.dataset.value === "profile") ||
-      (input.dataset.type === "class" && input.dataset.value === "profile")
+      (input.dataset.type === "class" && input.dataset.value === "profile") ||
+      (input.dataset.type === "unit" && input.dataset.value === "account")
     ) {
       linkSearchPHP = "../includes/search.php";
     } else if (

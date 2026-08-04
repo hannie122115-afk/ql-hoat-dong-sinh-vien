@@ -10,6 +10,10 @@ function loadPage(url) {
     .then((data) => {
       content.innerHTML = data;
 
+      if (url.includes("dashboard.php")) {
+        loadChart();
+      }
+
       if (url.includes("edit-management-act.php")) {
         console.log("goi init");
         initEditActivity();

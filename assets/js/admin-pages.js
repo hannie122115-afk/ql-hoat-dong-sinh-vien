@@ -127,6 +127,26 @@ function updateChart(chartData) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadChart();
+// =================createNewAccount4Org - account============
+
+document.addEventListener("submit", (e) => {
+  if (e.target.id !== "accountForm") return;
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  fetch("pages/account.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        alert(data.message);
+        sessionStorage.setItem("reloadAndLoadPage", "pages/account.php");
+        location.reload();
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(console.error);
 });
