@@ -76,7 +76,6 @@ $stmt3->execute();
 
 </head>
 <body>
-    <h1>ĐÂY LÀ TRANG QUẢN LÝ HOẠT ĐỘNG</h1>
     <div class="management-act-container">
         <div class="management-act-header">
             <div class="management-act-title">

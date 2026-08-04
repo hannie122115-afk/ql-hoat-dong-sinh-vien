@@ -239,8 +239,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <link rel="stylesheet" href="../assets/css/manager-pages.css">
 </head>
 <body>
-    <h1>ĐÂY LÀ TRANG TẠO HOẠT ĐỘNG</h1>
-
     <div class="created-act-container">
         <div class="created-act-title">
             <h2>Chỉnh sửa hoạt động</h2>
