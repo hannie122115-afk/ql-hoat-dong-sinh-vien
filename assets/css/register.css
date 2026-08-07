@@ -245,8 +245,19 @@ header {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
+  position: relative;
 }
 
+/* Đảm bảo ô input tìm kiếm chiếm hết 100% khung chứa */
+.search-register {
+  width: 100% !important;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
 .register-title-block {
   display: flex;
   align-items: center;

@@ -217,7 +217,7 @@ $stmt3->execute();
                         <button class="edit-management-act-btn row-act-management" data-id="<?= $act1['MaHoatDong'] ?>">
                             Sửa
                         </button>
-                        <button class="delete-management-act-btn"  data-id="<?= $act1['MaHoatDong'] ?>">
+                        <button class="delete-management-act-btn"  data-id="<?= $act1['MaHoatDong'] ?>" data-name="<?= htmlspecialchars($act1['TenHoatDong']) ?>" >
                             Xóa
                         </button>
                         

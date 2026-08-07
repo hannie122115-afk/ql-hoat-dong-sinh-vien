@@ -82,11 +82,22 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_P
             break;
         case "student":
             $sql = "SELECT MSSV as id
-                    , CONCAT(MSSV, ' - ', HoTen) as name
+                        , CONCAT(MSSV, ' - ', HoTen) as name
                     FROM SinhVien
                     WHERE HoTen LIKE ?
                         OR MSSV LIKE ?
                     LIMIT 8";
+            $params = [$search, $search];
+            break;
+        case "account":
+            $sql = "SELECT tk.Email as id
+                        , COALESCE(sv.HoTen, tc.TenToChuc) as name
+                        FROM TaiKhoanDangNhap tk
+                        LEFT JOIN SinhVien sv ON tk.MaTaiKhoan = sv.MaTaiKhoan
+                        LEFT JOIN ToChuc tc ON tk.MaTaiKhoan = tc.MaTaiKhoan
+                        WHERE sv.HoTen LIKE ?
+                            OR tc.TenToChuc LIKE ?
+                        LIMIT 8";
             $params = [$search, $search];
             break;
         default:

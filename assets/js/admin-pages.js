@@ -150,3 +150,190 @@ document.addEventListener("submit", (e) => {
     })
     .catch(console.error);
 });
+
+// =================search - account============
+document.addEventListener("click", (e) => {
+  const dropdownSelected = e.target.closest(".account-dropdown-selected");
+  if (dropdownSelected) {
+    const dropdownMenu = dropdownSelected.nextElementSibling;
+    dropdownMenu?.classList.toggle("show");
+    return;
+  }
+
+  const option = e.target.closest(".account-dropdown-option");
+  if (option) {
+    const container = option.closest(".account-search-container");
+    if (!container) return;
+
+    const selectedText = container.querySelector(".account-selected-text");
+    const dropdownMenu = container.querySelector(".account-dropdown-menu");
+
+    const searchInput = container.querySelector(".account-search-input");
+    const suggestBox = container.querySelector(".account-suggest-box");
+
+    selectedText.textContent = option.textContent;
+
+    if (option.dataset.value === "unit") {
+      searchInput.dataset.type = "unit";
+      searchInput.dataset.value = "account";
+      searchInput.placeholder = "Tìm kiếm tên đơn vị...";
+    } else {
+      searchInput.dataset.type = "account";
+      searchInput.removeAttribute("data-value");
+      searchInput.placeholder = "Tìm kiếm tên tổ chức / sinh viên...";
+    }
+
+    searchInput.value = "";
+    delete searchInput.dataset.id;
+
+    if (suggestBox) {
+      suggestBox.innerHTML = "";
+    }
+    dropdownMenu.classList.remove("show");
+    return;
+  }
+
+  if (!e.target.closest(".account-custom-dropdown")) {
+    document.querySelectorAll(".account-dropdown-menu.show").forEach((menu) => {
+      menu.classList.remove("show");
+    });
+  }
+});
+
+function searchAccount() {
+  const input = document.getElementById("searchInput");
+  const keyword = input.value.trim();
+  const type = input.dataset.type;
+
+  let queryUrl =
+    `pages/account.php?keyword=${encodeURIComponent(keyword)}` +
+    `&type=${encodeURIComponent(type)}`;
+
+  loadPage(queryUrl);
+}
+
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest("#btn-search-account");
+  if (!btn) return;
+  e.preventDefault();
+  searchAccount();
+});
+document.addEventListener("keydown", function (e) {
+  const input = e.target.closest("#searchInput");
+  if (!input) return;
+  if (e.key === "Enter") {
+    e.preventDefault();
+    searchAccount();
+  }
+});
+
+// =================popupDeleteAcoount - account============
+let deleteAccountId = null;
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".delete-account-btn");
+  if (!btn) return;
+  deleteAccountId = btn.dataset.id;
+  document.getElementById("delete-account-message").textContent =
+    `Bạn có chắc chắn muốn xóa tài khoản "${btn.dataset.name}"?`;
+  document.getElementById("delete-account-modal").classList.add("show");
+});
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btn-confirm-delete-account");
+  if (!btn) return;
+  fetch("../includes/delete-account.php", {
+    method: "POST",
+    body: new URLSearchParams({
+      id: deleteAccountId,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        alert("Xóa tài khoảng thành công!");
+        loadPage("pages/account.php");
+      } else {
+        alert(data.message);
+      }
+    });
+});
+
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-cancel-delete-account");
+  if (!btnCancel) return;
+  document.getElementById("delete-account-modal").classList.remove("show");
+});
+
+// =================popupBlockAccount - account============
+let blockAccountId = null;
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".block-account-btn");
+  if (!btn) return;
+  blockAccountId = btn.dataset.id;
+  document.getElementById("block-account-message").textContent =
+    `Bạn có chắc chắn muốn khóa tài khoản "${btn.dataset.name}"?`;
+  document.getElementById("block-account-modal").classList.add("show");
+});
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btn-confirm-block-account");
+  if (!btn) return;
+  fetch("../includes/block-account.php", {
+    method: "POST",
+    body: new URLSearchParams({
+      id: blockAccountId,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        alert("Khóa tài khoản thành công!");
+        loadPage("pages/account.php");
+      } else {
+        alert(data.message);
+      }
+    });
+});
+
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-cancel-block-account");
+  if (!btnCancel) return;
+  document.getElementById("block-account-modal").classList.remove("show");
+});
+
+// =================popupUnblockAccount - account============
+let unblockAccountId = null;
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".unblock-account-btn");
+  if (!btn) return;
+  unblockAccountId = btn.dataset.id;
+  document.getElementById("unblock-account-message").textContent =
+    `Bạn có chắc chắn muốn mở khóa tài khoản "${btn.dataset.name}"?`;
+  document.getElementById("unblock-account-modal").classList.add("show");
+});
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btn-confirm-unblock-account");
+  if (!btn) return;
+  fetch("../includes/unblock-account.php", {
+    method: "POST",
+    body: new URLSearchParams({
+      id: unblockAccountId,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        alert("Mở khóa tài khoản thành công!");
+        loadPage("pages/account.php");
+      } else {
+        alert(data.message);
+      }
+    });
+});
+
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-cancel-unblock-account");
+  if (!btnCancel) return;
+  document.getElementById("unblock-account-modal").classList.remove("show");
+});

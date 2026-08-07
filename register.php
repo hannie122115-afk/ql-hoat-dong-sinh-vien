@@ -74,7 +74,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $userId = $conn->lastInsertId();
 
-            $sql2 = "INSERT INTO sinhvien (MSSV, MaTaiKhoan, MaDonVi, MaNghanh, HoTen, Khoa, GioiTinh, NgaySinh, SoDienThoai, AnhDaiDien) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql2 = "INSERT INTO sinhvien (MSSV, MaTaiKhoan, MaDonVi, MaNganh, HoTen, Khoa, GioiTinh, NgaySinh, SoDienThoai, AnhDaiDien) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt2 = $conn->prepare($sql2);
             $stmt2->execute([$mssv, $userId, $unitId, $classId, $fullname, $year, $gender, $birth, $tel, $avt]);
 
@@ -209,7 +209,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <h3>Đơn vị</h3>
                         </div>
                         <div class="register-input-block ">
-                            <input type="text" class="search-input" data-type="unit" name="unit" value="<?= htmlspecialchars($unit ?? '') ?>" id="unit" placeholder="Gõ tên đơn vị để tìm kiếm và chọn">
+                            <input type="text" class="search-input search-register" data-type="unit" name="unit" value="<?= htmlspecialchars($unit ?? '') ?>" id="unit" placeholder="Gõ tên đơn vị để tìm kiếm và chọn">
                         </div>
                         <div class="suggest-box"></div>
                         <?php if(!empty($error['unit'])): ?>
@@ -228,7 +228,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <h3>Ngành</h3>
                         </div>
                         <div class="register-input-block register-class-search">
-                            <input type="text" class="search-input" data-type="class" name="class" value="<?= htmlspecialchars($class ?? '') ?>" id="" placeholder="Gõ tên ngành để tìm kiếm và chọn">
+                            <input type="text" class="search-input search-register" data-type="class" name="class" value="<?= htmlspecialchars($class ?? '') ?>" id="" placeholder="Gõ tên ngành để tìm kiếm và chọn">
                             
                         </div>
                         <div class="suggest-box suggest-box-profile"></div>

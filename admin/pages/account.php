@@ -56,6 +56,38 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 }
 
+$type = $_GET['type'] ?? 'account';
+$keyword = trim($_GET['keyword'] ?? '');
+$search = "%$keyword%";
+
+$sql4 = "SELECT tk.Email
+                , tk.Role
+                , tk.NgayTao
+                , tk.TrangThai
+                , COALESCE(sv.HoTen, tc.TenToChuc) AS TenTaiKhoan
+                , COALESCE(dv_sv.TenDonVi, dv_tc.TenDonVi) AS TenDonVi
+        FROM TaiKhoanDangNhap tk
+        LEFT JOIN SinhVien sv ON tk.MaTaiKhoan = sv.MaTaiKhoan
+        LEFT JOIN ToChuc tc ON tk.MaTaiKhoan = tc.MaTaiKhoan
+        LEFT JOIN DonVi dv_sv ON dv_sv.MaDonVi = sv.MaDonVi
+        LEFT JOIN DonVi dv_tc ON dv_tc.MaDonVi = tc.MaDonVi";
+if(!empty($keyword)){
+    $sql4 .= " WHERE sv.HoTen LIKE ? 
+                OR tc.TenToChuc LIKE ? 
+                OR dv_sv.TenDonVi LIKE ? 
+                OR dv_tc.TenDonVi LIKE ?";
+    $params = [$search, $search, $search, $search];
+}
+$stmt4 = $conn->prepare($sql4);
+empty($params) ? $stmt4 -> execute() : $stmt4 -> execute($params);
+
+$sql5 = "SELECT COUNT(Email)
+        FROM TaiKhoanDangNhap";
+$stmt5 = $conn->prepare($sql5);
+$stmt5 -> execute();
+$TongSo = $stmt5->fetchColumn();   
+
+
 ?>
 
 
@@ -73,7 +105,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <span>Quản lý và cấp tài khoản cho tổ chức và người dùng</span>
         </div>
         <div class="account-create-org">
-            <h2>Cấp tài khoản tổ chức</h2>
+            <h3>Cấp tài khoản tổ chức</h3>
             <div class="account-create-org">
                 <form action="" id="accountForm">
                     <div class="account-create-org-item">
@@ -98,6 +130,150 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     </div>
                     <button type="submit">Cấp tài khoản</button>
                 </form>
+            </div>
+        </div>
+        <div class="account-list">
+            <h3>Danh sách tài khoản</h3>
+            <div class="header-account-list">
+                <span>Tổng số tài khoản: <?= $TongSo ?></span>
+                <div class="account-search-container">
+                    <div class="account-custom-dropdown" data-type="type">
+                        <span>Tìm kiểm theo:</span>
+                        <div class="account-dropdown-selected">
+                            <span class="account-selected-text">
+                                Tên tổ chức / sinh viên
+                            </span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="account-dropdown-menu">
+                            <div class="account-dropdown-option" data-value="unit">Tên đơn vị</div>
+                            <div class="account-dropdown-option" data-value="account">Tên tổ chức / sinh viên</div>
+                        </div>
+                    </div>
+                    <div class="account-search">
+                        <div class="search-account-input">
+                            <input
+                                type="text"
+                                id="searchInput"
+                                class="search-input account-search-input"
+                                data-type="account"
+                                placeholder="Tìm kiếm tên tổ chức / sinh viên...">
+
+                            <button type="button" id="btn-search-account">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                        <div class="suggest-box account-suggest-box"></div>
+                    </div>
+                </div>
+
+            </div>
+            <table class="account-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên tổ chức / sinh viên</th>
+                        <th>Đơn vị</th>
+                        <th>Email</th>
+                        <th>Vai trò</th>
+                        <th>Ngày tạo</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $stt = 1; 
+                    while ($account = $stmt4->fetch(PDO::FETCH_ASSOC)):?>
+                    <tr>
+                        <td><?= $stt++ ?></td>
+                        <td>
+                            <div class="account-info">
+                                <h4><?= $account['TenTaiKhoan'] ?></h4>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="account-info">
+                                <h4><?= $account['TenDonVi'] ?></h4>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="account-info">
+                                <h4><?= $account['Email'] ?></h4>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="account-info">
+                                <?php if($account['Role'] == 1):?>
+                                <h4>Tổ chức / Câu lạc bộ</h4>
+                                <?php elseif($account['Role'] == 2):?>
+                                <h4>Quản trị viên</h4>
+                                <?php elseif($account['Role'] == 0):?>
+                                <h4>Sinh viên</h4>
+                                <?php endif;?>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="account-info">
+                                <h4><?= $account['NgayTao'] ?></h4>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="account-info">
+                                <?php if($account['TrangThai'] == 1): ?>
+                                <h4>Đang hoạt động</h4>
+                                <?php else: ?>
+                                <h4>Đã khóa</h4>
+                                <?php endif; ?>    
+                            </div>
+                        </td>
+                        <td>
+                            <?php if($account['TrangThai'] == 1): ?>
+                                <button class="block-account-btn " data-id="<?= $account['Email'] ?>" data-name="<?= htmlspecialchars($account['TenTaiKhoan']) ?>">
+                                    Khóa
+                                </button>
+                            <?php else: ?>
+                                <button class="unblock-account-btn " data-id="<?= $account['Email'] ?>" data-name="<?= htmlspecialchars($account['TenTaiKhoan']) ?>">
+                                    Mở khóa
+                                </button>
+                            <?php endif; ?>
+                            
+                            <button class="delete-account-btn"  data-id="<?= $account['Email'] ?>" data-name="<?= htmlspecialchars($account['TenTaiKhoan']) ?>">
+                                Xóa
+                            </button>
+                        </td>
+                    </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+            <div id="delete-account-modal" class="modal">
+                <div class="modal-content">
+                    <h3>Xác nhận xóa</h3>
+                    <p id="delete-account-message"></p>
+                    <div class="model-btn">
+                        <button id="btn-cancel-delete-account">Hủy</button>
+                        <button id="btn-confirm-delete-account">Xóa</button>
+                    </div>
+                </div>
+            </div>
+            <div id="block-account-modal" class="modal">
+                <div class="modal-content">
+                    <h3>Xác nhận khóa</h3>
+                    <p id="block-account-message"></p>
+                    <div class="model-btn">
+                        <button id="btn-cancel-block-account">Hủy</button>
+                        <button id="btn-confirm-block-account">Khóa</button>
+                    </div>
+                </div>
+            </div>
+            <div id="unblock-account-modal" class="modal">
+                <div class="modal-content">
+                    <h3>Xác nhận mở khóa</h3>
+                    <p id="unblock-account-message"></p>
+                    <div class="model-btn">
+                        <button id="btn-cancel-unblock-account">Hủy</button>
+                        <button id="btn-confirm-unblock-account">Mở khóa</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

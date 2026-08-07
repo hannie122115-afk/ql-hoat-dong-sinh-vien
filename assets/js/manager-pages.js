@@ -669,7 +669,7 @@ document.addEventListener("click", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        // alert("Xóa hoạt động thành công!");
+        alert("Xóa hoạt động thành công!");
         loadPage("pages/act-management.php");
       } else {
         alert(data.message);

@@ -2399,7 +2399,7 @@ select.act-year:focus {
   justify-content: center;
 }
 
-.modal.active {
+.modal.show {
   display: flex;
 }
 

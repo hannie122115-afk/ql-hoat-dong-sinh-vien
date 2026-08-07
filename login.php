@@ -29,6 +29,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     if($user === false){
       $error['email'] = "Email không tồn tại trên hệ thống!";
+    }elseif($user['TrangThai'] == 0){
+      $error['status'] = "Tài khoản đã bị khóa. Không thể đăng nhập!";
     }else{
       if(password_verify($password, $user['MatKhau'])){
         $_SESSION['user_id'] = $user['MaTaiKhoan'];
@@ -182,6 +184,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
               </div>
               <?php if(!empty($error['email'])): ?>
               <small style="color: red"> <?= $error['email'] ?> </small>
+              <?php elseif(!empty($error['status'])): ?>
+              <small style="color: red"> <?= $error['status'] ?> </small>
               <?php endif;?>
             </div>
 
