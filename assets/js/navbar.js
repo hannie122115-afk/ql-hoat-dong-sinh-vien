@@ -43,6 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
 const navbarItem = document.querySelectorAll(".navbar-item");
 navbarItem.forEach((item) => {
   item.addEventListener("click", function () {
+    if (this.querySelector('a[href*="logout.php"]')) {
+      return;
+    }
     loadPage(`pages/${this.dataset.page}.php`);
   });
 });
