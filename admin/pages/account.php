@@ -104,7 +104,7 @@ $TongSo = $stmt5->fetchColumn();
             <h2>Quản lý tài khoản</h2>
             <span>Quản lý và cấp tài khoản cho tổ chức và người dùng</span>
         </div>
-        <div class="account-create-org">
+        <div class="account-create-org-container">
             <h3>Cấp tài khoản tổ chức</h3>
             <div class="account-create-org">
                 <form action="" id="accountForm">

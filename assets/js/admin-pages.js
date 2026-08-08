@@ -227,7 +227,7 @@ document.addEventListener("keydown", function (e) {
   }
 });
 
-// =================popupDeleteAcoount - account============
+// =================popupDeleteAccount - account============
 let deleteAccountId = null;
 document.addEventListener("click", function (e) {
   const btn = e.target.closest(".delete-account-btn");
@@ -336,4 +336,224 @@ document.addEventListener("click", (e) => {
   const btnCancel = e.target.closest("#btn-cancel-unblock-account");
   if (!btnCancel) return;
   document.getElementById("unblock-account-modal").classList.remove("show");
+});
+
+// =================dropdownCreateSemester - semester============
+
+document.addEventListener("click", (e) => {
+  const dropdown = e.target.closest(".semester-create-item");
+  if (!dropdown) {
+    document
+      .querySelectorAll(".semester-dropdown-menu")
+      .forEach((menu) => menu.classList.remove("show"));
+    return;
+  }
+
+  // click vào ô
+  if (e.target.closest(".semester-dropdown-selected")) {
+    const currentMenu = dropdown.querySelector(".semester-dropdown-menu");
+
+    document.querySelectorAll(".semester-dropdown-menu").forEach((m) => {
+      if (m !== currentMenu) m.classList.remove("show");
+    });
+
+    if (currentMenu) {
+      currentMenu.classList.toggle("show");
+    }
+    return;
+  }
+
+  // click chọn option
+  const option = e.target.closest(".semester-dropdown-option");
+  if (option) {
+    const selectedText = dropdown.querySelector(".semester-selected-text");
+    if (selectedText) {
+      selectedText.textContent = option.textContent;
+    }
+
+    const parentContainer = option.closest(".semester-create-item");
+    const input = parentContainer.querySelector("input[type='hidden']");
+    if (input) {
+      input.value = option.dataset.value ?? "";
+    }
+
+    dropdown.querySelector(".semester-dropdown-menu").classList.remove("show");
+
+    return;
+  }
+});
+
+// =================dropdownYear - semester============
+
+document.addEventListener("click", (e) => {
+  const dropdown = e.target.closest(".semester-search");
+  if (!dropdown) {
+    document
+      .querySelectorAll(".semester-year-dropdown-menu.show")
+      .forEach((menu) => {
+        menu.classList.remove("show");
+      });
+    return;
+  }
+
+  // click vào ô
+  if (e.target.closest(".semester-year-dropdown-selected")) {
+    const currentMenu = dropdown.querySelector(".semester-year-dropdown-menu");
+
+    document.querySelectorAll(".semester-year-dropdown-menu").forEach((m) => {
+      if (m !== currentMenu) m.classList.remove("show");
+    });
+
+    if (currentMenu) {
+      currentMenu.classList.toggle("show");
+    }
+    return;
+  }
+
+  // click chọn option
+  const option = e.target.closest(".semester-year-dropdown-option");
+  if (option) {
+    const selectedText = dropdown.querySelector(".semester-year-selected-text");
+    if (selectedText) {
+      selectedText.textContent = option.textContent;
+    }
+
+    dropdown
+      .querySelector(".semester-year-dropdown-menu")
+      .classList.remove("show");
+
+    const filterYear = option.dataset.value ?? "";
+    const queryUrl = `pages/semester.php?filterYear=${encodeURIComponent(filterYear)}`;
+    loadPage(queryUrl);
+
+    return;
+  }
+});
+
+// =================createSemester - semester============
+
+document.addEventListener("submit", (e) => {
+  if (e.target.id !== "semesterForm") return;
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  document.getElementById("notice-semester-modal").classList.add("show");
+
+  fetch("pages/semester.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        // alert("🎉 " + data.message);
+        document.getElementById("notice-semester-message").textContent =
+          data.message;
+
+        document
+          .getElementById("btn-cancel-notice-semester")
+          .classList.remove("hidden");
+        document
+          .getElementById("btn-cancel-notice-error-semester")
+          .classList.add("hidden");
+
+        e.target.reset();
+        const semesterText = e.target.querySelector(
+          '.semester-create-item[data-type="semester"] .semester-selected-text',
+        );
+        if (semesterText) semesterText.textContent = "--Chọn học kỳ--";
+        const yearText = e.target.querySelector(
+          '.semester-create-item[data-type="year"] .semester-selected-text',
+        );
+        if (yearText) yearText.textContent = "--Chọn năm học--";
+      } else {
+        document.getElementById("notice-semester-message").textContent =
+          data.message;
+        document
+          .getElementById("btn-cancel-notice-error-semester")
+          .classList.remove("hidden");
+        document
+          .getElementById("btn-cancel-notice-semester")
+          .classList.add("hidden");
+      }
+    })
+    .catch(console.error);
+});
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-cancel-notice-semester");
+  if (!btnCancel) return;
+  document.getElementById("notice-semester-modal").classList.remove("show");
+  loadPage("pages/semester.php");
+});
+document.addEventListener("click", (e) => {
+  const btnCancelError = e.target.closest("#btn-cancel-notice-error-semester");
+  if (!btnCancelError) return;
+  document.getElementById("notice-semester-modal").classList.remove("show");
+});
+
+// =================popupDeleteSemester - semester============
+let deleteSemesterId = null;
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".delete-semester-btn");
+  if (!btn) return;
+  deleteSemesterId = btn.dataset.id;
+  document.getElementById("delete-semester-message").textContent =
+    `Bạn có chắc chắn muốn xóa học kỳ ${btn.dataset.name}?`;
+  document.getElementById("delete-semester-modal").classList.add("show");
+  if (
+    document.getElementById("btn-confirm-delete-semester").classList == "hidden"
+  ) {
+    document
+      .getElementById("btn-confirm-delete-semester")
+      .classList.remove("hidden");
+  }
+});
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btn-confirm-delete-semester");
+  if (!btn) return;
+  fetch("../includes/delete-semester.php", {
+    method: "POST",
+    body: new URLSearchParams({
+      id: deleteSemesterId,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        document.getElementById("delete-semester-message").textContent =
+          data.message;
+        document
+          .getElementById("btn-confirm-delete-semester")
+          .classList.add("hidden");
+        document.getElementById("delete-semester-modal-title").textContent =
+          "Thông báo";
+        document.getElementById("btn-cancel-delete-semester").textContent =
+          "Đóng";
+        loadPage("pages/semester.php");
+      } else {
+        document.getElementById("delete-semester-message").textContent =
+          data.message;
+        document
+          .getElementById("btn-confirm-delete-semester")
+          .classList.add("hidden");
+        document.getElementById("delete-semester-modal-title").textContent =
+          "Lỗi";
+      }
+    });
+});
+
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-cancel-delete-semester");
+  if (!btnCancel) return;
+  document.getElementById("delete-semester-modal").classList.remove("show");
+});
+
+// =================chuyenSangEditActManagement - act-management============
+let currentActManageId = null;
+document.addEventListener("click", (e) => {
+  const rowAct = e.target.closest(".row-act-management");
+  if (!rowAct) return;
+  currentActManageId = rowAct.dataset.id;
+  loadPage(`pages/edit-management-act.php?id=${currentActManageId}`);
 });
