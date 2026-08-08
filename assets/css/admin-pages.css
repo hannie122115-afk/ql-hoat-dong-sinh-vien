@@ -603,7 +603,7 @@
    ========================================== */
 /* Bắt buộc ẩn element khi có class hidden */
 .hidden {
-  display: none !important;
+  display: none;
 }
 
 /* ==========================================
@@ -672,3 +672,42 @@
 /* .hidden {
   display: none !important;
 } */
+/* Tiêu đề Modal */
+#notice-account-modal-title {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Nội dung thông báo */
+#notice-account-message {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  word-break: break-word; /* Tự xuống dòng nếu thông báo dài */
+}
+
+/* Nút Đóng - THÀNH CÔNG (Màu xanh dương / xanh lá) */
+#btn-cancel-notice-account {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+#btn-cancel-notice-account:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Nút Đóng - BÁO LỖI (Màu đỏ) */
+#btn-cancel-notice-error-account {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+#btn-cancel-notice-error-account:hover {
+  background-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}

@@ -14,10 +14,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $unitId = $_POST['unitId'] ?? '';
     $orgName = $_POST['orgName'] ?? '';
-    $orgInitName = $_POST['orgInitName'] ?? '';
     $orgEmail = $_POST['orgEmail'] ?? '';
     $orgPassword = strstr($orgEmail, '@', true);
     $password_hashed = password_hash($orgPassword, PASSWORD_DEFAULT);
+
+    if(empty($unitId)){
+        echo json_encode(['success' => false, 'message' => 'Vui lòng chọn đơn vị!']);
+        exit;
+    }elseif(empty($orgName)){
+        echo json_encode(['success' => false, 'message' => 'Vui lòng nhập tên tổ chức / câu lạc bộ!']);
+        exit;
+    }elseif(empty($orgEmail)){
+        echo json_encode(['success' => false, 'message' => 'Vui lòng nhập email tổ chức / câu lạc bộ!']);
+        exit;
+    }
+
+    if(empty($orgName)){
+        echo json_encode(['success' => false, 'message' => 'Vui lòng nhập tên tổ chức / câu lạc bộ!']);
+        exit;
+    }elseif(empty($orgEmail)){
+        echo json_encode(['success' => false, 'message' => 'Vui lòng nhập email tổ chức / câu lạc bộ!']);
+        exit;
+    }elseif(empty($unitId)){
+        echo json_encode(['success' => false, 'message' => 'Vui lòng chọn đơn vị!']);
+        exit;
+    }
 
     try{
         $conn->beginTransaction();
@@ -55,6 +76,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         exit;
     }
 }
+
 
 $type = $_GET['type'] ?? 'account';
 $keyword = trim($_GET['keyword'] ?? '');
@@ -117,7 +139,7 @@ $TongSo = $stmt5->fetchColumn();
                     <div class="account-create-org-item">
                         <span>Email đăng nhập</span>
                         <div class="account-create-org-input">
-                            <input type="text" name="orgEmail" id="" placeholder="Nhập email đăng nhập">
+                            <input type="email" name="orgEmail" id="" placeholder="Nhập email đăng nhập">
                         </div>
                     </div>
                     <div class="account-create-org-item">
@@ -272,6 +294,16 @@ $TongSo = $stmt5->fetchColumn();
                     <div class="model-btn">
                         <button id="btn-cancel-unblock-account">Hủy</button>
                         <button id="btn-confirm-unblock-account">Mở khóa</button>
+                    </div>
+                </div>
+            </div>
+            <div id="notice-account-modal" class="modal">
+                <div class="modal-content">
+                    <h3 id="notice-account-modal-title">Thông báo</h3>
+                    <p id="notice-account-message"></p>
+                    <div class="model-btn">
+                        <button id="btn-cancel-notice-account">Đóng</button>
+                        <button id="btn-cancel-notice-error-account" class="hidden">Đóng</button>
                     </div>
                 </div>
             </div>

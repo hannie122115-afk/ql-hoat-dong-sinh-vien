@@ -134,6 +134,8 @@ document.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
 
+  document.getElementById("notice-account-modal").classList.add("show");
+
   fetch("pages/account.php", {
     method: "POST",
     body: formData,
@@ -141,14 +143,44 @@ document.addEventListener("submit", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        alert(data.message);
-        sessionStorage.setItem("reloadAndLoadPage", "pages/account.php");
-        location.reload();
+        // alert(data.message);
+        // sessionStorage.setItem("reloadAndLoadPage", "pages/account.php");
+        // location.reload();
+        // loadPage("pages/account.php");
+        document.getElementById("notice-account-message").textContent =
+          data.message;
+        document
+          .getElementById("btn-cancel-notice-account")
+          .classList.remove("hidden");
+        document
+          .getElementById("btn-cancel-notice-error-account")
+          .classList.add("hidden");
+
+        e.target.reset();
       } else {
-        alert(data.message);
+        // alert(data.message);
+        document.getElementById("notice-account-message").textContent =
+          data.message;
+        document
+          .getElementById("btn-cancel-notice-error-account")
+          .classList.remove("hidden");
+        document
+          .getElementById("btn-cancel-notice-account")
+          .classList.add("hidden");
       }
     })
     .catch(console.error);
+});
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-cancel-notice-account");
+  if (!btnCancel) return;
+  document.getElementById("notice-account-modal").classList.remove("show");
+  loadPage("pages/account.php");
+});
+document.addEventListener("click", (e) => {
+  const btnCancelError = e.target.closest("#btn-cancel-notice-error-account");
+  if (!btnCancelError) return;
+  document.getElementById("notice-account-modal").classList.remove("show");
 });
 
 // =================search - account============
@@ -236,6 +268,13 @@ document.addEventListener("click", function (e) {
   document.getElementById("delete-account-message").textContent =
     `Bạn có chắc chắn muốn xóa tài khoản "${btn.dataset.name}"?`;
   document.getElementById("delete-account-modal").classList.add("show");
+  if (
+    document.getElementById("btn-confirm-delete-account").classList == "hidden"
+  ) {
+    document
+      .getElementById("btn-confirm-delete-account")
+      .classList.remove("hidden");
+  }
 });
 
 document.addEventListener("click", (e) => {
@@ -250,10 +289,23 @@ document.addEventListener("click", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        alert("Xóa tài khoảng thành công!");
-        loadPage("pages/account.php");
+        document.getElementById("delete-account-message").textContent =
+          "Xóa tài khoản thành công!";
+        document
+          .getElementById("btn-confirm-delete-account")
+          .classList.add("hidden");
+        document.getElementById("delete-account-modal-title").textContent =
+          "Thông báo";
+        document.getElementById("btn-cancel-delete-account").textContent =
+          "Đóng";
       } else {
-        alert(data.message);
+        document.getElementById("delete-account-message").textContent =
+          "Không thể xóa tài khoản!";
+        document
+          .getElementById("btn-confirm-delete-account")
+          .classList.add("hidden");
+        document.getElementById("delete-account-modal-title").textContent =
+          "Lỗi";
       }
     });
 });
@@ -262,6 +314,7 @@ document.addEventListener("click", (e) => {
   const btnCancel = e.target.closest("#btn-cancel-delete-account");
   if (!btnCancel) return;
   document.getElementById("delete-account-modal").classList.remove("show");
+  loadPage("pages/account.php");
 });
 
 // =================popupBlockAccount - account============
@@ -287,10 +340,23 @@ document.addEventListener("click", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        alert("Khóa tài khoản thành công!");
-        loadPage("pages/account.php");
+        document.getElementById("block-account-message").textContent =
+          "Khóa tài khoản thành công";
+        document
+          .getElementById("btn-confirm-block-account")
+          .classList.add("hidden");
+        document.getElementById("block-account-modal-title").textContent =
+          "Thông báo";
+        document.getElementById("btn-cancel-block-account").textContent =
+          "Đóng";
       } else {
-        alert(data.message);
+        document.getElementById("block-account-message").textContent =
+          "Không thể khóa tài khoản!";
+        document
+          .getElementById("btn-confirm-block-account")
+          .classList.add("hidden");
+        document.getElementById("block-account-modal-title").textContent =
+          "Lỗi";
       }
     });
 });
@@ -299,6 +365,7 @@ document.addEventListener("click", (e) => {
   const btnCancel = e.target.closest("#btn-cancel-block-account");
   if (!btnCancel) return;
   document.getElementById("block-account-modal").classList.remove("show");
+  loadPage("pages/account.php");
 });
 
 // =================popupUnblockAccount - account============
@@ -324,10 +391,23 @@ document.addEventListener("click", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        alert("Mở khóa tài khoản thành công!");
-        loadPage("pages/account.php");
+        document.getElementById("unblock-account-message").textContent =
+          "Mở khóa tài khoản thành công";
+        document
+          .getElementById("btn-confirm-unblock-account")
+          .classList.add("hidden");
+        document.getElementById("unblock-account-modal-title").textContent =
+          "Thông báo";
+        document.getElementById("btn-cancel-unblock-account").textContent =
+          "Đóng";
       } else {
-        alert(data.message);
+        document.getElementById("unblock-account-message").textContent =
+          "Không thể mở khóa tài khoản!";
+        document
+          .getElementById("btn-confirm-unblock-account")
+          .classList.add("hidden");
+        document.getElementById("unblock-account-modal-title").textContent =
+          "Lỗi";
       }
     });
 });
@@ -336,6 +416,7 @@ document.addEventListener("click", (e) => {
   const btnCancel = e.target.closest("#btn-cancel-unblock-account");
   if (!btnCancel) return;
   document.getElementById("unblock-account-modal").classList.remove("show");
+  loadPage("pages/account.php");
 });
 
 // =================dropdownCreateSemester - semester============
@@ -446,7 +527,6 @@ document.addEventListener("submit", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        // alert("🎉 " + data.message);
         document.getElementById("notice-semester-message").textContent =
           data.message;
 
@@ -489,6 +569,81 @@ document.addEventListener("click", (e) => {
   const btnCancelError = e.target.closest("#btn-cancel-notice-error-semester");
   if (!btnCancelError) return;
   document.getElementById("notice-semester-modal").classList.remove("show");
+});
+
+document.addEventListener("submit", (e) => {
+  if (e.target.id !== "editSemesterForm") return;
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  formData.append("action", "edit");
+
+  document.getElementById("notice-semester-modal").classList.add("show");
+
+  fetch("pages/semester.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        document.getElementById("notice-semester-message").textContent =
+          data.message;
+
+        document
+          .getElementById("btn-cancel-notice-semester")
+          .classList.remove("hidden");
+        document
+          .getElementById("btn-cancel-notice-error-semester")
+          .classList.add("hidden");
+
+        document.getElementById("edit-form-wrapper").classList.add("hidden");
+        document
+          .getElementById("create-form-wrapper")
+          .classList.remove("hidden");
+
+        e.target.reset();
+      } else {
+        document.getElementById("notice-semester-message").textContent =
+          data.message;
+        document
+          .getElementById("btn-cancel-notice-error-semester")
+          .classList.remove("hidden");
+        document
+          .getElementById("btn-cancel-notice-semester")
+          .classList.add("hidden");
+      }
+    })
+    .catch(console.error);
+});
+
+document.addEventListener("click", (e) => {
+  const btnEdit = e.target.closest(".edit-semester-btn");
+  if (btnEdit) {
+    const id = btnEdit.dataset.id;
+    const hk = btnEdit.dataset.hk;
+    const nam = btnEdit.dataset.nam;
+    const start = btnEdit.dataset.start;
+    const end = btnEdit.dataset.end;
+
+    // document.getElementById("edit-maHocKy").value = id;
+    document.getElementById("edit-input-semester").value = hk;
+    document.getElementById("edit-input-year").value = nam;
+    document.getElementById("edit-semester-text").value = "Học kỳ " + hk;
+    document.getElementById("edit-year-text").value = nam;
+    document.getElementById("edit-dateStart").value = start;
+    document.getElementById("edit-dateEnd").value = end;
+
+    document.getElementById("create-form-wrapper").classList.add("hidden");
+    document.getElementById("edit-form-wrapper").classList.remove("hidden");
+    return;
+  }
+
+  const btnCancelEdit = e.target.closest("#btn-cancel-edit");
+  if (btnCancelEdit) {
+    document.getElementById("edit-form-wrapper").classList.add("hidden");
+    document.getElementById("create-form-wrapper").classList.remove("hidden");
+  }
 });
 
 // =================popupDeleteSemester - semester============

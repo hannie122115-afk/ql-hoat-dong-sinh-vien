@@ -11,7 +11,11 @@ if(!isset($_SESSION['user_id'])){
 require_once "../../config/db.php";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+    
+    if(ob_get_length()) ob_clean();
+    header('Content-Type: application/json; charset=utf-8');
 
+    $action = $_POST['action'] ?? '';
     $semester = $_POST['semester'] ?? '';
     $year = $_POST['year'] ?? '';
     $dateStart = $_POST['dateStart'] ?? '';
@@ -39,30 +43,48 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             exit;
         } 
     }
-    if(empty($error)){
-        try{
+
+    if ($action === 'edit') {
+
+        try {
             
-            $sql1 = "UPDATE HocKy
-                    SET ThoiGianBatDau = ? 
-                        , ThoiGianKetThuc = ?
-                    WHERE HocKy = ?
-                        AND NamHoc = ?";
-            $stmt1 = $conn->prepare($sql1);
-            $stmt1->execute([$dateStart, $dateEnd, $semester, $year]);
+            $sql5 = "UPDATE HocKy
+                          SET ThoiGianBatDau = ?
+                            , ThoiGianKetThuc = ?
+                          WHERE HocKy = ? AND NamHoc = ?";
+            $stmt5 = $conn->prepare($sql5);
+            $stmt5->execute([$dateStart, $dateEnd, $semester, $year]);
 
             echo json_encode([
                 'success' => true, 
-                'message' => 'Tạo học kỳ thành công']);
+                'message' => 'Cập nhật học kỳ thành công'
+                ]);
             exit;
-        }catch(PDOException $e){
+
+        } catch (PDOException $e) {
             echo json_encode([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
-            ]);
+                'success' => false, 
+                'message' => 'Lỗi cập nhật: ' . $e->getMessage()
+                ]);
             exit;
         }
     }
+
+    try {
+        $sql1 = "UPDATE HocKy
+                SET ThoiGianBatDau = ?, ThoiGianKetThuc = ?
+                WHERE HocKy = ? AND NamHoc = ?";
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->execute([$dateStart, $dateEnd, $semester, $year]);
+
+        echo json_encode(['success' => true, 'message' => 'Tạo học kỳ thành công']);
+        exit;
+    } catch(PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
+        exit;
+    }
 }
+
   
 $sql3 = "SELECT DISTINCT NamHoc
         FROM HocKy
@@ -108,7 +130,7 @@ $stmt2->execute($params);
             <h2>Quản lý học kỳ</h2>
             <span>Quản lý và tạo học kì mới cho năm học</span>
         </div>
-        <div class="semester-create-container">
+        <div class="semester-create-container" id="create-form-wrapper">
             <h3>Tạo học kì mới</h3>
             <div class="semester-create">
                 <form action="" id="semesterForm">
@@ -180,8 +202,52 @@ $stmt2->execute($params);
                 </form>
             </div>
         </div>
+        <!-- edit -->
+        <div class="semester-create-container hidden" id="edit-form-wrapper">
+            <h3>Cập nhật học kỳ</h3>
+            <div class="semester-create">
+                <form action="" id="editSemesterForm">
+                    <input type="hidden" name="action" value="edit">
+                    <!-- <input type="hidden" name="maHocKy" id="edit-maHocKy"> -->
+
+                    <div class="semester-create-item" data-type="semester">
+                        <span>Học kỳ</span>
+                        <div class="semester-create-input">
+                            <input type="text" name="dateStart" id="edit-semester-text" class="input-edit-semester-readonly" readonly>
+                        </div>
+                        <input type="hidden" name="semester" id="edit-input-semester" value="">
+                    </div>
+
+                    <div class="semester-create-item" data-type="year">
+                        <span>Năm học</span>
+                        <input type="text" name="dateStart" id="edit-year-text" class="input-edit-semester-readonly" readonly>
+                        <input type="hidden" name="year" id="edit-input-year" value="">
+                    </div>
+
+                    <div class="semester-create-item">
+                        <span>Thời gian bắt đầu</span>
+                        <div class="semester-create-input">
+                            <input type="date" name="dateStart" id="edit-dateStart">
+                        </div>
+                    </div>
+
+                    <div class="semester-create-item">
+                        <span>Thời gian kết thúc</span>
+                        <div class="semester-create-input">
+                            <input type="date" name="dateEnd" id="edit-dateEnd">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit">Lưu cập nhật</button>
+                        <button type="button" id="btn-cancel-edit" >Hủy bỏ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="semester-list">
             <h3>Danh sách học kỳ</h3>
+            <!-- create -->
             <div class="header-semester-list">
                 <div class="semester-search-container">
                     <div class="semester-search" data-type="year">
@@ -199,7 +265,6 @@ $stmt2->execute($params);
                         </div>
                     </div>
                 </div>
-
             </div>
             <table class="semester-table">
                 <thead>
@@ -238,7 +303,11 @@ $stmt2->execute($params);
                             </div>
                         </td>
                         <td>
-                            <button class="edit-semester-btn"  data-id="<?= $semester['MaHocKy'] ?>" data-name="<?= htmlspecialchars($semester['HocKy']) ?> (<?= htmlspecialchars($semester['NamHoc']) ?>)">
+                            <button class="edit-semester-btn"  data-id="<?= $semester['MaHocKy'] ?>" 
+                            data-hk="<?= $semester['HocKy'] ?>"
+                            data-nam="<?= $semester['NamHoc'] ?>"
+                            data-start="<?= $semester['ThoiGianBatDau'] ?>"
+                            data-end="<?= $semester['ThoiGianKetThuc'] ?>">
                                 Sửa
                             </button>
 
