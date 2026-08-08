@@ -213,14 +213,17 @@ $stmt2->execute($params);
                     <div class="semester-create-item" data-type="semester">
                         <span>Học kỳ</span>
                         <div class="semester-create-input">
-                            <input type="text" name="dateStart" id="edit-semester-text" class="input-edit-semester-readonly" readonly>
+                            <input type="text" name="semester" id="edit-semester-text" class="input-edit-semester-readonly" readonly>
                         </div>
                         <input type="hidden" name="semester" id="edit-input-semester" value="">
                     </div>
 
                     <div class="semester-create-item" data-type="year">
                         <span>Năm học</span>
-                        <input type="text" name="dateStart" id="edit-year-text" class="input-edit-semester-readonly" readonly>
+                        <div class="semester-create-input">
+                            <input type="text" name="semester" id="edit-year-text" class="input-edit-semester-readonly" readonly>
+                        </div>
+                        
                         <input type="hidden" name="year" id="edit-input-year" value="">
                     </div>
 

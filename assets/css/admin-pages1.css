@@ -1,0 +1,713 @@
+/* Container chính chứa thanh tìm kiếm */
+.account-search-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-family: Arial, sans-serif;
+}
+
+/* Custom Dropdown Container */
+.account-custom-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  user-select: none; /* Tránh bôi đen chữ khi double click */
+}
+
+/* Khung hiển thị giá trị đã chọn */
+.account-dropdown-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  min-width: 180px;
+  transition: border-color 0.2s ease;
+}
+
+.account-dropdown-selected:hover {
+  border-color: #007bff;
+}
+
+/* Menu chứa các tùy chọn (Mặc định ẩn) */
+.account-dropdown-menu {
+  display: none; /* Ẩn menu đi */
+  position: absolute;
+  top: 100%;
+  left: 88px; /* Căn lề vừa với sau chữ "Tìm kiếm theo:" */
+  right: 0;
+  margin-top: 5px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+/* CLASS QUAN TRỌNG: Mở menu khi JavaScript toggle class này */
+.account-dropdown-menu.show {
+  display: block;
+}
+
+/* Từng Option trong menu */
+.account-dropdown-option {
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.account-dropdown-option:hover {
+  background-color: #f1f5f9;
+  color: #007bff;
+}
+
+/* Khung Tìm kiếm & Input */
+.account-search {
+  position: relative;
+}
+
+.search-account-input {
+  display: flex;
+  align-items: center;
+}
+
+.account-search-input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  outline: none;
+  width: 250px;
+  font-size: 14px;
+}
+
+.account-search-input:focus {
+  border-color: #007bff;
+}
+
+/* Nút bấm Tìm kiếm */
+#btn-search-account {
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#btn-search-account:hover {
+  background-color: #0056b3;
+}
+
+/* --------------------------------------------------------------------------
+   POPUP MODAL (XÓA, KHÓA, MỞ KHÓA TÀI KHOẢN)
+   -------------------------------------------------------------------------- */
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hiển thị khi JS thêm class 'show' */
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.modal-content h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.modal-content p {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin-bottom: 1.25rem;
+  word-break: break-word;
+}
+
+.model-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* CSS dùng chung cho tất cả các nút trong Modal */
+.model-btn button {
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Nút Hủy */
+#btn-cancel-delete-account,
+#btn-cancel-block-account,
+#btn-cancel-unblock-account {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+#btn-cancel-delete-account:hover,
+#btn-cancel-block-account:hover,
+#btn-cancel-unblock-account:hover {
+  background-color: #e2e8f0;
+}
+
+/* Nút Xóa (Màu đỏ) */
+#btn-confirm-delete-account {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+#btn-confirm-delete-account:hover {
+  background-color: #dc2626;
+}
+
+/* Nút Khóa (Màu cam) */
+#btn-confirm-block-account {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+#btn-confirm-block-account:hover {
+  background-color: #d97706;
+}
+
+/* Nút Mở khóa (Màu xanh lá) */
+#btn-confirm-unblock-account {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+#btn-confirm-unblock-account:hover {
+  background-color: #059669;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= CSS DROPDOWN SEMESTER ================= */
+
+/* Container chính của mỗi ô filter */
+.semester-create-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 220px; /* Bạn có thể tùy chỉnh độ rộng theo layout */
+  font-family: inherit;
+}
+
+/* Label phía trên dropdown (Học kỳ, Năm học) */
+.semester-create-item > span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Ô hiển thị giá trị đang chọn (Trigger) */
+.semester-dropdown-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background-color: #ffffff;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.semester-dropdown-selected:hover {
+  border-color: #409eff;
+  box-shadow: 0 0 4px rgba(64, 158, 255, 0.2);
+}
+
+.semester-selected-text {
+  font-size: 14px;
+  color: #303133;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.semester-dropdown-selected i {
+  font-size: 12px;
+  color: #909399;
+  transition: transform 0.3s ease;
+}
+
+/* Xoay icon mũi tên khi dropdown được mở */
+.semester-create-item:has(.semester-dropdown-menu.show)
+  .semester-dropdown-selected
+  i {
+  transform: rotate(180deg);
+}
+
+/* Menu chứa danh sách option */
+.semester-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 220px; /* Tự động xuất hiện thanh cuộn nếu danh sách dài */
+  overflow-y: auto;
+
+  /* Hiệu ứng Ẩn/Hiện */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s;
+}
+
+/* Khi có class .show từ JS */
+.semester-dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Từng Option trong danh sách */
+.semester-dropdown-option {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #606266;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.semester-dropdown-option:hover {
+  background-color: #f5f7fa;
+  color: #409eff;
+}
+
+/* Tùy chỉnh thanh cuộn (Scrollbar) cho đẹp mắt */
+.semester-dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.semester-dropdown-menu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0 8px 8px 0;
+}
+
+.semester-dropdown-menu::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.semester-dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* ================= DROPDOWN YEAR SEMESTER ================= */
+
+/* Container bao ngoài cùng (Header / Filter Bar) */
+.header-semester-list {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.semester-search-container {
+  display: flex;
+  gap: 16px;
+}
+
+/* Thẻ chứa chính của Dropdown */
+.semester-search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 220px; /* Độ rộng ô filter */
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Nhãn phía trên ("Năm học") */
+.semester-search > span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Ô kích hoạt dropdown (Khung hiển thị giá trị chọn) */
+.semester-year-dropdown-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.semester-year-dropdown-selected:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.semester-year-selected-text {
+  font-size: 14px;
+  color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Biểu tượng mũi tên */
+.semester-year-dropdown-selected i {
+  font-size: 12px;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+/* Xoay mũi tên khi danh sách hiển thị */
+.semester-search:has(.semester-year-dropdown-menu.show)
+  .semester-year-dropdown-selected
+  i {
+  transform: rotate(180deg);
+}
+
+/* Danh sách sổ xuống (Menu) */
+.semester-year-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  max-height: 220px;
+  overflow-y: auto;
+
+  /* Ẩn mặc định */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s;
+}
+
+/* Khi thêm class .show từ Javascript */
+.semester-year-dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Mỗi lựa chọn trong Menu */
+.semester-year-dropdown-option {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #4b5563;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.semester-year-dropdown-option:hover {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+/* Tuỳ chỉnh Scrollbar cho Menu khi danh sách Năm học quá dài */
+.semester-year-dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.semester-year-dropdown-menu::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0 8px 8px 0;
+}
+
+.semester-year-dropdown-menu::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.semester-year-dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ==========================================
+   1. MÔ-ĐUN MODAL (OVERLAY & KHUNG HỘP THOẠI)
+   ========================================== */
+.modal {
+  display: none; /* Mặc định ẩn */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Lớp nền tối nhẹ */
+  backdrop-filter: blur(3px); /* Hiệu ứng mờ hậu cảnh */
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Khi JS thêm class .show thì hiện Modal */
+.modal.show {
+  display: flex;
+  opacity: 1;
+}
+
+/* Hộp nội dung chính của Modal */
+.modal-content {
+  background: #ffffff;
+  padding: 24px 28px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  transform: translateY(-15px);
+  transition: transform 0.2s ease-in-out;
+}
+
+.modal.show .modal-content {
+  transform: translateY(0);
+}
+
+/* ==========================================
+   2. TIÊU ĐỀ & NỘI DUNG THÔNG BÁO
+   ========================================== */
+#delete-semester-modal-title {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #0f172a;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+#delete-semester-message {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  word-break: break-word; /* Tránh tràn chữ nếu câu thông báo dài */
+}
+
+/* ==========================================
+   3. KHU VỰC NÚT BẤM (BUTTONS)
+   ========================================== */
+.model-btn {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.model-btn button {
+  padding: 9px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+/* Nút Hủy / Đóng */
+#btn-cancel-delete-semester {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+#btn-cancel-delete-semester:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Nút Xóa */
+#btn-confirm-delete-semester {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+#btn-confirm-delete-semester:hover {
+  background-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* ==========================================
+   4. CLASS TIỆN ÍCHẨN (UTILITY)
+   ========================================== */
+/* Bắt buộc ẩn element khi có class hidden */
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================
+   2. TIÊU ĐỀ & NỘI DUNG THÔNG BÁO
+   ========================================== */
+#notice-semester-modal-title {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #0f172a;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+#notice-semester-message {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  word-break: break-word; /* Tránh bể khung nếu câu thông báo dài */
+}
+
+/* ==========================================
+   3. NÚT ĐÓNG (BUTTON)
+   ========================================== */
+.model-btn {
+  display: flex;
+  justify-content: center;
+}
+
+#btn-cancel-notice-semester {
+  padding: 9px 28px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background-color: #2563eb; /* Màu xanh lá/xanh dương chủ đạo */
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+#btn-cancel-notice-semester:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Nút Đóng Lỗi (Màu xám/đỏ nhẹ để phân biệt với nút đóng thường) */
+#btn-cancel-notice-error-semester {
+  padding: 9px 28px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background-color: #ef4444; /* Tone màu đỏ báo lỗi */
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+#btn-cancel-notice-error-semester:hover {
+  background-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Đảm bảo class hidden luôn ưu tiên ẩn nút */
+/* .hidden {
+  display: none !important;
+} */
+/* Tiêu đề Modal */
+#notice-account-modal-title {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Nội dung thông báo */
+#notice-account-message {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  word-break: break-word; /* Tự xuống dòng nếu thông báo dài */
+}
+
+/* Nút Đóng - THÀNH CÔNG (Màu xanh dương / xanh lá) */
+#btn-cancel-notice-account {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+#btn-cancel-notice-account:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Nút Đóng - BÁO LỖI (Màu đỏ) */
+#btn-cancel-notice-error-account {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+#btn-cancel-notice-error-account:hover {
+  background-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}

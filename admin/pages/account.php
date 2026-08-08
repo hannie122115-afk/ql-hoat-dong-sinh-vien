@@ -190,83 +190,91 @@ $TongSo = $stmt5->fetchColumn();
                 </div>
 
             </div>
-            <table class="account-table">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Tên tổ chức / sinh viên</th>
-                        <th>Đơn vị</th>
-                        <th>Email</th>
-                        <th>Vai trò</th>
-                        <th>Ngày tạo</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $stt = 1; 
-                    while ($account = $stmt4->fetch(PDO::FETCH_ASSOC)):?>
-                    <tr>
-                        <td><?= $stt++ ?></td>
-                        <td>
-                            <div class="account-info">
-                                <h4><?= $account['TenTaiKhoan'] ?></h4>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="account-info">
-                                <h4><?= $account['TenDonVi'] ?></h4>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="account-info">
-                                <h4><?= $account['Email'] ?></h4>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="account-info">
-                                <?php if($account['Role'] == 1):?>
-                                <h4>Tổ chức / Câu lạc bộ</h4>
-                                <?php elseif($account['Role'] == 2):?>
-                                <h4>Quản trị viên</h4>
-                                <?php elseif($account['Role'] == 0):?>
-                                <h4>Sinh viên</h4>
-                                <?php endif;?>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="account-info">
-                                <h4><?= $account['NgayTao'] ?></h4>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="account-info">
+            <div class="table-wrapper">
+                <table class="account-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên tổ chức / sinh viên</th>
+                            <th>Đơn vị</th>
+                            <th>Email</th>
+                            <th>Vai trò</th>
+                            <th>Ngày tạo</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $stt = 1; 
+                        while ($account = $stmt4->fetch(PDO::FETCH_ASSOC)):?>
+                        <tr class="table-row-account"
+                            data-name="<?= $account['TenTaiKhoan'] ?>"
+                            data-unit="<?= $account['TenDonVi'] ?>"
+                            data-email="<?= $account['Email'] ?>"
+                            data-role="<?= $account['Role']?>"
+                            data-date="<?= $account['NgayTao'] ?>"
+                            data-status="<?= $account['TrangThai'] ?>">
+                            <td><?= $stt++ ?></td>
+                            <td>
+                                <div class="account-info">
+                                    <span><?= $account['TenTaiKhoan'] ?></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="account-info">
+                                    <span><?= $account['TenDonVi'] ?></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="account-info">
+                                    <span><?= $account['Email'] ?></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="account-info">
+                                    <?php if($account['Role'] == 1):?>
+                                    <span>Tổ chức</span>
+                                    <?php elseif($account['Role'] == 2):?>
+                                    <span>Quản trị viên</span>
+                                    <?php elseif($account['Role'] == 0):?>
+                                    <span>Sinh viên</span>
+                                    <?php endif;?>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="account-info">
+                                    <span><?= $account['NgayTao'] ?></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="account-info">
+                                    <?php if($account['TrangThai'] == 1): ?>
+                                    <span>Đang hoạt động</span>
+                                    <?php else: ?>
+                                    <span>Đã khóa</span>
+                                    <?php endif; ?>    
+                                </div>
+                            </td>
+                            <td>
                                 <?php if($account['TrangThai'] == 1): ?>
-                                <h4>Đang hoạt động</h4>
+                                    <button class="block-account-btn " data-id="<?= $account['Email'] ?>" data-name="<?= htmlspecialchars($account['TenTaiKhoan']) ?>">
+                                        Khóa
+                                    </button>
                                 <?php else: ?>
-                                <h4>Đã khóa</h4>
-                                <?php endif; ?>    
-                            </div>
-                        </td>
-                        <td>
-                            <?php if($account['TrangThai'] == 1): ?>
-                                <button class="block-account-btn " data-id="<?= $account['Email'] ?>" data-name="<?= htmlspecialchars($account['TenTaiKhoan']) ?>">
-                                    Khóa
+                                    <button class="unblock-account-btn " data-id="<?= $account['Email'] ?>" data-name="<?= htmlspecialchars($account['TenTaiKhoan']) ?>">
+                                        Mở khóa
+                                    </button>
+                                <?php endif; ?>
+                                
+                                <button class="delete-account-btn"  data-id="<?= $account['Email'] ?>" data-name="<?= htmlspecialchars($account['TenTaiKhoan']) ?>">
+                                    Xóa
                                 </button>
-                            <?php else: ?>
-                                <button class="unblock-account-btn " data-id="<?= $account['Email'] ?>" data-name="<?= htmlspecialchars($account['TenTaiKhoan']) ?>">
-                                    Mở khóa
-                                </button>
-                            <?php endif; ?>
-                            
-                            <button class="delete-account-btn"  data-id="<?= $account['Email'] ?>" data-name="<?= htmlspecialchars($account['TenTaiKhoan']) ?>">
-                                Xóa
-                            </button>
-                        </td>
-                    </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
             <div id="delete-account-modal" class="modal">
                 <div class="modal-content">
                     <h3>Xác nhận xóa</h3>
@@ -304,6 +312,15 @@ $TongSo = $stmt5->fetchColumn();
                     <div class="model-btn">
                         <button id="btn-cancel-notice-account">Đóng</button>
                         <button id="btn-cancel-notice-error-account" class="hidden">Đóng</button>
+                    </div>
+                </div>
+            </div>
+            <div id="info-account-modal" class="modal">
+                <div class="modal-content modal-content-lg">
+                    <h3 id="info-account-modal-title">Thông tin chi tiết</h3>
+                     <div id="info-account-message-container" class="info-account-message-container"></div>
+                    <div class="model-btn">
+                        <button id="btn-cancel-info-account">Đóng</button>
                     </div>
                 </div>
             </div>

@@ -89,10 +89,10 @@ $semester = $stmt4->fetch(PDO::FETCH_ASSOC);
                 </div>
                 <div class="homepage-statistic-title">
                     <span>Học kỳ hiện tại</span>
-                    <h3><?= $semester['NamHoc'] ?> - HK<?= $semester['NamHoc'] ?></h3>
+                    <h3>HK<?= $semester['HocKy'] ?></h3>
                     <?php $dateStart = new DateTime($semester['ThoiGianBatDau']); 
                         $dateEnd = new DateTime($semester['ThoiGianKetThuc']); ?>
-                    <span>Từ ngày <?= $dateStart->format('d/m/y') ?> đến ngày <?= $dateEnd->format('d/m/y') ?></span>
+                    <span><?= $dateStart->format('d/m/y') ?> - <?= $dateEnd->format('d/m/y') ?></span>
                 </div>
             </div>
         </div>

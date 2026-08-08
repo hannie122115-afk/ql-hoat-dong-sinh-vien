@@ -419,6 +419,64 @@ document.addEventListener("click", (e) => {
   loadPage("pages/account.php");
 });
 
+// =================popupInfoAccount - account============
+// let infoAccountId = null;
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".table-row-account");
+  if (!btn) return;
+
+  const accountName = btn.dataset.name || "Không có dữ liệu";
+  const accountUnit = btn.dataset.unit || "Không có dữ liệu";
+  const accountEmail = btn.dataset.email || "Không có dữ liệu";
+  const accountDate = btn.dataset.date || "Không có dữ liệu";
+
+  let accountStatus = "Đã khóa";
+  if (btn.dataset.status == 1) {
+    accountStatus = "Đang hoạt động";
+  }
+
+  let accountRole = "Sinh viên";
+  if (btn.dataset.role == 1) {
+    accountRole = "Tổ chức";
+  } else if (btn.dataset.role == 2) {
+    accountRole = "Quản trị viên";
+  }
+
+  document.getElementById("info-account-message-container").innerHTML = `
+    <div class="info-account-message">
+      <div class="info-account-message-item">Tên tổ chức / sinh viên</div>
+      <div class="info-account-message-item">${accountName}</div>
+    </div>
+    <div class="info-account-message">
+      <div class="info-account-message-item">Tên đơn vị</div>
+      <div class="info-account-message-item">${accountUnit}</div>
+    </div>
+    <div class="info-account-message">
+      <div class="info-account-message-item">Email liên hệ</div>
+      <div class="info-account-message-item">${accountEmail}</div>
+    </div>
+    <div class="info-account-message">
+      <div class="info-account-message-item">Vai trò</div>
+      <div class="info-account-message-item">${accountRole}</div>
+    </div>
+    <div class="info-account-message">
+      <div class="info-account-message-item">Ngày tạo</div>
+      <div class="info-account-message-item">${accountDate}</div>
+    </div>
+    <div class="info-account-message">
+      <div class="info-account-message-item">Trạng thái</div>
+      <div class="info-account-message-item">${accountStatus}</div>
+    </div>`;
+
+  document.getElementById("info-account-modal").classList.add("show");
+});
+
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-cancel-info-account");
+  if (!btnCancel) return;
+  document.getElementById("info-account-modal").classList.remove("show");
+});
+
 // =================dropdownCreateSemester - semester============
 
 document.addEventListener("click", (e) => {
@@ -704,11 +762,3 @@ document.addEventListener("click", (e) => {
   document.getElementById("delete-semester-modal").classList.remove("show");
 });
 
-// =================chuyenSangEditActManagement - act-management============
-let currentActManageId = null;
-document.addEventListener("click", (e) => {
-  const rowAct = e.target.closest(".row-act-management");
-  if (!rowAct) return;
-  currentActManageId = rowAct.dataset.id;
-  loadPage(`pages/edit-management-act.php?id=${currentActManageId}`);
-});
