@@ -19,6 +19,9 @@ $stmt4 = $conn->prepare("
            HocKy,
            ThoiGianKetThuc
     FROM HocKy
+    WHERE ThoiGianBatDau IS NOT NULL
+        AND ThoiGianKetThuc IS NOT NULL
+        AND ThoiGianBatDau >= NOW()
     ORDER BY NamHoc DESC, HocKy
 ");
 $stmt4->execute();
@@ -615,10 +618,24 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             </div>
         </form>
     </div>
-        <!-- <script src="../../assets/js/manager-pages.js"></script> -->
-
-    <!-- <script src="../assets/js/manager-pages.js"></script> -->
-    <!-- <script src="../assets/js/suggest.js"></script> -->
+    <div id="notice-create-act-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="notice-create-act-modal-title">Thông báo</h3>
+            <p id="notice-create-act-message"></p>
+            <div class="model-btn">
+                <button id="btn-close-notice-create-act">Đóng</button>
+            </div>
+        </div>
+    </div>
+    <div id="error-create-act-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="error-create-act-modal-title">Lỗi</h3>
+            <p id="error-create-act-message"></p>
+            <div class="model-btn">
+                <button id="btn-close-error-create-act">Đóng</button>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

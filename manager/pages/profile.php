@@ -299,5 +299,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
         </div>
     </div>
+    <div id="notice-save-profile-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="notice-save-profile-modal-title">Thông báo</h3>
+            <p id="notice-save-profile-message"></p>
+            <div class="model-btn">
+                <button id="btn-cancel-notice-save-profile">Đóng</button>
+            </div>
+        </div>
+    </div>
+    <div id="notice-password-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="notice-password-modal-title">Thông báo</h3>
+            <p id="notice-password-message"></p>
+            <div class="model-btn">
+                <button id="btn-close-notice-password">Đóng</button>
+                <button id="btn-close-notice-error-password" class="hidden">Đóng</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

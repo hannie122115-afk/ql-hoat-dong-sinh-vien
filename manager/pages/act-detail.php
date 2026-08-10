@@ -287,5 +287,14 @@ $semester = $stmt3->fetch(PDO::FETCH_ASSOC);
         </div>
 
     </div>
+    <div id="notice-act-detail-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="notice-act-detail-modal-title">Thông báo</h3>
+            <p id="notice-act-detail-message"></p>
+            <div class="model-btn">
+                <button id="btn-close-notice-act-detail">Đóng</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

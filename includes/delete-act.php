@@ -9,7 +9,7 @@ if(!isset($_SESSION['user_id'])){
 }
 
 require_once "../config/db.php";
-require_once "auth.php";
+// require_once "auth.php";
 
 $id = $_POST["id"] ?? "";
 

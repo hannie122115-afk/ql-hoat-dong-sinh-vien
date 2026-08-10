@@ -192,7 +192,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
           <div class="login-block register-block">
             <div class="login-title-block register-title-block">
               <span>
-                <i class="fa-regular fa-envelope"></i>
+                <i class="fa-solid fa-lock"></i>
               </span>
               <h3>Mật khẩu</h3>
             </div>
@@ -205,7 +205,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             <?php endif;?>
           </div>
 
-          <div class="login-memory-block">
+          <!-- <div class="login-memory-block">
             <div class="login-right-memory-block">
               <b>
                 <a href="#">Quên mật khẩu?</a>
@@ -215,7 +215,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
               <input type="checkbox" name="memory" id="" />
               <span>Ghi nhớ đăng nhập</span>
             </div>
-          </div>
+          </div> -->
 
           <div class="login-btn register-submit register-btn-submit">
             <input type="submit" value="Đăng nhập" />

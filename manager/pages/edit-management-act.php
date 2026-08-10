@@ -213,7 +213,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $_SESSION['success_update_act_message'] = 'Cập nhật hoạt động thành công!';
         echo json_encode([
             "success" => true, 
-            "message" => "Sửa hoạt động thành công",
+            "message" => "Cập nhật hoạt động thành công",
             "actCode" => $actManagementId]);
         exit;
     }catch(Exception $e){
@@ -257,9 +257,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         </div>
 
         <form action="" method="post">
-                <!-- STEP 1 -->
+          
             <div class="step-block active" id="step1">
-                <!-- <h1>ĐÂY LÀ BƯỚC 1</h1> -->
+               
                 <div class="act-info-container">
                     <div class="step1-block act-info-block">
                         <div class="act-title-block">
@@ -325,7 +325,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="act-info-item">
                                 <h4>Mục cộng điểm</h4>
                                 <div class="act-info-item-input">
-                                    <input type="text" class="search-input validate-input" data-type="bonus" id="bonus" value="<?= $actInfo['TenMucCongDiem'] ?>">
+                                    <input type="text" class="search-input validate-input" data-type="bonus" data-id="<?= $actInfo['MaMucCongDiem'] ?>" id="bonus" value="<?= $actInfo['TenMucCongDiem'] ?>">
                                 </div>
                                 <div class="suggest-box"></div>
                                 <div class="error-message"></div>
@@ -352,7 +352,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                             value="<?= $row['NamHoc'] ?>"
                                             data-semester="<?= $row['MaHocKy'] ?>"
                                             data-semestername="<?= $row['HocKy'] ?>"
-                                            data-end="<?= $row['ThoiGianKetThuc'] ?>" <?= $isSelected ?> >>
+                                            data-end="<?= $row['ThoiGianKetThuc'] ?>" <?= $isSelected ?> >
                                                 <?= $row['HocKy'] ?> (<?= $row['NamHoc'] ?>)
                                             </option>
                                         <?php }?>
@@ -409,9 +409,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     <div class="btn-step-next">Tiếp theo</div>
                 </div>
             </div>
-            <!-- STEP 2 -->
+            
             <div class="step-block" id="step2">
-                <!-- <h1>ĐÂY LÀ BƯỚC 2</h1> -->
                 <div class="act-question-container">
                     <div class="step2-block auto-ques-block" >
                         <div class="act-title-block">
@@ -503,9 +502,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     
                 </div>
             </div>
-            <!-- STEP 3 -->
+            
             <div class="step-block" id="step3">
-                <!-- <h1>ĐÂY LÀ BƯỚC 3</h1> -->
+           
                 <div class="preview-container-step3">
                     <div class="preview-block-step3">
                         <div class="act-title-block">
@@ -648,6 +647,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     <div id="edit-data"
      data-custom='<?= htmlspecialchars(json_encode($customQuestions), ENT_QUOTES) ?>'>
+    </div>
+
+    <div id="notice-edit-act-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="notice-edit-act-modal-title">Thông báo</h3>
+            <p id="notice-edit-act-message"></p>
+            <div class="model-btn">
+                <button id="btn-close-notice-edit-act">Đóng</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>

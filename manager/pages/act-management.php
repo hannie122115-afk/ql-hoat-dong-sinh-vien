@@ -236,6 +236,15 @@ $stmt3->execute();
                 </div>
             </div>
         </div>
+        <div id="notice-act-modal" class="modal">
+            <div class="modal-content">
+                <h3>Thông báo</h3>
+                <p id="notice-act-message"></p>
+                <div class="model-btn">
+                    <button id="btn-cancel-notice-act">Đóng</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

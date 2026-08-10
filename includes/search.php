@@ -73,12 +73,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['keyword']) && isset($_P
             break;
         case "bonus":
             $sql = "SELECT MaMucCongDiem as id
-                            , TenMucCongDiem as name
+                            , CONCAT(MaMucCongDiem, '.', TenMucCongDiem) as name
                             , DiemToiDa as maxPoint
                             FROM MucCongDiemRenLuyen 
                             WHERE TenMucCongDiem LIKE ?
+                                OR MaMucCongDiem LIKE ?
                             LIMIT 8";
-            $params = [$search];
+            $params = [$search, $search];
             break;
         case "student":
             $sql = "SELECT MSSV as id

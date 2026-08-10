@@ -761,4 +761,3 @@ document.addEventListener("click", (e) => {
   if (!btnCancel) return;
   document.getElementById("delete-semester-modal").classList.remove("show");
 });
-

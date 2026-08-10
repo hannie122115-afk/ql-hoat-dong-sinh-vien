@@ -126,6 +126,8 @@ document.addEventListener("input", function (e) {
           return;
         }
 
+        suggestBox.classList.add("show");
+
         data.forEach((item) => {
           const div = document.createElement("div");
           div.classList.add("suggest-item");
@@ -133,7 +135,7 @@ document.addEventListener("input", function (e) {
           div.dataset.id = item.id;
           if (input.dataset.type === "bonus") {
             div.dataset.maxPoint = item.maxPoint;
-            div.textContent = item.id + ". " + item.name;
+            div.textContent = item.name;
           } else {
             div.textContent = item.name;
           }
@@ -145,6 +147,7 @@ document.addEventListener("input", function (e) {
   document.addEventListener("click", function (e) {
     if (!input.contains(e.target) && !suggestBox.contains(e.target)) {
       suggestBox.innerHTML = "";
+      suggestBox.classList.remove("show");
     }
   });
 });

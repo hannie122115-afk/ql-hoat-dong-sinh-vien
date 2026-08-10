@@ -4,6 +4,7 @@ $host = "localhost";
 $dbname = "ql-hoat-dong-sinh-vien";
 $username = "root";
 $password = "";
+date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 try{
     $conn = new PDO(

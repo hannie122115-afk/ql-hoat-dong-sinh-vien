@@ -312,6 +312,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                     </button>
                 </form>
             </div>
+            <!-- doi mat khau -->
             <div class="profile-user-item">
                 <h3>Đổi mật khẩu</h3>
                 <form action="" id="changePasswordForm">
@@ -427,6 +428,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                 </tbody>
             </table>
         </div>
+        
     </div>
 </body>
 </html>

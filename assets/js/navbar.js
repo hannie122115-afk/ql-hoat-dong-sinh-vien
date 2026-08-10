@@ -26,6 +26,10 @@ function loadPage(url) {
       if (url.includes("calendar.php")) {
         initCalendar();
       }
+
+      if (url.includes("created-act.php")) {
+        initCreateAct();
+      }
     })
     .catch((err) => console.error("Lỗi load trang:", err));
 }

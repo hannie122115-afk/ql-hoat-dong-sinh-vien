@@ -98,6 +98,7 @@ const activityData = {
   },
 };
 
+let unsaveCustomQues = "";
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("btn-step-next")) {
     if (currentStep === 1) {
@@ -117,7 +118,11 @@ document.addEventListener("click", function (e) {
       });
 
       if (!isValid) {
-        alert("Vui lòng nhập đầy đủ toàn bộ thông tin!");
+        document.getElementById("error-create-act-modal").classList.add("show");
+
+        document.getElementById("error-create-act-message").textContent =
+          "Vui lòng nhập đầy đủ toàn bộ thông tin!";
+        // alert("Vui lòng nhập đầy đủ toàn bộ thông tin!");
         return;
       }
 
@@ -158,12 +163,16 @@ document.addEventListener("click", function (e) {
 
       showStep(2);
     } else if (currentStep === 2) {
-      const unsaveCustomQues = document.querySelectorAll(
+      unsaveCustomQues = document.querySelectorAll(
         ".custom-ques-input input:not(.is-saved",
       );
       if (unsaveCustomQues.length > 0) {
-        alert("Vui lòng chọn 'lưu' hoặc 'hủy bỏ' câu hỏi để tiếp tục.");
-        unsaveCustomQues[0].focus();
+        document.getElementById("error-create-act-modal").classList.add("show");
+
+        document.getElementById("error-create-act-message").textContent =
+          "Vui lòng chọn 'lưu' hoặc 'hủy bỏ' câu hỏi để tiếp tục.";
+        // alert("Vui lòng chọn 'lưu' hoặc 'hủy bỏ' câu hỏi để tiếp tục.");
+        // unsaveCustomQues[0].focus();
         return;
       }
 
@@ -188,6 +197,14 @@ document.addEventListener("click", function (e) {
   }
 });
 
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btn-close-error-create-act");
+  if (!btn) return;
+  document.getElementById("error-create-act-modal").classList.remove("show");
+
+  unsaveCustomQues[0].focus();
+});
+
 // ===============errorStep1 - created-act===================
 
 document.addEventListener(
@@ -208,20 +225,6 @@ document.addEventListener(
         const maxPoint = document.querySelector("#bonus").dataset.maxPoint;
         if (parseInt(input.value) > parseInt(maxPoint)) {
           errMessage.textContent = `Điểm rèn luyện nhập vào không được lớn hơn điểm rèn luyện tối đa ở mục đã chọn. Điểm rèn luyện tối đa của mục này là: ${maxPoint}`;
-        } else {
-          errMessage.textContent = "";
-        }
-      }
-
-      if (input.classList.contains("act-year")) {
-        // const select = document.querySelector("#act-year");
-        const option = input.options[input.selectedIndex];
-        const semesterEnd = option.dataset.end;
-        const actStart = document
-          .getElementById("act-start")
-          .value.split("T")[0];
-        if (actStart > semesterEnd) {
-          errMessage.textContent = `Không thể cộng điểm cho hoạt động này vào học kỳ trước.`;
         } else {
           errMessage.textContent = "";
         }
@@ -267,7 +270,11 @@ function initDateTime() {
       const now = new Date();
       const selected = new Date(this.value);
       if (selected < now) {
-        alert("Thời gian bắt đầu phải từ thời điểm hiện tại trở đi.");
+        document.getElementById("error-create-act-modal").classList.add("show");
+
+        document.getElementById("error-create-act-message").textContent =
+          "Thời gian bắt đầu phải từ thời điểm hiện tại trở đi.";
+        // alert("Thời gian bắt đầu phải từ thời điểm hiện tại trở đi.");
         this.value = "";
       }
 
@@ -527,6 +534,7 @@ function renderPreview() {
 }
 
 // ===============created-act===================
+let actIdCreateClose = "";
 document.addEventListener("click", (e) => {
   const btn = e.target.closest("#btn-submit-act");
   if (!btn) {
@@ -550,12 +558,54 @@ document.addEventListener("click", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        loadPage(`pages/act-detail.php?id=${data.actCode}`);
+        document.getElementById("notice-create-act-message").textContent =
+          data.message;
+        document
+          .getElementById("notice-create-act-modal")
+          .classList.add("show");
+        actIdCreateClose = data.actCode;
       } else {
         alert(data.message);
       }
     });
 });
+
+document.addEventListener("click", (e) => {
+  const btnNotice = e.target.closest("#btn-close-notice-create-act");
+  if (btnNotice) {
+    document.getElementById("notice-create-act-modal").classList.remove("show");
+    if (actIdCreateClose) {
+      loadPage(`pages/act-detail.php?id=${actIdCreateClose}`);
+    }
+    return;
+  }
+});
+
+function initCreateAct() {
+  console.log("Khởi tạo lại Form Tạo Hoạt Động");
+  currentStep = 1;
+  showStep(1);
+
+  activityData.step1 = {
+    actName: "",
+    actObject: "",
+    actLocate: "",
+    actStart: "",
+    actMaxSlot: "",
+    actEnd: "",
+    actBonus: "",
+    actBonusId: "",
+    actPoint: "",
+    actSemester: "",
+    actSemesterName: "",
+    actYear: "",
+    actContent: "",
+    actImgAvt: "",
+    actImgCover: "",
+  };
+  activityData.step2 = { autoQuestions: [], customQuestions: [] };
+  unsaveCustomQues = "";
+}
 
 // ===============searchAct - activity-Management===================
 let currentFilters = {
@@ -594,9 +644,10 @@ document.addEventListener("keydown", function (e) {
 // =================chuyenSangEditActManagement - act-management============
 let currentActManageId = null;
 document.addEventListener("click", (e) => {
-  const rowAct = e.target.closest(".row-act-management");
+  const rowAct = e.target.closest(".edit-management-act-btn");
   if (!rowAct) return;
   currentActManageId = rowAct.dataset.id;
+  console.log(`Nhan duoc ma hoat dong: ${currentActManageId}`);
   loadPage(`pages/edit-management-act.php?id=${currentActManageId}`);
 });
 
@@ -669,8 +720,10 @@ document.addEventListener("click", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        alert("Xóa hoạt động thành công!");
-        loadPage("pages/act-management.php");
+        // alert("Xóa hoạt động thành công!");
+        document.getElementById("notice-act-message").textContent =
+          "Xóa hoạt động thành công";
+        document.getElementById("notice-act-modal").classList.add("show");
       } else {
         alert(data.message);
       }
@@ -683,7 +736,14 @@ document.addEventListener("click", (e) => {
   document.getElementById("delete-act-modal").classList.remove("show");
 });
 
-// =================cancelBtn - edit-management-act============
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-cancel-notice-act");
+  if (!btnCancel) return;
+  document.getElementById("notice-act-modal").classList.remove("show");
+  loadPage("pages/act-management.php");
+});
+
+// =================cancelEditBtn - edit-management-act============
 document.addEventListener("click", function (e) {
   const btn = e.target.closest(".btn-step-return");
   if (!btn) return;
@@ -778,6 +838,7 @@ document.addEventListener("change", function (e) {
 });
 
 // ===============updateAct - edit-management-act===================
+let actIdEditClose = "";
 document.addEventListener("click", (e) => {
   const btn = e.target.closest("#btn-update-act");
   if (!btn) {
@@ -794,9 +855,7 @@ document.addEventListener("click", (e) => {
   activityData.step1.actMaxSlot = document.getElementById("act-max-slot").value;
   activityData.step1.actPoint = document.getElementById("act-point").value;
   activityData.step1.actBonus = document.getElementById("bonus").value;
-  document.getElementById("bonusId").value = document.querySelector(
-    "[data-type='bonus']",
-  ).dataset.id;
+
   activityData.step1.actBonusId = document.getElementById("bonusId").value;
 
   activityData.step1.actContent = document.getElementById("act-content").value;
@@ -840,11 +899,25 @@ document.addEventListener("click", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        loadPage(`pages/act-detail.php?id=${data.actCode}`);
+        document.getElementById("notice-edit-act-message").textContent =
+          data.message;
+        document.getElementById("notice-edit-act-modal").classList.add("show");
+        actIdEditClose = data.actCode;
       } else {
         alert(data.message);
       }
     });
+});
+
+document.addEventListener("click", (e) => {
+  const btnNotice = e.target.closest("#btn-close-notice-edit-act");
+  if (btnNotice) {
+    document.getElementById("notice-edit-act-modal").classList.remove("show");
+    if (actIdEditClose) {
+      loadPage(`pages/act-detail.php?id=${actIdEditClose}`);
+    }
+    return;
+  }
 });
 
 // =================showBTN - act-detail============
@@ -1002,12 +1075,30 @@ document.addEventListener("click", async function (e) {
   console.log(result);
 
   if (result.success) {
-    alert("Điểm danh thành công!");
-    const html = await fetch(
-      `pages/student-list.php?id=${btn.dataset.actId}`,
-    ).then((r) => r.text());
+    document.getElementById("notice-act-detail-message").textContent =
+      "Điểm danh thành công!";
+    document.getElementById("notice-act-detail-modal").classList.add("show");
+    // alert("Điểm danh thành công!");
+    // const html = await fetch(
+    //   `pages/student-list.php?id=${btn.dataset.actId}`,
+    // ).then((r) => r.text());
 
-    document.getElementById("student-list-body").innerHTML = html;
+    // document.getElementById("student-list-body").innerHTML = html;
+  }
+});
+
+document.addEventListener("click", async (e) => {
+  const btnNotice = e.target.closest("#btn-close-notice-act-detail");
+  if (btnNotice) {
+    document.getElementById("notice-act-detail-modal").classList.remove("show");
+    if (actIdCreateClose) {
+      const html = await fetch(
+        `pages/student-list.php?id=${btn.dataset.actId}`,
+      ).then((r) => r.text());
+
+      document.getElementById("student-list-body").innerHTML = html;
+    }
+    return;
   }
 });
 
@@ -1072,7 +1163,6 @@ function loadStatistic() {
       } else {
         placeholder.textContent =
           "Không tìm thấy dữ liệu phù hợp với Học kỳ & Năm học đã chọn!";
-        // Nếu không có dữ liệu, xóa chart cũ đi cho đỡ bị treo
         if (activityChart) {
           activityChart.destroy();
         }
@@ -1211,9 +1301,14 @@ document.addEventListener("submit", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        alert("Cập nhật thông tin thành công!");
-        sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
-        location.reload();
+        // alert("Cập nhật thông tin thành công!");
+        document.getElementById("notice-save-profile-message").textContent =
+          data.message;
+        document
+          .getElementById("notice-save-profile-modal")
+          .classList.add("show");
+        // sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
+        // location.reload();
       } else {
         alert(data.message);
       }
@@ -1221,6 +1316,19 @@ document.addEventListener("submit", (e) => {
     .catch(console.error);
 });
 
+document.addEventListener("click", (e) => {
+  const btnNotice = e.target.closest("#btn-cancel-notice-save-profile");
+  if (btnNotice) {
+    document
+      .getElementById("notice-save-profile-modal")
+      .classList.remove("show");
+    if (actIdCreateClose) {
+      sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
+      location.reload();
+    }
+    return;
+  }
+});
 // =================previewAvt - profile============
 
 document.addEventListener("change", (e) => {
@@ -1241,6 +1349,7 @@ document.addEventListener("submit", (e) => {
 
   const formData = new FormData(e.target);
   formData.append("action", "change_password");
+  document.getElementById("notice-password-modal").classList.add("show");
 
   fetch("pages/profile.php", {
     method: "POST",
@@ -1249,13 +1358,42 @@ document.addEventListener("submit", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        alert("🎉 " + data.message);
+        document.getElementById("notice-password-message").textContent =
+          data.message;
+        document
+          .getElementById("btn-close-notice-password")
+          .classList.remove("hidden");
+        document
+          .getElementById("btn-close-notice-error-password")
+          .classList.add("hidden");
         e.target.reset();
+
+        // alert("🎉 " + data.message);
+        // e.target.reset();
       } else {
-        alert("⚠️ " + data.message);
+        // alert("⚠️ " + data.message);
+        document.getElementById("notice-password-message").textContent =
+          data.message;
+        document
+          .getElementById("btn-close-notice-error-password")
+          .classList.remove("hidden");
+        document
+          .getElementById("btn-close-notice-password")
+          .classList.add("hidden");
       }
     })
     .catch(console.error);
+});
+
+document.addEventListener("click", (e) => {
+  const btnCancel = e.target.closest("#btn-close-notice-password");
+  if (!btnCancel) return;
+  document.getElementById("notice-password-modal").classList.remove("show");
+});
+document.addEventListener("click", (e) => {
+  const btnCancelError = e.target.closest("#btn-close-notice-error-password");
+  if (!btnCancelError) return;
+  document.getElementById("notice-password-modal").classList.remove("show");
 });
 
 // =================hiddenPassword - profile============
