@@ -76,12 +76,12 @@ $stmt3->execute();
 
 </head>
 <body>
-    <div class="management-act-container">
+    <div class="management-act-container dashboard-container">
+        <div class="management-act-title profile-user-title dashboard-user-title">
+            <h2>Quản lý hoạt động</h2>
+            <span>Danh sách các hoạt động do CLB tạo và quản lý</span>
+        </div>
         <div class="management-act-header">
-            <div class="management-act-title">
-                <h2>Quản lý hoạt động</h2>
-                <span>Danh sách các hoạt động do CLB tạo và quản lý</span>
-            </div>
             <div class="management-search-act">
                 <div class="management-btn-search-act">
                         <input type="text" name="activity" class="search-input management-search-input" data-type="activity" id="act-management" placeholder="Tìm kiếm hoạt động..." value="<?= htmlspecialchars($keyword) ?>">

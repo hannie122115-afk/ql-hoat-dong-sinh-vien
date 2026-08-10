@@ -218,8 +218,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 </head>
 <body>
 
-    <div class="created-act-container">
-        <div class="created-act-title">
+    <div class="created-act-container dashboard-container">
+        <!-- <div class="created-act-title">
+            <h2>Tạo hoạt động mới</h2>
+            <span>Điền đầy đủ thông tin để tạo hoạt động cho sinh viên đăng ký tham gia.</span>
+        </div> -->
+        <div class="profile-user-title dashboard-user-title">
             <h2>Tạo hoạt động mới</h2>
             <span>Điền đầy đủ thông tin để tạo hoạt động cho sinh viên đăng ký tham gia.</span>
         </div>

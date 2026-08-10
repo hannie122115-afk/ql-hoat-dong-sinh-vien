@@ -21,46 +21,11 @@ $stmt->execute([$user['MSSV']]);
 $events = [];
 
 while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-    // $start = new DateTime($row["ThoiGianBatDau"]);
-    // $end   = new DateTime($row["ThoiGianKetThuc"]);
-    // $now = new DateTime();
-
-    // if($row["DaDiemDanh"] == 1){
-    //     $status = "Đã tham gia";
-    //     $backgroundColor = "#22c55e";
-    //     $borderColor = "#22c55e";
-    //     $textColor = "#ffffff";
-    // }
-    // elseif($end < $now){
-    //     $status = "Đã kết thúc";
-    //     $backgroundColor = "#ef4444";
-    //     $borderColor = "#ef4444";
-    //     $textColor = "#ffffff";
-    // }
-    // elseif($start <= $now && $end >= $now){
-    //     $status = "Đang diễn ra";
-    //     $backgroundColor = "#f59e0b";
-    //     $borderColor = "#f59e0b";
-    //     $textColor = "#ffffff";
-    // }
-    // else{
-    //     $status = "Sắp diễn ra";
-    //     $backgroundColor = "#3b82f6";
-    //     $borderColor = "#3b82f6";
-    //     $textColor = "#ffffff";
-    // }
-
     $events[] = [
         "id" => $row["MaHoatDong"],
         "title" => $row["TenHoatDong"],
         "start" => $row["ThoiGianBatDau"],
         "end" => $row["ThoiGianKetThuc"]
-        // "backgroundColor" => $backgroundColor,
-        // "borderColor" => $borderColor,
-        // "textColor" => $textColor,
-        // "extendedProps" => [
-        //     "status" => $status
-        // ]
     ];
 }
 

@@ -155,8 +155,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     <title>Document</title>
 </head>
 <body>
-    <div class="profile-org-container">
-        <div class="profile-org-title">
+    <div class="profile-org-container dashboard-container">
+        <div class="profile-org-title profile-user-title">
             <h2>Hồ sơ</h2>
             <span>Quản lý thông tin tổ chức của bạn.</span>
         </div>

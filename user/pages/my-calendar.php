@@ -24,7 +24,10 @@ require_once "../auth.php";
 <body>
     <div class="calendar-container">
 
-        <h2>Lịch hoạt động của tôi</h2>
+
+        <div class="profile-user-title">
+            <h2>Lịch hoạt động của tôi</h2>
+        </div>
 
         <div id="calendar"></div>
 

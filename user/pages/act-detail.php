@@ -132,9 +132,6 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
     <!-- <link rel="stylesheet" href="../assets/css/user-pages.css"> -->
 </head>
 <body>
-    ĐÂY LÀ TRANG CHI TIẾT HOẠT ĐỘNG 
-
-
     <div class="act-detail-container">
 
         <div class="act-detail-img">
@@ -334,5 +331,6 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
 
         </div> -->
     </div>
+    
 </body>
 </html>

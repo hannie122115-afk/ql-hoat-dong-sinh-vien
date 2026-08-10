@@ -159,3 +159,80 @@ function initCalendar() {
   calendar.render();
 }
 
+// =================dropdown - registered-act============
+
+let filterRegister = {
+  semester: "",
+  year: "",
+};
+
+document.addEventListener("click", (e) => {
+  const selected = e.target.closest(".registered-act-dropdown-selected");
+  if (selected) {
+    const dropdown = selected.closest(".registered-act-dropdown-block");
+    document
+      .querySelectorAll(".registered-act-dropdown-menu")
+      .forEach((menu) => {
+        if (menu !== dropdown.querySelector(".registered-act-dropdown-menu")) {
+          menu.classList.remove("show");
+        }
+      });
+    dropdown
+      .querySelector(".registered-act-dropdown-menu")
+      .classList.toggle("show");
+    return;
+  }
+
+  const item = e.target.closest(".registered-act-dropdown-item");
+  if (item) {
+    const dropdown = item.closest(".registered-act-dropdown-block");
+    const type = dropdown.dataset.type;
+    dropdown.querySelector(".selected-text").textContent = item.textContent;
+    dropdown
+      .querySelector(".registered-act-dropdown-menu")
+      .classList.remove("show");
+    filterRegister[type] = item.dataset.value;
+    loadRegisteredAct();
+  } else {
+    document
+      .querySelectorAll(".registered-act-dropdown-menu")
+      .forEach((menu) => {
+        menu.classList.remove("show");
+      });
+  }
+});
+
+function loadRegisteredAct() {
+  const currentCardContainer = document.querySelector(".card-container");
+
+  // Hiển thị hiệu ứng mờ lập tức để người dùng biết đang tải
+  if (currentCardContainer) {
+    currentCardContainer.style.opacity = "0.4";
+    currentCardContainer.style.pointerEvents = "none";
+  }
+
+  const params = new URLSearchParams({
+    semester: filterRegister.semester,
+    year: filterRegister.year,
+  });
+
+  fetch(`pages/registered-act.php?${params.toString()}`)
+    .then((response) => response.text())
+    .then((html) => {
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const newCardContainer = doc.querySelector(".card-container");
+
+      if (newCardContainer && currentCardContainer) {
+        // Cập nhật lại HTML card
+        currentCardContainer.innerHTML = newCardContainer.innerHTML;
+      }
+    })
+    .catch((error) => console.error("Error loading activities:", error))
+    .finally(() => {
+      // Khôi phục lại độ mờ sau khi tải xong
+      if (currentCardContainer) {
+        currentCardContainer.style.opacity = "1";
+        currentCardContainer.style.pointerEvents = "auto";
+      }
+    });
+}

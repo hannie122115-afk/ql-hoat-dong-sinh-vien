@@ -346,6 +346,52 @@ header {
 /* ==========================================================================
    3. FLEX LAYOUT STRUCTURE (ĐỒNG BỘ CƠ CHẾ CHIA CỘT FLEX ĐẸP VÀ CHUẨN XÁC)
    ========================================================================== */
+.right-container .dashboard-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.85rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Tiêu đề trang */
+.right-container .profile-user-title {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.85rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.right-container .profile-user-title h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-dark, #1e293b);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.right-container .profile-user-title h2::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 1.2rem;
+  background-color: var(--primary-color, #2563eb);
+  border-radius: 2px;
+}
+
+.right-container .profile-user-title span {
+  font-size: 0.88rem;
+  color: var(--text-muted, #64748b);
+}
+
 .container {
   display: flex;
   margin-top: var(--header-height);
@@ -2130,7 +2176,7 @@ select.act-year:focus {
   user-select: none;
   transition: all 0.2s ease;
   gap: 0.5rem;
-  width: 14rem;
+  width: 13rem;
   margin-left: 2rem;
 }
 
@@ -2630,7 +2676,7 @@ select.act-year:focus {
   border-radius: 0.75rem;
   border: 1px solid var(--border-color, #e2e8f0);
   box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
 }
 
 .statistic-title h2 {
@@ -2756,7 +2802,7 @@ select.act-year:focus {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.25rem;
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
 }
 
 /* Mỗi thẻ con trong khối Overview */

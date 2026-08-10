@@ -246,7 +246,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
             <div class="profile-user-item">
                 <h3>Thông tin cá nhân</h3>
-                <form action="" id="profileForm">
+                <form action="" id="profileForm" data-type="user">
                     <div class="profile-user-info-item">
                         <h4>Họ và tên</h4>
                         <div class="user-info-item-input">
@@ -306,7 +306,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                             <input type="file" name="userAvt" id="profile-avt-input">
                         </div>
                     </label>
-                    <button type="submit">
+                    <button type="submit" >
                         <i class="fa-solid fa-check"></i>
                         Lưu 
                     </button>
@@ -315,7 +315,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             <!-- doi mat khau -->
             <div class="profile-user-item">
                 <h3>Đổi mật khẩu</h3>
-                <form action="" id="changePasswordForm">
+                <form action="" id="changePasswordForm" data-type="user">
                     <div class="profile-user-password">
                         <h4>Mật khẩu hiện tại</h4>
                         <div class="user-password-item-input">
@@ -429,6 +429,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             </table>
         </div>
         
+    </div>
+    <div id="notice-save-profile-user-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="notice-save-profile-user-modal-title">Thông báo</h3>
+            <p id="notice-save-profile-user-message"></p>
+            <div class="model-btn">
+                <button id="btn-cancel-notice-save-profile-user">Đóng</button>
+            </div>
+        </div>
+    </div>
+    <div id="notice-password-user-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="notice-password-user-modal-title">Lỗi</h3>
+            <p id="notice-password-user-message"></p>
+            <div class="model-btn">
+                <button id="btn-close-notice-password-user">Đóng</button>
+                <button id="btn-close-notice-error-password-user" class="hidden">Đóng</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -51,12 +51,13 @@ $stmt3->execute();
     
 </head>
 <body>
-    <div class="statistic-container">
-        <div class="statistic-header">
-            <div class="statistic-title">
+    <div class="statistic-container dashboard-container">
+        <div class="statistic-header profile-user-title">
+            <div class="statistic-title ">
                 <h2>Thống kê & báo cáo</h2>
                 <span>Tổng quan hoạt động và số liệu của tổ chức</span>
             </div>
+
             <div class="statistic-dropdown">
                 <div class="statistic-dropdown-block" data-type="semester">
                     <span>Học kì</span>
@@ -128,7 +129,7 @@ $stmt3->execute();
             </div>
         </div>
 
-        <div class="statistic-chart-container" style="margin-top: 30px; background: #fff; padding: 20px; border-radius: 12px;">
+        <div class="statistic-chart-container" style=" background: #fff; padding: 20px; border-radius: 12px;">
             <h3>So sánh lượt đăng ký và điểm danh theo hoạt động</h3>
             <div id="chart-placeholder" >
                 Vui lòng chọn học kỳ và năm học để xem biểu đồ thống kê

@@ -55,89 +55,95 @@ empty($keyword) ? $stmt2->execute() : $stmt2->execute([$search]);
 
 </head>
 <body>
-    <h1>Xin chào, <?= $user['HoTen'] ?>!</h1>
-    <div class="container">
-        <div class="title-container">
-            <i class="fa-regular fa-calendar"></i>
-            <h3>Sắp diễn ra</h3>
+    <!-- <h1>Xin chào, <?= $user['HoTen'] ?>!</h1> -->
+    
+    <div class="dashboard-container">
+        <div class="profile-user-title dashboard-user-title">
+            <h2>Xin chào, <?= $user['HoTen'] ?>!</h2>
         </div>
-        <div class="card-container">
-            <?php $count = 0;
-            while($row = $stmt1->fetch(PDO::FETCH_ASSOC)){ 
-                $count++;?>
-            <div class="card-item <?= $count > 6 ? 'hidden-card-item' : '' ?>" data-id="<?= $row['MaHoatDong'] ?>">  
-                <div class="img-card-item">
-                    <img src="<?= $row['AnhAvt'] ?>" alt="">
-                </div>
-                <div class="title-card-item">
-                    <div class="date-card-item">
-                        <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
-                        $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
-                        <h3><?= $dateStart->format('d'); ?></h3>
-                        <span>tháng <?= $dateStart->format('m'); ?></span>
-                    </div>
-                    <h4><?= $row['TenHoatDong'] ?></h4>
-                    <div class="info-card-item">
-                        <div class="info-card-item-inside">
-                            <i class="fa-regular fa-clock"></i>
-                            <span><?= $dateStart->format('H:i'); ?> - <?= $dateEnd->format('H:i'); ?></span>
-                        </div>
-                        <div class="info-card-item-inside">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <span><?= $row['DiaDiem'] ?></span>
-                        </div>
-                        <div class="info-card-item-inside">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span><?= $row['total'] ?>/<?= $row['SoLuongToiDa']?> đã đăng ký</span>
-                        </div>
-                    </div>
-                </div>
+        <div class="container">
+            <div class="title-container">
+                <i class="fa-regular fa-calendar"></i>
+                <h3>Sắp diễn ra</h3>
             </div>
-            <?php } ?>
-        </div>
-        <div class="see-all-card-btn">Xem tất cả</div>
-    </div>
-    <div class="container">
-        <div class="title-container">
-            <i class="fa-regular fa-calendar"></i>
-            <h3>Đang diễn ra</h3>
-        </div>
-        <div class="card-container">
-            <?php $count = 0;
-            while($row = $stmt2->fetch(PDO::FETCH_ASSOC)){ 
-                $count++; ?>
-            <div class="card-item <?= $count > 6 ? 'hidden-card-item' : '' ?>" data-id="<?= $row['MaHoatDong'] ?>">  
-                <div class="img-card-item">
-                    <img src="<?= $row['AnhAvt'] ?>" alt="">
-                </div>
-                <!-- <h1></h1> -->
-                <div class="title-card-item">
-                    <div class="date-card-item">
-                        <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
-                        $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
-                        <h3><?= $dateStart->format('d'); ?></h3>
-                        <span>tháng <?= $dateStart->format('m'); ?></span>
+            <div class="card-container">
+                <?php $count = 0;
+                while($row = $stmt1->fetch(PDO::FETCH_ASSOC)){ 
+                    $count++;?>
+                <div class="card-item <?= $count > 6 ? 'hidden-card-item' : '' ?>" data-id="<?= $row['MaHoatDong'] ?>">  
+                    <div class="img-card-item">
+                        <img src="<?= $row['AnhAvt'] ?>" alt="">
                     </div>
-                    <h4><?= $row['TenHoatDong'] ?></h4>
-                    <div class="info-card-item">
-                        <div class="info-card-item-inside">
-                            <i class="fa-regular fa-clock"></i>
-                            <span><?= $dateStart->format('H:i'); ?> - <?= $dateEnd->format('H:i'); ?></span>
+                    <div class="title-card-item">
+                        <div class="date-card-item">
+                            <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
+                            $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
+                            <h3><?= $dateStart->format('d'); ?></h3>
+                            <span>tháng <?= $dateStart->format('m'); ?></span>
                         </div>
-                        <div class="info-card-item-inside">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <span><?= $row['DiaDiem'] ?></span>
-                        </div>
-                        <div class="info-card-item-inside">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span><?= $row['total'] ?>/<?= $row['SoLuongToiDa']?> đã đăng ký</span>
+                        <h4><?= $row['TenHoatDong'] ?></h4>
+                        <div class="info-card-item">
+                            <div class="info-card-item-inside">
+                                <i class="fa-regular fa-clock"></i>
+                                <span><?= $dateStart->format('H:i'); ?> - <?= $dateEnd->format('H:i'); ?></span>
+                            </div>
+                            <div class="info-card-item-inside">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span><?= $row['DiaDiem'] ?></span>
+                            </div>
+                            <div class="info-card-item-inside">
+                                <i class="fa-solid fa-user-group"></i>
+                                <span><?= $row['total'] ?>/<?= $row['SoLuongToiDa']?> đã đăng ký</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <?php } ?>
             </div>
-            <?php } ?>
+            <div class="see-all-card-btn">Xem tất cả</div>
         </div>
-        <div class="see-all-card-btn">Xem tất cả</div>
+        <div class="container">
+            <div class="title-container">
+                <i class="fa-regular fa-calendar"></i>
+                <h3>Đang diễn ra</h3>
+            </div>
+            <div class="card-container">
+                <?php $count = 0;
+                while($row = $stmt2->fetch(PDO::FETCH_ASSOC)){ 
+                    $count++; ?>
+                <div class="card-item <?= $count > 6 ? 'hidden-card-item' : '' ?>" data-id="<?= $row['MaHoatDong'] ?>">  
+                    <div class="img-card-item">
+                        <img src="<?= $row['AnhAvt'] ?>" alt="">
+                    </div>
+                    <!-- <h1></h1> -->
+                    <div class="title-card-item">
+                        <div class="date-card-item">
+                            <?php $dateStart = new DateTime($row['ThoiGianBatDau']); 
+                            $dateEnd = new DateTime($row['ThoiGianKetThuc']); ?>
+                            <h3><?= $dateStart->format('d'); ?></h3>
+                            <span>tháng <?= $dateStart->format('m'); ?></span>
+                        </div>
+                        <h4><?= $row['TenHoatDong'] ?></h4>
+                        <div class="info-card-item">
+                            <div class="info-card-item-inside">
+                                <i class="fa-regular fa-clock"></i>
+                                <span><?= $dateStart->format('H:i'); ?> - <?= $dateEnd->format('H:i'); ?></span>
+                            </div>
+                            <div class="info-card-item-inside">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span><?= $row['DiaDiem'] ?></span>
+                            </div>
+                            <div class="info-card-item-inside">
+                                <i class="fa-solid fa-user-group"></i>
+                                <span><?= $row['total'] ?>/<?= $row['SoLuongToiDa']?> đã đăng ký</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
+            <div class="see-all-card-btn">Xem tất cả</div>
+        </div>
     </div>
 
 </body>

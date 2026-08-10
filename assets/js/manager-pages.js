@@ -1291,6 +1291,7 @@ function updateChart(chartData) {
 // =================saveInfoOrg - profile============
 document.addEventListener("submit", (e) => {
   if (e.target.id !== "profileForm") return;
+  // const btn = e.target;
   e.preventDefault();
   const formData = new FormData(e.target);
 
@@ -1302,11 +1303,38 @@ document.addEventListener("submit", (e) => {
     .then((data) => {
       if (data.success) {
         // alert("Cập nhật thông tin thành công!");
-        document.getElementById("notice-save-profile-message").textContent =
-          data.message;
-        document
-          .getElementById("notice-save-profile-modal")
-          .classList.add("show");
+        // if (document.getElementById("notice-save-profile-message")) {
+        //   document.getElementById("notice-save-profile-message").textContent =
+        //     data.message;
+        //   document
+        //     .getElementById("notice-save-profile-modal")
+        //     .classList.add("show");
+        // } else if (
+        //   document.getElementById("notice-save-profile-user-message")
+        // ) {
+        //   document.getElementById(
+        //     "notice-save-profile-user-message",
+        //   ).textContent = data.message;
+        //   document
+        //     .getElementById("notice-save-profile-user-modal")
+        //     .classList.add("show");
+        // }
+
+        if (e.target.dataset.type == "user") {
+          document.getElementById(
+            "notice-save-profile-user-message",
+          ).textContent = data.message;
+          document
+            .getElementById("notice-save-profile-user-modal")
+            .classList.add("show");
+        } else {
+          document.getElementById("notice-save-profile-message").textContent =
+            data.message;
+          document
+            .getElementById("notice-save-profile-modal")
+            .classList.add("show");
+        }
+
         // sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
         // location.reload();
       } else {
@@ -1318,9 +1346,22 @@ document.addEventListener("submit", (e) => {
 
 document.addEventListener("click", (e) => {
   const btnNotice = e.target.closest("#btn-cancel-notice-save-profile");
+  const btnNoticeUser = e.target.closest(
+    "#btn-cancel-notice-save-profile-user",
+  );
   if (btnNotice) {
     document
       .getElementById("notice-save-profile-modal")
+      .classList.remove("show");
+    if (actIdCreateClose) {
+      sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
+      location.reload();
+    }
+    return;
+  }
+  if (btnNoticeUser) {
+    document
+      .getElementById("notice-save-profile-user-modal")
       .classList.remove("show");
     if (actIdCreateClose) {
       sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
@@ -1349,7 +1390,11 @@ document.addEventListener("submit", (e) => {
 
   const formData = new FormData(e.target);
   formData.append("action", "change_password");
-  document.getElementById("notice-password-modal").classList.add("show");
+  if (e.target.dataset.type == "user") {
+    document.getElementById("notice-password-user-modal").classList.add("show");
+  } else {
+    document.getElementById("notice-password-modal").classList.add("show");
+  }
 
   fetch("pages/profile.php", {
     method: "POST",
@@ -1358,42 +1403,84 @@ document.addEventListener("submit", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        document.getElementById("notice-password-message").textContent =
-          data.message;
-        document
-          .getElementById("btn-close-notice-password")
-          .classList.remove("hidden");
-        document
-          .getElementById("btn-close-notice-error-password")
-          .classList.add("hidden");
-        e.target.reset();
-
-        // alert("🎉 " + data.message);
-        // e.target.reset();
+        if (e.target.dataset.type == "user") {
+          document.getElementById("notice-password-user-message").textContent =
+            data.message;
+          document
+            .getElementById("btn-close-notice-password-user")
+            .classList.remove("hidden");
+          document
+            .getElementById("btn-close-notice-error-password-user")
+            .classList.add("hidden");
+          e.target.reset();
+        } else {
+          document.getElementById("notice-password-message").textContent =
+            data.message;
+          document
+            .getElementById("btn-close-notice-password")
+            .classList.remove("hidden");
+          document
+            .getElementById("btn-close-notice-error-password")
+            .classList.add("hidden");
+          e.target.reset();
+        }
       } else {
-        // alert("⚠️ " + data.message);
-        document.getElementById("notice-password-message").textContent =
-          data.message;
-        document
-          .getElementById("btn-close-notice-error-password")
-          .classList.remove("hidden");
-        document
-          .getElementById("btn-close-notice-password")
-          .classList.add("hidden");
+        if (e.target.dataset.type == "user") {
+          document.getElementById("notice-password-user-message").textContent =
+            data.message;
+          document
+            .getElementById("btn-close-notice-error-password-user")
+            .classList.remove("hidden");
+          document
+            .getElementById("btn-close-notice-password-user")
+            .classList.add("hidden");
+        } else {
+          document.getElementById("notice-password-message").textContent =
+            data.message;
+          document
+            .getElementById("btn-close-notice-error-password")
+            .classList.remove("hidden");
+          document
+            .getElementById("btn-close-notice-password")
+            .classList.add("hidden");
+        }
       }
     })
     .catch(console.error);
 });
 
 document.addEventListener("click", (e) => {
+  // const btnCancel = e.target.closest("#btn-close-notice-password");
+  // if (!btnCancel) return;
+
   const btnCancel = e.target.closest("#btn-close-notice-password");
-  if (!btnCancel) return;
-  document.getElementById("notice-password-modal").classList.remove("show");
+  const btnCancelUser = e.target.closest("#btn-close-notice-password-user");
+  if (btnCancel) {
+    document.getElementById("notice-password-modal").classList.remove("show");
+  }
+  if (btnCancelUser) {
+    document
+      .getElementById("notice-password-user-modal")
+      .classList.remove("show");
+  }
 });
 document.addEventListener("click", (e) => {
+  // const btnCancelError = e.target.closest("#btn-close-notice-error-password");
+  // if (!btnCancelError) return;
+  // document.getElementById("notice-password-modal").classList.remove("show");
+
   const btnCancelError = e.target.closest("#btn-close-notice-error-password");
-  if (!btnCancelError) return;
-  document.getElementById("notice-password-modal").classList.remove("show");
+  const btnCancelErrorUser = e.target.closest(
+    "#btn-close-notice-error-password-user",
+  );
+  if (btnCancelError) {
+    document.getElementById("notice-password-modal").classList.remove("show");
+  }
+  if (btnCancelErrorUser) {
+    document
+      .getElementById("notice-password-user-modal")
+      .classList.remove("show");
+  }
 });
 
 // =================hiddenPassword - profile============
