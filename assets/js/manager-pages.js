@@ -3,6 +3,13 @@
 console.log("js loaded");
 
 // ===============searchCard - dashboard===================
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btn-add-act");
+  if (!btn) return;
+  loadPage(`pages/created-act.php`);
+});
+
+// ===============searchCard - dashboard===================
 function searchActCard() {
   const inputAct = document.getElementById("activity");
   let keyword = inputAct.value.trim();

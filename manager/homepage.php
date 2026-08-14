@@ -56,14 +56,14 @@ require_once "auth.php";
 
             <div class="homepage-header-left">
                 <div class="btn-add-act">
-                    <button>
+                    <button id="btn-add-act">
                         <i class="fa-solid fa-plus"></i>
                         <b>Tạo hoạt động</b>
                     </button>
                 </div>
-                <div class="notify-bell">
+                <!-- <div class="notify-bell">
                     <i class="fa-regular fa-bell"></i>
-                </div>
+                </div> -->
                 <div class="homepage-header-org">
                     <div class="header-org-img">
                         <img src="<?= $org['AnhDaiDien'] ?>" alt="Ảnh đại diện">

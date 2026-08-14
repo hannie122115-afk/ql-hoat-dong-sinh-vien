@@ -27,7 +27,6 @@ require_once "auth.php";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/search.css">
     <link rel="stylesheet" href="../assets/css/user-pages.css">
-     <!-- <link rel="stylesheet" href="../assets/css/homepage.css"> -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
 
@@ -64,9 +63,9 @@ require_once "auth.php";
                         <i class="fa-solid fa-calendar-day"></i>
                     </button>
                 </div>
-                <div class="notify-bell">
+                <!-- <div class="notify-bell">
                     <i class="fa-regular fa-bell"></i>
-                </div>
+                </div> -->
                 <div class="homepage-header-org">
                     <div class="header-org-img">
                         <img src="<?= $user['AnhDaiDien'] ?>" alt="Ảnh đại diện">
