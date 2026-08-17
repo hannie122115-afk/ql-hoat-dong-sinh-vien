@@ -22,7 +22,9 @@ $stmt4->execute([$user['MaTaiKhoan']]);
 $account = $stmt4->fetch(PDO::FETCH_ASSOC);
 
 $sql3 = "SELECT DISTINCT NamHoc
-        FROM HocKy";
+        FROM HocKy
+        WHERE ThoiGianBatDau IS NOT NULL
+            AND ThoiGianKetThuc IS NOT NULL";
 $stmt3 = $conn->prepare($sql3);
 $stmt3->execute();
 
@@ -31,25 +33,28 @@ $stmt5 = null;
 $totalPoint = 0;
 
 if (!empty($semester) && !empty($year)) {
+
     $sql5 = "SELECT
-                m.MaMucCongDiem,
-                m.TenMucCongDiem,
-                m.DiemToiDa,
-                SUM(c.DiemNhanDuoc) AS TongDiem
-            FROM ChiTietDiemRenLuyen c
-            JOIN MucCongDiemRenLuyen m
-                ON c.MaMucCongDiem = m.MaMucCongDiem
-            JOIN HocKy hk
-                ON c.MaHocKy = hk.MaHocKy
-            WHERE c.MSSV = ?
-                AND hk.HocKy = ?
-                AND hk.NamHoc = ?
-                AND m.MaMucCongDiem <> '00'
-            GROUP BY
-                m.MaMucCongDiem,
-                m.TenMucCongDiem,
-                m.DiemToiDa
-            ORDER BY m.MaMucCongDiem";
+            m.MaMucCongDiem,
+            m.TenMucCongDiem,
+            m.DiemToiDa,
+            COALESCE(SUM(c.DiemNhanDuoc), 0) AS TongDiem
+        FROM MucCongDiemRenLuyen m
+        LEFT JOIN ChiTietDiemRenLuyen c
+            ON c.MaMucCongDiem = m.MaMucCongDiem
+            AND c.MSSV = ?
+            AND c.MaHocKy IN (
+                SELECT MaHocKy
+                FROM HocKy
+                WHERE HocKy = ?
+                AND NamHoc = ?
+            )
+        WHERE m.MaMucCongDiem <> '00'
+        GROUP BY
+            m.MaMucCongDiem,
+            m.TenMucCongDiem,
+            m.DiemToiDa
+        ORDER BY m.MaMucCongDiem";        
     $stmt5 = $conn->prepare($sql5);
     $stmt5->execute([
         $user['MSSV'],
@@ -57,14 +62,24 @@ if (!empty($semester) && !empty($year)) {
         $year
     ]);
 
-    $sqlTotal = "SELECT SUM(DiemNhanDuoc) AS TongCong
-                FROM ChiTietDiemRenLuyen c
-                JOIN HocKy hk
-                    ON c.MaHocKy = hk.MaHocKy
-                WHERE c.MSSV = ?
-                    AND hk.HocKy = ?
-                    AND hk.NamHoc = ?";
-
+    $sqlTotal = "SELECT SUM(LEAST(TongDiem, DiemToiDa)) AS TongCong
+                FROM (
+                    SELECT
+                        c.MaMucCongDiem,
+                        SUM(c.DiemNhanDuoc) AS TongDiem,
+                        m.DiemToiDa
+                    FROM ChiTietDiemRenLuyen c
+                    JOIN HocKy hk
+                        ON c.MaHocKy = hk.MaHocKy
+                    JOIN MucCongDiemRenLuyen m
+                        ON m.MaMucCongDiem = c.MaMucCongDiem
+                    WHERE c.MSSV = ?
+                        AND hk.HocKy = ?
+                        AND hk.NamHoc = ?
+                    GROUP BY
+                        c.MaMucCongDiem,
+                        m.DiemToiDa
+                ) AS temp;";
     $stmtTotal = $conn->prepare($sqlTotal);
     $stmtTotal->execute([
         $user['MSSV'],
