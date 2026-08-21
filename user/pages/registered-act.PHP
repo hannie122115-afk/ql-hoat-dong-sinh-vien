@@ -5,8 +5,6 @@ if(session_status() === PHP_SESSION_NONE){
 require_once "../../config/db.php";
 require_once "../auth.php";
 
-$semester = $_GET['semester'] ?? '';
-$year = $_GET['year'] ?? '';
 
 $sql3 = "SELECT DISTINCT NamHoc 
         FROM HocKy  
@@ -24,21 +22,12 @@ $sql1 = "SELECT
             ON hd.MaHoatDong = dk.MaHoatDong
         LEFT JOIN HocKy hk
             ON hk.MaHocKy = hd.MaHocKy
-        WHERE dk.DaDiemDanh = 0 ";
-$params = [];
-if(!empty($semester)){
-    $sql1 .= " AND hk.HocKy = ? ";
-    $params[] = $semester;
-}
-
-if(!empty($year)){
-    $sql1 .= " AND hk.NamHoc = ? ";
-    $params[] = $year;
-}
+        WHERE dk.DaDiemDanh = 0 
+        AND dk.MSSV = ?";
 
 $sql1 .= " GROUP BY hd.MaHoatDong ORDER BY hd.ThoiGianBatDau DESC";
 $stmt1 = $conn->prepare($sql1);
-$stmt1->execute($params);
+$stmt1->execute([$user['MSSV']]);
 
 ?> 
 
@@ -59,34 +48,7 @@ $stmt1->execute($params);
             <div >
                 <h2>Hoạt động đã đăng ký</h2>
             </div>
-            <div class="registered-act-dropdown">
-                <div class="registered-act-dropdown-block" data-type="semester">
-                    <span>Học kì</span>
-                    <div class="registered-act-dropdown-selected">
-                        <span class="selected-text" > <?= !empty($semester) ? "HK" . htmlspecialchars($semester) : "Tất cả học kỳ" ?> </span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="registered-act-dropdown-menu">
-                        <div class="registered-act-dropdown-item" data-value="">Tất cả học kỳ</div>
-                        <div class="registered-act-dropdown-item" data-value="1">HK1</div>
-                        <div class="registered-act-dropdown-item" data-value="2">HK2</div>
-                        <div class="registered-act-dropdown-item" data-value="3">HK3</div>
-                    </div>
-                </div>
-                <div class="registered-act-dropdown-block" data-type="year">
-                    <span>Năm học</span>
-                    <div class="registered-act-dropdown-selected">
-                        <span class="selected-text" > <?= !empty($year) ? htmlspecialchars($year) : "Tất cả năm học" ?> </span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="registered-act-dropdown-menu">
-                        <div class="registered-act-dropdown-item" data-value="">Tất cả năm học</div>
-                        <?php while($row = $stmt3->fetch(PDO::FETCH_ASSOC)){ ?>
-                        <div class="registered-act-dropdown-item" data-value="<?= $row['NamHoc'] ?>"><?= $row['NamHoc'] ?></div>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>
+            
         </div>
         
         <div class="card-container">
@@ -126,7 +88,7 @@ $stmt1->execute($params);
             <?php else: ?>
                 <div class="empty-state">
                     <i class="fa-solid fa-calendar-xmark"></i>
-                    <p><?= !empty($keyword) ? 'Không tìm thấy hoạt động phù hợp.' : 'Bạn chưa đăng ký hoạt động nào.' ?></p>
+                    <p>Bạn chưa đăng ký hoạt động nào.</p>
                 </div>
             <?php endif; ?>
         </div>

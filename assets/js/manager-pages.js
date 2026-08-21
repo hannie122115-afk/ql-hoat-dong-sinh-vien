@@ -1309,43 +1309,66 @@ document.addEventListener("submit", (e) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        // alert("Cập nhật thông tin thành công!");
-        // if (document.getElementById("notice-save-profile-message")) {
-        //   document.getElementById("notice-save-profile-message").textContent =
-        //     data.message;
-        //   document
-        //     .getElementById("notice-save-profile-modal")
-        //     .classList.add("show");
-        // } else if (
-        //   document.getElementById("notice-save-profile-user-message")
-        // ) {
-        //   document.getElementById(
-        //     "notice-save-profile-user-message",
-        //   ).textContent = data.message;
-        //   document
-        //     .getElementById("notice-save-profile-user-modal")
-        //     .classList.add("show");
-        // }
-
         if (e.target.dataset.type == "user") {
           document.getElementById(
             "notice-save-profile-user-message",
           ).textContent = data.message;
+          document.getElementById(
+            "notice-save-profile-user-modal-title",
+          ).textContent = "Thông báo";
           document
             .getElementById("notice-save-profile-user-modal")
             .classList.add("show");
+          document
+            .getElementById("btn-cancel-notice-save-profile-user")
+            .classList.remove("hidden");
+          document
+            .getElementById("btn-close-notice-error-profile-user")
+            .classList.add("hidden");
         } else {
           document.getElementById("notice-save-profile-message").textContent =
             data.message;
           document
             .getElementById("notice-save-profile-modal")
             .classList.add("show");
+          document
+            .getElementById("btn-cancel-notice-save-profile")
+            .classList.remove("hidden");
+          document
+            .getElementById("btn-close-notice-error-profile")
+            .classList.add("hidden");
         }
-
-        // sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
-        // location.reload();
       } else {
-        alert(data.message);
+        // alert(data.message);
+        if (e.target.dataset.type == "user") {
+          document.getElementById(
+            "notice-save-profile-user-message",
+          ).textContent = data.message;
+          document.getElementById(
+            "notice-save-profile-user-modal-title",
+          ).textContent = "Lỗi";
+          document
+            .getElementById("notice-save-profile-user-modal")
+            .classList.add("show");
+          document
+            .getElementById("btn-cancel-notice-save-profile-user")
+            .classList.add("hidden");
+          document
+            .getElementById("btn-close-notice-error-profile-user")
+            .classList.remove("hidden");
+        } else {
+          document.getElementById("notice-save-profile-message").textContent =
+            data.message;
+          document
+            .getElementById("notice-save-profile-modal")
+            .classList.add("show");
+          document
+            .getElementById("btn-cancel-notice-save-profile")
+            .classList.add("hidden");
+          document
+            .getElementById("btn-close-notice-error-profile")
+            .classList.remove("hidden");
+        }
       }
     })
     .catch(console.error);
@@ -1360,23 +1383,39 @@ document.addEventListener("click", (e) => {
     document
       .getElementById("notice-save-profile-modal")
       .classList.remove("show");
-    if (actIdCreateClose) {
-      sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
-      location.reload();
-    }
+    sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
+    location.reload();
+
     return;
   }
   if (btnNoticeUser) {
     document
       .getElementById("notice-save-profile-user-modal")
       .classList.remove("show");
-    if (actIdCreateClose) {
-      sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
-      location.reload();
-    }
+    sessionStorage.setItem("reloadAndLoadPage", "pages/profile.php");
+    location.reload();
+
     return;
   }
 });
+
+document.addEventListener("click", (e) => {
+  const btnCancelError = e.target.closest("#btn-close-notice-error-profile");
+  const btnCancelErrorUser = e.target.closest(
+    "#btn-close-notice-error-profile-user",
+  );
+  if (btnCancelError) {
+    document
+      .getElementById("notice-save-profile-modal")
+      .classList.remove("show");
+  }
+  if (btnCancelErrorUser) {
+    document
+      .getElementById("notice-save-profile-user-modal")
+      .classList.remove("show");
+  }
+});
+
 // =================previewAvt - profile============
 
 document.addEventListener("change", (e) => {
@@ -1413,6 +1452,9 @@ document.addEventListener("submit", (e) => {
         if (e.target.dataset.type == "user") {
           document.getElementById("notice-password-user-message").textContent =
             data.message;
+          document.getElementById(
+            "notice-password-user-modal-title",
+          ).textContent = "Thông báo";
           document
             .getElementById("btn-close-notice-password-user")
             .classList.remove("hidden");
@@ -1435,6 +1477,9 @@ document.addEventListener("submit", (e) => {
         if (e.target.dataset.type == "user") {
           document.getElementById("notice-password-user-message").textContent =
             data.message;
+          document.getElementById(
+            "notice-password-user-modal-title",
+          ).textContent = "Lỗi";
           document
             .getElementById("btn-close-notice-error-password-user")
             .classList.remove("hidden");

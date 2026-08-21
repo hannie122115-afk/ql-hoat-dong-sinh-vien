@@ -95,6 +95,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $orgDate = $_POST['orgDate'] ?? $org['NgayThanhLap'];
         $orgDescribe = $_POST['orgDescribe'] ?? $org['MoTa'];
 
+        if( $orgName === '' ||
+            $orgInitName === '' ||
+            $unitId === '' ||
+            $orgDate === '' ||
+            $orgDescribe === ''){
+            echo json_encode([
+            'success' => false,
+            'message' => 'Vui lòng nhập đầy đủ thông tin',
+            ]);
+            exit;
+        }
 
         // Xử lý upload ảnh
         $uploadDir = "../../assets/images/uploads/manager/";
@@ -170,7 +181,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                     <div>
                         <i class="fa-solid fa-rotate"></i>
                         Thay đổi ảnh 
-                        <input type="file" name="orgAvt" id="profile-avt-input">
+                        <input type="file" name="orgAvt" id="profile-avt-input" accept="image/*">
                     </div>
                 </div>
 
@@ -305,6 +316,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             <p id="notice-save-profile-message"></p>
             <div class="model-btn">
                 <button id="btn-cancel-notice-save-profile">Đóng</button>
+                <button id="btn-close-notice-error-profile" class="hidden">Đóng</button>
             </div>
         </div>
     </div>

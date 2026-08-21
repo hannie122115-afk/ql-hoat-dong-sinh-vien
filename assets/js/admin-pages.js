@@ -422,7 +422,15 @@ document.addEventListener("click", (e) => {
 // =================popupInfoAccount - account============
 // let infoAccountId = null;
 document.addEventListener("click", function (e) {
-  const btn = e.target.closest(".table-row-account");
+  if (e.target.closest(".block-account-btn")) {
+    return;
+  }
+
+  if (e.target.closest(".unblock-account-btn")) {
+    return;
+  }
+
+  const btn = e.target.closest("table-row-account");
   if (!btn) return;
 
   const accountName = btn.dataset.name || "Không có dữ liệu";

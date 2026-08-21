@@ -155,10 +155,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $userGender = trim($_POST['userGender'] ?? $user['GioiTinh']);
         $userTel = trim($_POST['userTel'] ?? $user['SoDienThoai']);
         $userBirth = trim($_POST['userBirth'] ?? $user['NgaySinh']);
-        $userName = trim($_POST['userName'] ?? $user['HoTen']);
+        // $userName = trim($_POST['userName'] ?? $user['HoTen']);
         $userYear = trim($_POST['userYear'] ?? $user['Khoa']);
         $userUnitId = trim($_POST['userUnitId'] ?? $user['MaDonVi']);
         $classId = trim($_POST['classId'] ?? $user['MaNganh']);
+
+        if( $userName === '' ||
+            $userGender === '' ||
+            $userTel === '' ||
+            $userBirth === '' ||
+            $userYear === '' ||
+            $userUnitId === '' ||
+            $classId === ''){
+            echo json_encode([
+            'success' => false,
+            'message' => 'Vui lòng nhập đầy đủ thông tin',
+            ]);
+            exit;
+        }
 
         // Xử lý upload ảnh
         $uploadDir = "../../assets/images/uploads/user/";
@@ -318,7 +332,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                         <div>
                             <i class="fa-solid fa-rotate"></i>
                             Thay đổi ảnh 
-                            <input type="file" name="userAvt" id="profile-avt-input">
+                            <input type="file" name="userAvt" id="profile-avt-input" accept="image/*">
                         </div>
                     </label>
                     <button type="submit" >
@@ -451,12 +465,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             <p id="notice-save-profile-user-message"></p>
             <div class="model-btn">
                 <button id="btn-cancel-notice-save-profile-user">Đóng</button>
+                <button id="btn-close-notice-error-profile-user" class="hidden">Đóng</button>
             </div>
         </div>
     </div>
     <div id="notice-password-user-modal" class="modal">
         <div class="modal-content">
-            <h3 id="notice-password-user-modal-title">Lỗi</h3>
+            <h3 id="notice-password-user-modal-title"></h3>
             <p id="notice-password-user-message"></p>
             <div class="model-btn">
                 <button id="btn-close-notice-password-user">Đóng</button>

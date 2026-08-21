@@ -75,6 +75,15 @@ $semester = $stmt9->fetch(PDO::FETCH_ASSOC);
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $answers = $_POST['answers'] ?? [];
+    foreach ($answers as $quesId => $answer) {
+        if (trim($answer) === '') {
+            echo json_encode([
+                "success" => false,
+                "message" => "Vui lòng trả lời đầy đủ các câu hỏi."
+            ]);
+            exit;
+        }
+    }
     try{
         $conn->beginTransaction();
 
@@ -121,6 +130,13 @@ $stmt8 = $conn->prepare($sql8);
 $stmt8->execute([$user['MSSV'], $actId]);
 $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
 
+$sql9 = "SELECT COUNT(MSSV) AS SoLuongHienTai
+        FROM DangKy 
+        WHERE MaHoatDong = ?";
+$stmt9 = $conn->prepare($sql9);
+$stmt9->execute([$actId]);
+$AmountCurrent = $stmt9->fetchColumn();
+
 ?>
 
 <!DOCTYPE html>
@@ -157,9 +173,10 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
                     <button class="registered-btn">
                         <span>Đã đăng ký</span>
                     </button>
-                <?php elseif($dateNow->format('Y-m-d H:i:s') >= $dateEnd->format('Y-m-d H:i:s') ): ?>
-                    <button class=" register-btn">
-                        <span>Đã kết thúc</span>
+                
+                <?php elseif($act['total'] >= $act['SoLuongToiDa']):?>
+                    <button class="registered-btn">
+                        <span>Đã đủ số lượng</span>
                     </button>
                 <?php else: ?>
                     <button class="act-detail-btn register-btn">
@@ -332,5 +349,15 @@ $isRegistered = $stmt8->fetch(PDO::FETCH_ASSOC);
         </div> -->
     </div>
     
+    <div id="notice-save-register-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="notice-save-register-modal-title">Lỗi</h3>
+            <p id="notice-save-register-message"></p>
+            <div class="model-btn">
+                <button id="btn-cancel-notice-save-register">Đóng</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

@@ -46,17 +46,17 @@ document.addEventListener("click", (e) => {
   const inputs = form.querySelectorAll("input[type='text']");
 
   let isValid = true;
-  inputs.forEach((input) => {
-    if (input.readOnly) return;
-    if (input.value.trim() === "") {
-      alert("Vui lòng trả lời đầy đủ các câu hỏi!");
-      input.style.border = "1px solid red";
-      input.focus();
-      return;
-    } else {
-      input.style.border = "";
-    }
-  });
+  // inputs.forEach((input) => {
+  //   if (input.readOnly) return;
+  //   if (input.value.trim() === "") {
+  //     alert("Vui lòng trả lời đầy đủ các câu hỏi!");
+  //     input.style.border = "1px solid red";
+  //     input.focus();
+  //     return;
+  //   } else {
+  //     input.style.border = "";
+  //   }
+  // });
 
   if (!isValid) return;
 
@@ -70,11 +70,25 @@ document.addEventListener("click", (e) => {
       if (data.success) {
         loadPage(`pages/act-detail.php?id=${currentActId}`);
       } else {
-        alert(data.message);
+        // alert(data.message);
+        document.getElementById("notice-save-register-message").textContent =
+          data.message;
+        document
+          .getElementById("notice-save-register-modal")
+          .classList.add("show");
       }
     });
 });
 
+document.addEventListener("click", (e) => {
+  const btnNotice = e.target.closest("#btn-cancel-notice-save-register");
+  if (btnNotice) {
+    document
+      .getElementById("notice-save-register-modal")
+      .classList.remove("show");
+    return;
+  }
+});
 // ================dropdown - profile============
 let profileFilters = {
   semester: "",
@@ -119,6 +133,46 @@ document.addEventListener("click", function (e) {
 
 // =================my-calender============
 
+// function initCalendar() {
+//   const calendarEl = document.getElementById("calendar");
+
+//   if (!calendarEl) return;
+
+//   const calendar = new FullCalendar.Calendar(calendarEl, {
+//     initialView: "dayGridWeek",
+//     locale: "vi",
+//     height: "auto",
+//     contentHeight: 550,
+//     displayEventTime: false,
+//     events: "pages/calendar-data.php",
+//     eventClick(info) {
+//       loadPage(`pages/act-detail.php?id=${info.event.id}`);
+//     },
+//     eventContent(info) {
+//       const start = info.event.start.toLocaleTimeString("vi-VN", {
+//         hour: "2-digit",
+//         minute: "2-digit",
+//       });
+
+//       const end = info.event.end.toLocaleTimeString("vi-VN", {
+//         hour: "2-digit",
+//         minute: "2-digit",
+//       });
+
+//       return {
+//         html: `
+//             <div class="event-box">
+//                 <div class="event-title">${info.event.title}</div>
+//                 <div class="event-time">${start} - ${end}</div>
+//             </div>
+//         `,
+//       };
+//     },
+//   });
+
+//   calendar.render();
+// }
+
 function initCalendar() {
   const calendarEl = document.getElementById("calendar");
 
@@ -130,36 +184,95 @@ function initCalendar() {
     height: "auto",
     contentHeight: 550,
     displayEventTime: false,
+    dayMaxEventRows: false,
     events: "pages/calendar-data.php",
+
     eventClick(info) {
       loadPage(`pages/act-detail.php?id=${info.event.id}`);
     },
+
     eventContent(info) {
       const start = info.event.start.toLocaleTimeString("vi-VN", {
         hour: "2-digit",
         minute: "2-digit",
       });
 
-      const end = info.event.end.toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      const end = info.event.end
+        ? info.event.end.toLocaleTimeString("vi-VN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "";
 
       return {
         html: `
-            <div class="event-box">
-                <div class="event-title">${info.event.title}</div>
-                <div class="event-time">${start} - ${end}</div>
-            </div>
+          <div class="event-box">
+            <div class="event-title">${info.event.title}</div>
+            <div class="event-time">${start} - ${end}</div>
+          </div>
         `,
       };
+    },
+
+    eventDidMount(info) {
+      info.el.dataset.eventId = info.event.id;
+      // thời gian để set từng event
+      setTimeout(() => {
+        arrangeCalendarEvents(calendar);
+      }, 50);
+    },
+    // thời gian set qua tuần mới
+    datesSet() {
+      setTimeout(() => {
+        arrangeCalendarEvents(calendar);
+      }, 100);
     },
   });
 
   calendar.render();
 }
 
-// =================dropdown - registered-act============
+function arrangeCalendarEvents(calendar) {
+  const events = calendar.getEvents();
+
+  if (!events.length) return;
+
+  const sortedEvents = [...events].sort((a, b) => {
+    return a.start - b.start;
+  });
+
+  const rowMap = new Map();
+
+  sortedEvents.forEach((event, index) => {
+    rowMap.set(String(event.id), index);
+  });
+
+  const ROW_HEIGHT = 58; //cach 58px
+
+  const eventEls = document.querySelectorAll(".fc-daygrid-event");
+
+  eventEls.forEach((eventEl) => {
+    const eventId = eventEl.dataset.eventId;
+
+    if (!eventId) return;
+
+    const row = rowMap.get(String(eventId));
+
+    if (row === undefined) return;
+
+    const harness = eventEl.closest(".fc-daygrid-event-harness");
+
+    if (!harness) return;
+
+    harness.style.setProperty("top", `${row * ROW_HEIGHT}px`, "important");
+  });
+
+  document.querySelectorAll(".fc-daygrid-day-events").forEach((container) => {
+    container.style.minHeight = `${sortedEvents.length * ROW_HEIGHT}px`;
+  });
+}
+
+// =================dropdown - joined-act============
 
 let filterRegister = {
   semester: "",
@@ -216,7 +329,7 @@ function loadRegisteredAct() {
     year: filterRegister.year,
   });
 
-  fetch(`pages/registered-act.php?${params.toString()}`)
+  fetch(`pages/joined-act.php?${params.toString()}`)
     .then((response) => response.text())
     .then((html) => {
       const doc = new DOMParser().parseFromString(html, "text/html");

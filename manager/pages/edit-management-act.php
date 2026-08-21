@@ -246,7 +246,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         <div class="step-line">
             <div class="step-line-item active" data-step="1">
-                1. Tạo hoạt động
+                1. Thông tin hoạt động
             </div>
             <div class="step-line-item" data-step="2">
                 2. Câu hỏi bổ sung

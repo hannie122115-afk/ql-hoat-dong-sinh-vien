@@ -206,7 +206,8 @@ $TongSo = $stmt5->fetchColumn();
                     </thead>
                     <tbody>
                         <?php $stt = 1; 
-                        while ($account = $stmt4->fetch(PDO::FETCH_ASSOC)):?>
+                        while ($account = $stmt4->fetch(PDO::FETCH_ASSOC)):
+                            $createDate = new DateTime($account['NgayTao']); ?>
                         <tr class="table-row-account"
                             data-name="<?= $account['TenTaiKhoan'] ?>"
                             data-unit="<?= $account['TenDonVi'] ?>"
@@ -243,7 +244,7 @@ $TongSo = $stmt5->fetchColumn();
                             </td>
                             <td>
                                 <div class="account-info">
-                                    <span><?= $account['NgayTao'] ?></span>
+                                    <span><?= $createDate->format('d/m/y') ?></span>
                                 </div>
                             </td>
                             <td>
@@ -287,7 +288,7 @@ $TongSo = $stmt5->fetchColumn();
             </div>
             <div id="block-account-modal" class="modal">
                 <div class="modal-content">
-                    <h3>Xác nhận khóa</h3>
+                    <h3 id="block-account-modal-title">Xác nhận khóa</h3>
                     <p id="block-account-message"></p>
                     <div class="model-btn">
                         <button id="btn-cancel-block-account">Hủy</button>
@@ -297,7 +298,7 @@ $TongSo = $stmt5->fetchColumn();
             </div>
             <div id="unblock-account-modal" class="modal">
                 <div class="modal-content">
-                    <h3>Xác nhận mở khóa</h3>
+                    <h3 id="unblock-account-modal-title">Xác nhận mở khóa</h3>
                     <p id="unblock-account-message"></p>
                     <div class="model-btn">
                         <button id="btn-cancel-unblock-account">Hủy</button>
@@ -307,7 +308,7 @@ $TongSo = $stmt5->fetchColumn();
             </div>
             <div id="notice-account-modal" class="modal">
                 <div class="modal-content">
-                    <h3 id="notice-account-modal-title">Thông báo</h3>
+                    <h3 id="notice-account-modal-title"></h3>
                     <p id="notice-account-message"></p>
                     <div class="model-btn">
                         <button id="btn-cancel-notice-account">Đóng</button>

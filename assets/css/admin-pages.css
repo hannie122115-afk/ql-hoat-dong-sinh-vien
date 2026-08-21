@@ -606,6 +606,7 @@
 /* Cắt chữ gọn gàng nếu quá dài */
 .account-info {
   display: block;
+  width: 7rem;
 }
 
 .account-info span {
@@ -781,7 +782,7 @@
 
 .model-btn {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -1430,12 +1431,6 @@ button:active {
   color: #475569;
   margin-bottom: 24px;
   line-height: 1.5;
-}
-
-.model-btn {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
 }
 
 /* ==========================================================================

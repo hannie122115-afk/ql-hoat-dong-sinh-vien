@@ -370,14 +370,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <h4>Hình ảnh hoạt động</h4>
                             <span>Chọn ảnh 1 ảnh đại diện cho hoạt động</span>
                             <div class="act-info-item-input">
-                                <input type="file" name="act-img-avt" id="act-img-avt" class="act-img-input validate-input" data-required="true">
+                                <input type="file" name="act-img-avt" id="act-img-avt" class="act-img-input validate-input" data-required="true" accept="image/*">
                             </div>
                         </div>
                         <div class="act-info-item act-content-item">
                             <h4>Hình ảnh hoạt động</h4>
                             <span>Chọn ảnh 1 ảnh bìa cho hoạt động</span>
                             <div class="act-info-item-input">
-                                <input type="file" name="act-img-cover" id="act-img-cover" class="act-img-input validate-input" data-required="true">
+                                <input type="file" name="act-img-cover" id="act-img-cover" class="act-img-input validate-input" data-required="true" accept="image/*">
                             </div>
                         </div>
                     </div>

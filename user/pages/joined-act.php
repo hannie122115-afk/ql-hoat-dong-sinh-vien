@@ -24,8 +24,9 @@ $sql1 = "SELECT
             ON hd.MaHoatDong = dk.MaHoatDong
         LEFT JOIN HocKy hk
             ON hk.MaHocKy = hd.MaHocKy
-        WHERE dk.DaDiemDanh = 1 ";
-$params = [];
+        WHERE dk.DaDiemDanh = 1 
+            AND dk.MSSV = ?";
+$params = [$user['MSSV']];
 if(!empty($semester)){
     $sql1 .= " AND hk.HocKy = ? ";
     $params[] = $semester;
@@ -124,7 +125,7 @@ $stmt1->execute($params);
             <?php else: ?>
                 <div class="empty-state">
                     <i class="fa-solid fa-calendar-xmark"></i>
-                    <p><?= !empty($keyword) ? 'Không tìm thấy hoạt động phù hợp.' : 'Bạn chưa tham gia hoạt động nào.' ?></p>
+                    <p>Bạn chưa tham gia hoạt động nào trong học kỳ này.</p>
                 </div>
             <?php endif; ?>
         </div>
